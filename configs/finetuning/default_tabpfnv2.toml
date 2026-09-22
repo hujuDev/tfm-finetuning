@@ -1,0 +1,57 @@
+# TabPFNv2 default finetuning config template.
+# Replace {dataset} in data.path.
+seed = 0
+patience = 16
+amp = true
+n_epochs = -1
+batch_size = 1
+epoch_size = 10
+seq_len_pred = 1024
+finetune_mode = "full"
+
+context_subsample_train = 30000
+[model]
+untie_pos_embeddings = false
+untie_value_embeddings = false
+
+[model.tabpfn_config]
+nhead = 6
+emsize = 192
+nlayers = 12
+nhid_factor = 4
+
+[model.num_embeddings]
+type = "LinearEmbeddings"
+
+[data]
+seed = 0
+num_policy = "noisy-quantile"
+cache = true
+path = ":data/tabarena/{dataset}" # replace {dataset} (e.g., churn)
+cat_policy = "ordinal"
+old = false
+split = "fold0_repeat0_sample0"
+
+[optimizer]
+type = "AdamW"
+lr = 6.457747804233804e-05
+weight_decay = 0.0
+
+[evaluation]
+# Slim foundation-model runs use the TabArena context/query-aligned
+# validation and test protocol.
+backend = "tabarena_aligned"
+
+[evaluation.tabpfn]
+# Optional kwargs forwarded to TabPFNClassifier/TabPFNRegressor during evaluation.
+# Set to 2 to align final eval estimator count with low-cost validation.
+# n_estimators = 2
+
+[evaluation.feature_transform]
+# Optional numeric transform controls used by tabarena_aligned backend.
+# numeric_train = "none"
+# numeric_test = "none"
+
+[wandb]
+project = "tabpfn-finetuning"
+mode = "online"

@@ -1,0 +1,91 @@
+study: dataset_transfer_learned_retention_train
+title: 'Dataset Transfer: Bank--Covertype Retention Producers'
+section: section3
+models:
+- name: tabpfnv25
+  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+- name: tabiclv2
+  config: configs/finetuning/default_tabicl_v2.toml
+- name: mitra
+  config: configs/finetuning/default_mitra.toml
+split:
+  protocol: fixed_split_repeated_seeds
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  folds:
+  - 0
+  repeats:
+  - 0
+  samples:
+  - 0
+settings:
+  preprocess.steps:
+  - clamp_train_pool
+  preprocess.clamp_train_pool.max_size: 200000
+  data.backend: tabarena_openml_task_wrapper
+  evaluation.backend: tabarena_aligned
+  foundation_model.preprocessing_protocol: shared
+  foundation_model.epochs: 100
+  foundation_model.use_lr_scheduler: false
+  foundation_model.early_stopping: false
+  foundation_model.patience: 16
+  foundation_model.min_delta: 0.0001
+  foundation_model.final_eval_checkpoint: best
+  foundation_model.keep_intermediate_checkpoints: false
+  foundation_model.test_eval_interval_epochs: 0
+  foundation_model.test_context_includes_validation_data: true
+  foundation_model.validation_split_ratio: 0.1
+  foundation_model.validation_split_seed: 0
+  foundation_model.ignore_pretraining_limits: true
+  foundation_model.resource_fallback_policy: strict
+  dataset_transfer.enabled: true
+  dataset_transfer.family: dataset_transfer_learned_retention
+  dataset_transfer.execution_mode: train
+  dataset_transfer.updates_per_dataset: 100
+  dataset_transfer.row_budget_per_dataset: 50000
+  dataset_transfer.nested_row_seed: 0
+  dataset_transfer.context_policy: target_train_plus_validation
+  dataset_transfer.strict_resource_semantics: true
+groups:
+- name: bank_then_covertype_80gb_5h_mem64g_main
+  resource: gpu_80gb_5h_mem64g
+  datasets:
+  - covertype
+  axes:
+    preprocessing:
+    - value: shared
+      settings:
+        foundation_model.preprocessing_protocol: shared
+    retentionRoute:
+    - value: sequential_bank_then_covertype
+      settings:
+        dataset_transfer.route_id: sequential_bank_then_covertype
+- name: covertype_then_bank_40gb_5h_main
+  resource: gpu_40gb_5h
+  datasets:
+  - Bank_Customer_Churn
+  axes:
+    preprocessing:
+    - value: shared
+      settings:
+        foundation_model.preprocessing_protocol: shared
+    retentionRoute:
+    - value: sequential_covertype_then_bank
+      settings:
+        dataset_transfer.route_id: sequential_covertype_then_bank
+- name: pooled_bank_covertype_80gb_5h_mem64g_main
+  resource: gpu_80gb_5h_mem64g
+  datasets:
+  - covertype
+  axes:
+    preprocessing:
+    - value: shared
+      settings:
+        foundation_model.preprocessing_protocol: shared
+    retentionRoute:
+    - value: pooled_bank_covertype
+      settings:
+        dataset_transfer.route_id: pooled_bank_covertype

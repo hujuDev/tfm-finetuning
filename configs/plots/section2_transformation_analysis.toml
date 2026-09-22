@@ -1,0 +1,98 @@
+[input]
+results_root = "results"
+
+[studies]
+subsample = "distribution_shift_subsample"
+label_noise = "distribution_shift_label_noise"
+feature_order = "distribution_shift_feature_order"
+numeric_scale = "distribution_shift_numeric_scale"
+spurious_correlation = "distribution_shift_spurious_correlation"
+diamonds_mitigation = "distribution_shift_heavy_tail_diamonds"
+contextual_scale = "distribution_shift_contextual_scale"
+heavy_tail = "distribution_shift_heavy_tail"
+
+[alignment_studies]
+feature_order = "distribution_shift_feature_order_alignment"
+numeric_scale = "distribution_shift_numeric_scale_alignment"
+
+[datasets]
+subsample = ["sdss17", "food_delivery_time", "houses", "jm1", "amazon_employee_access", "bank_marketing"]
+label_noise = ["jm1", "bank_marketing", "amazon_employee_access", "splice", "sdss17"]
+feature_order = ["splice", "maternal_health_risk", "anneal", "jm1", "wine_quality"]
+numeric_scale = ["airfoil_self_noise", "miami_housing", "jm1", "bank_marketing", "maternal_health_risk"]
+spurious_correlation = ["amazon_employee_access", "jm1", "houses"]
+diamonds_mitigation = ["diamonds"]
+contextual_scale = ["houses", "sdss17"]
+heavy_tail = ["healthcare_insurance_expenses", "houses", "miami_housing"]
+
+[fit_conditions]
+subsample = ["1", "1/2", "1/4", "1/8", "1/16"]
+label_noise = ["0", "0.05", "0.15", "0.3"]
+feature_order = ["canonical", "permuted"]
+numeric_scale = ["raw", "standardized"]
+spurious_correlation = ["0", "0.5", "0.8", "0.95"]
+diamonds_mitigation = ["none", "winsor_p01_p99", "robust_log1p"]
+contextual_scale = [
+  "scale_1x_no_unit_column",
+  "scale_1x_with_unit_column",
+  "scale_sx_no_unit_column",
+  "scale_sx_with_unit_column",
+]
+heavy_tail = [
+  "original/none",
+  "original/winsor_p01_p99",
+  "original/robust_log1p",
+  "fit_side_contaminated/none",
+  "fit_side_contaminated/winsor_p01_p99",
+  "fit_side_contaminated/robust_log1p",
+]
+
+[controls]
+subsample = "1"
+label_noise = "0"
+feature_order = "canonical/canonical"
+numeric_scale = "raw/raw"
+spurious_correlation = "0"
+diamonds_mitigation = "none"
+contextual_scale = "scale_1x_no_unit_column"
+heavy_tail = "original/none"
+
+[models]
+default = ["tabpfnv25", "tabiclv2", "mitra"]
+diamonds_mitigation = ["tabpfnv25"]
+
+[splits]
+seeds = [0, 1, 2]
+small_dataset_folds = [0, 1, 2]
+standard_dataset_folds = [0]
+small_datasets = [
+  "anneal",
+  "airfoil_self_noise",
+  "blood_transfusion_service_center",
+  "credit_g",
+  "healthcare_insurance_expenses",
+  "maternal_health_risk",
+  "mic",
+]
+
+[output]
+root = "results/analysis/thesis_findings/transformation_studies"
+thesis_assets = "results/figure_assets/findings/transformation_studies"
+
+[figures]
+subsample_order = ["1/16", "1/8", "1/4", "1/2", "1"]
+label_noise_order = ["0", "0.05", "0.15", "0.3"]
+spurious_correlation_order = ["0", "0.5", "0.8", "0.95"]
+feature_order_settings = ["canonical/canonical", "permuted/canonical"]
+numeric_scale_settings = ["raw/raw", "standardized/raw"]
+contextual_scale_settings = [
+  "scale_1x_no_unit_column",
+  "scale_1x_with_unit_column",
+  "scale_sx_no_unit_column",
+  "scale_sx_with_unit_column",
+]
+heavy_tail_target_modes = ["none", "winsor_p01_p99", "robust_log1p"]
+
+[class_rebalancing]
+shared_study = "distribution_shift_class_prior_majority_downsampling"
+context_study = "distribution_shift_class_prior_context_only_downsampling"

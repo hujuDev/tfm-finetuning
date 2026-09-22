@@ -1,0 +1,86 @@
+study: dataset_transfer_natural_domain_training
+title: 'Dataset Transfer: Natural Same-Schema Domains'
+section: section3
+models:
+- name: tabpfnv25
+  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+- name: tabiclv2
+  config: configs/finetuning/default_tabicl_v2.toml
+- name: mitra
+  config: configs/finetuning/default_mitra.toml
+axes:
+  preprocessing:
+  - value: shared
+    settings:
+      foundation_model.preprocessing_protocol: shared
+  naturalDomainRoute:
+  - value: target_control_300_steps
+    settings:
+      dataset_transfer.route_id: target_control_300_steps
+  - value: source_only_pooled
+    settings:
+      dataset_transfer.route_id: source_only_pooled
+  - value: target_inclusive_pooled
+    settings:
+      dataset_transfer.route_id: target_inclusive_pooled
+split:
+  protocol: fixed_split_repeated_seeds
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  folds:
+  - 0
+  repeats:
+  - 0
+  samples:
+  - 0
+settings:
+  preprocess.steps:
+  - clamp_train_pool
+  preprocess.clamp_train_pool.max_size: 200000
+  data.backend: local_exported_arrays
+  evaluation.backend: official
+  foundation_model.preprocessing_protocol: shared
+  foundation_model.epochs: 100
+  foundation_model.use_lr_scheduler: false
+  foundation_model.early_stopping: false
+  foundation_model.patience: 101
+  foundation_model.min_delta: 0.0
+  foundation_model.final_eval_checkpoint: best
+  foundation_model.keep_intermediate_checkpoints: false
+  foundation_model.test_eval_interval_epochs: 0
+  foundation_model.test_context_includes_validation_data: true
+  foundation_model.validation_split_ratio: 0.1
+  foundation_model.validation_split_seed: 0
+  foundation_model.ignore_pretraining_limits: true
+  foundation_model.resource_fallback_policy: strict
+  dataset_transfer.enabled: true
+  dataset_transfer.family: dataset_transfer_natural_domain
+  dataset_transfer.execution_mode: train
+  dataset_transfer.updates_per_dataset: 100
+  dataset_transfer.row_budget_per_dataset: 50000
+  dataset_transfer.nested_row_seed: 0
+  dataset_transfer.natural_domain_condition: terminal_route
+  dataset_transfer.context_policy: target_train_plus_validation
+  dataset_transfer.strict_resource_semantics: true
+groups:
+- name: heart_natural_domain_any_5h_main
+  resource: gpu_any_5h
+  datasets:
+  - heart_disease_cleveland
+  - heart_disease_hungary
+  - heart_disease_va_long_beach
+- name: wids_hospital_natural_domain_80gb_5h_mem64g_main
+  resource: gpu_80gb_5h_mem64g
+  datasets:
+  - wids_diabetes_hospital_118
+  - wids_diabetes_hospital_19
+  - wids_diabetes_hospital_188
+- name: covertype_area_natural_domain_80gb_5h_mem64g_main
+  resource: gpu_80gb_5h_mem64g
+  datasets:
+  - covertype_comanche_peak
+  - covertype_neota
+  - covertype_rawah

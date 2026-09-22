@@ -1,0 +1,70 @@
+study: distribution_shift_contextual_scale_calibration
+title: 'Distribution Shift: Contextual Scale Calibration'
+section: section2
+models:
+- name: tabpfnv25
+  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+  settings:
+    foundation_model.model_id: tabpfn_v2_5
+    foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+    foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+axes:
+  contextualScaleSpread:
+  - value: '1'
+    settings:
+      preprocess.contextual_scale.scale_spread: 1
+  - value: '3'
+    settings:
+      preprocess.contextual_scale.scale_spread: 3
+  - value: '10'
+    settings:
+      preprocess.contextual_scale.scale_spread: 10
+  - value: '30'
+    settings:
+      preprocess.contextual_scale.scale_spread: 30
+  - value: '100'
+    settings:
+      preprocess.contextual_scale.scale_spread: 100
+split:
+  protocol: fixed_split_repeated_seeds
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  folds:
+  - 0
+  repeats:
+  - 0
+  samples:
+  - 0
+settings:
+  preprocess.steps:
+  - clamp_train_pool
+  - contextual_scale
+  preprocess.clamp_train_pool.max_size: 200000
+  preprocess.contextual_scale.condition: scale_sx_no_unit_column
+  preprocess.contextual_scale.feature_strategy: importance
+  preprocess.contextual_scale.feature_count: 1
+  preprocess.contextual_scale.group_count: 3
+  data.backend: tabarena_openml_task_wrapper
+  evaluation.backend: tabarena_aligned
+  foundation_model.preprocessing_protocol: shared
+  foundation_model.n_estimators_validation: 2
+  foundation_model.baseline_only: true
+  foundation_model.evaluation_splits:
+  - val
+  foundation_model.test_eval_interval_epochs: 0
+  foundation_model.test_context_includes_validation_data: true
+  foundation_model.test_context_comparison.enabled: false
+  foundation_model.inference_context_max_rows: 50000
+  foundation_model.ignore_pretraining_limits: true
+groups:
+- name: all_80gb_main
+  resource: gpu_80gb_5h
+  datasets:
+  - sdss17
+  - food_delivery_time
+  - houses
+  - jm1
+  - bank_marketing

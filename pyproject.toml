@@ -1,0 +1,94 @@
+[build-system]
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tfm-finetuning"
+version = "0.1.0"
+description = "Fine-tuning, evaluation, and controlled experiments for tabular foundation models."
+license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "autogluon>=1.5,<1.6",
+    "einops>=0.8.0",
+    "huggingface-hub",
+    "ipykernel>=7.0.0",
+    "jinja2>=3.1.6",
+    "jupyter>=1.1.1",
+    "loguru>=0.7.3",
+    "matplotlib==3.10.1",
+    "numpy>=1.16,<2.2",
+    "openml>=0.14.1",
+    "pandas>=2.2.3",
+    "pyarrow>=19.0.0",
+    "pyyaml",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.1",
+    "submitit>=1.5.3,<2",
+    "setuptools>=75.8.0",
+    "loralib>=0.1.2",
+    "tomli>=2.2.1",
+    "tomli-w>=1.2.0",
+    "torch>=2.6.0",
+    "tqdm>=4.67.1",
+    "triton>=3.1.0",
+    "typing-extensions>=4.11,<5",
+    "tabarena @ git+https://github.com/autogluon/tabarena.git#subdirectory=tabarena",
+    "tabicl[finetune] @ git+https://github.com/soda-inria/tabicl.git",
+    "tabpfn @ git+https://github.com/PriorLabs/TabPFN.git",
+    "wandb>=0.18.5",
+    "python-dotenv>=1.0.1",
+    "pydantic>=2.10.3",
+    "pytest>=8.3.5",
+]
+
+[project.urls]
+Repository = "https://github.com/hujuDev/tfm-finetuning"
+
+[project.scripts]
+tfm-experiment = "experiments.run_experiment:main"
+tfm-figures = "plots.final_figures:main"
+
+[dependency-groups]
+dev = ["pre-commit>=4.0.1", "ruff>=0.8.0"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = [
+    "data",
+    "data.*",
+    "experiments",
+    "experiments.*",
+    "finetuning",
+    "finetuning.*",
+    "plots",
+    "plots.*",
+    "utils",
+    "utils.*",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [".", "src"]
+testpaths = ["tests"]
+norecursedirs = ["deprecated", "libs", ".venv", ".worktrees", "dist", "build"]
+markers = [
+    "integration: requires real on-disk datasets under data/tabarena",
+]
+
+[tool.mypy]
+explicit_package_bases = true
+disable_error_code = ["import-untyped"]
+
+[tool.ruff]
+line-length = 119
+indent-width = 4
+src = ["src"]
+extend-exclude = ["libs", "libs/**"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E741", "E712", "E402"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/finetuning/tabarena_data*.py" = ["F401", "F403", "F405"]

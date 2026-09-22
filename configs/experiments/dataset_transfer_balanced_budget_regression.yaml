@@ -1,0 +1,97 @@
+study: dataset_transfer_balanced_budget_regression
+title: 'Dataset Transfer: Balanced Regression Budgets'
+section: section3
+models:
+- name: tabpfnv25
+  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+- name: tabiclv2
+  config: configs/finetuning/default_tabicl_v2.toml
+- name: mitra
+  config: configs/finetuning/default_mitra.toml
+axes:
+  preprocessing:
+  - value: shared
+    settings:
+      foundation_model.preprocessing_protocol: shared
+  targetBudgetProducer:
+  - value: target_only
+    settings:
+      dataset_transfer.route_id: balanced_budget_target_only
+  - value: houses_initialized
+    settings:
+      dataset_transfer.route_id: balanced_budget_source_initialized
+  targetTrainRows:
+  - value: 64
+    settings:
+      dataset_transfer.target_train_rows: 64
+      dataset_transfer.target_row_budget_policy: exact
+  - value: 256
+    settings:
+      dataset_transfer.target_train_rows: 256
+      dataset_transfer.target_row_budget_policy: exact
+  - value: 1024
+    settings:
+      dataset_transfer.target_train_rows: 1024
+      dataset_transfer.target_row_budget_policy: exact
+  - value: 4096
+    settings:
+      dataset_transfer.target_train_rows: 4096
+      dataset_transfer.target_row_budget_policy: exact
+  - value: 16384
+    settings:
+      dataset_transfer.target_train_rows: 16384
+      dataset_transfer.target_row_budget_policy: exact
+  - value: 50000
+    settings:
+      dataset_transfer.target_train_rows: 50000
+      dataset_transfer.target_row_budget_policy: cap
+split:
+  protocol: fixed_split_repeated_seeds
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  folds:
+  - 0
+  repeats:
+  - 0
+  samples:
+  - 0
+settings:
+  preprocess.steps:
+  - clamp_train_pool
+  preprocess.clamp_train_pool.max_size: 200000
+  data.backend: tabarena_openml_task_wrapper
+  evaluation.backend: tabarena_aligned
+  foundation_model.preprocessing_protocol: shared
+  foundation_model.epochs: 100
+  foundation_model.use_lr_scheduler: false
+  foundation_model.early_stopping: false
+  foundation_model.patience: 16
+  foundation_model.min_delta: 0.0001
+  foundation_model.final_eval_checkpoint: best
+  foundation_model.keep_intermediate_checkpoints: false
+  foundation_model.test_eval_interval_epochs: 0
+  foundation_model.test_context_includes_validation_data: true
+  foundation_model.validation_split_ratio: 0.1
+  foundation_model.validation_split_seed: 0
+  foundation_model.ignore_pretraining_limits: true
+  foundation_model.resource_fallback_policy: strict
+  dataset_transfer.enabled: true
+  dataset_transfer.family: dataset_transfer_balanced_budget
+  dataset_transfer.task_family: regression
+  dataset_transfer.execution_mode: train
+  dataset_transfer.updates_per_dataset: 100
+  dataset_transfer.nested_row_seed: 0
+  dataset_transfer.dependency_updates_per_dataset: 100
+  dataset_transfer.dependency_row_budget_per_dataset: 50000
+  dataset_transfer.dependency_nested_row_seed: 0
+  dataset_transfer.context_policy: target_train_plus_validation
+  dataset_transfer.strict_resource_semantics: true
+groups:
+- name: balanced_regression_budget_80gb_5h_mem64g_main
+  resource: gpu_80gb_5h_mem64g
+  datasets:
+  - physiochemical_protein
+  - food_delivery_time

@@ -1,0 +1,26 @@
+study: mitra_churn
+datasets:
+- churn
+models:
+- name: mitra
+  config: configs/finetuning/default_mitra.toml
+split:
+  protocol: fixed_split_repeated_seeds
+  folds:
+  - 0
+  repeats:
+  - 0
+  samples:
+  - 0
+  seeds:
+  - 0
+settings:
+  data.backend: tabarena_openml_task_wrapper
+  evaluation.backend: tabarena_aligned
+  foundation_model.epochs: 1
+  foundation_model.context_size: 1024
+  foundation_model.early_stopping: false
+  foundation_model.final_eval_checkpoint: best
+wandb:
+  project: tfm-finetuning
+  mode: disabled

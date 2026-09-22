@@ -1,0 +1,687 @@
+study: unified_foundation_baseline
+title: Default run atlas
+section: section1
+axes:
+  preprocessing:
+  - value: native
+    settings:
+      foundation_model.preprocessing_protocol: native
+  - value: shared
+    settings:
+      foundation_model.preprocessing_protocol: shared
+split:
+  protocol: cv_auto
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  samples:
+  - 0
+groups:
+- name: any_gpu_main
+  resource: gpu_any_5h
+  datasets:
+  - Another-Dataset-on-used-Fiat-500
+  - Fitness_Club
+  - Is-this-a-good-customer
+  - MIC
+  - Marketing_Campaign
+  - QSAR_fish_toxicity
+  - airfoil_self_noise
+  - anneal
+  - blood-transfusion-service-center
+  - concrete_compressive_strength
+  - credit-g
+  - diabetes
+  - hazelnut-spread-contaminant-detection
+  - healthcare_insurance_expenses
+  - maternal_health_risk
+  - qsar-biodeg
+  - website_phishing
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2_5
+      foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  - name: tabiclv2
+    config: configs/finetuning/default_tabicl_v2.toml
+    settings:
+      foundation_model.model_id: tabicl_v2
+      foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+      foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+  - name: mitra
+    config: configs/finetuning/default_mitra.toml
+    settings:
+      foundation_model.model_id: mitra
+      foundation_model.classifier_checkpoint: autogluon/mitra-classifier
+      foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 1
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: medium_40gb_main
+  resource: gpu_40gb_5h
+  datasets:
+  - Amazon_employee_access
+  - Bank_Customer_Churn
+  - E-CommereShippingData
+  - HR_Analytics_Job_Change_of_Data_Scientists
+  - SDSS17
+  - bank-marketing
+  - churn
+  - credit_card_clients_default
+  - heloc
+  - houses
+  - in_vehicle_coupon_recommendation
+  - jm1
+  - miami_housing
+  - online_shoppers_intention
+  - polish_companies_bankruptcy
+  - seismic-bumps
+  - splice
+  - students_dropout_and_academic_success
+  - wine_quality
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2_5
+      foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  - name: tabiclv2
+    config: configs/finetuning/default_tabicl_v2.toml
+    settings:
+      foundation_model.model_id: tabicl_v2
+      foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+      foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+  - name: mitra
+    config: configs/finetuning/default_mitra.toml
+    settings:
+      foundation_model.model_id: mitra
+      foundation_model.classifier_checkpoint: autogluon/mitra-classifier
+      foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 1
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: large_80gb_main
+  resource: gpu_80gb_5h
+  datasets:
+  - APSFailure
+  - Bioresponse
+  - Diabetes130US
+  - Food_Delivery_Time
+  - GiveMeSomeCredit
+  - MiniBooNE
+  - NATICUSdroid
+  - QSAR-TID-11
+  - airlines
+  - coil2000_insurance_policies
+  - covertype
+  - customer_satisfaction_in_airline
+  - diamonds
+  - hiva_agnostic
+  - kddcup09_appetency
+  - physiochemical_protein
+  - superconductivity
+  - taiwanese_bankruptcy_prediction
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2_5
+      foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  - name: tabiclv2
+    config: configs/finetuning/default_tabicl_v2.toml
+    settings:
+      foundation_model.model_id: tabicl_v2
+      foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+      foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+  - name: mitra
+    config: configs/finetuning/default_mitra.toml
+    settings:
+      foundation_model.model_id: mitra
+      foundation_model.classifier_checkpoint: autogluon/mitra-classifier
+      foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 1
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: openml_addendum_any_gpu_main
+  resource: gpu_any_5h
+  datasets:
+  - satimage
+  - segment
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2_5
+      foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  - name: tabiclv2
+    config: configs/finetuning/default_tabicl_v2.toml
+    settings:
+      foundation_model.model_id: tabicl_v2
+      foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+      foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+  - name: mitra
+    config: configs/finetuning/default_mitra.toml
+    settings:
+      foundation_model.model_id: mitra
+      foundation_model.classifier_checkpoint: autogluon/mitra-classifier
+      foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 1
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+  split:
+    protocol: fixed_split_repeated_seeds
+    folds:
+    - 0
+    repeats:
+    - 0
+    samples:
+    - 0
+    seeds:
+    - 0
+    - 1
+    - 2
+    validation_seed: 0
+- name: openml_addendum_sylva_prior_40gb_main
+  resource: gpu_40gb_5h
+  datasets:
+  - sylva_prior
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2_5
+      foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  - name: tabiclv2
+    config: configs/finetuning/default_tabicl_v2.toml
+    settings:
+      foundation_model.model_id: tabicl_v2
+      foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+      foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+  - name: mitra
+    config: configs/finetuning/default_mitra.toml
+    settings:
+      foundation_model.model_id: mitra
+      foundation_model.classifier_checkpoint: autogluon/mitra-classifier
+      foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 1
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+  split:
+    protocol: fixed_split_repeated_seeds
+    folds:
+    - 0
+    repeats:
+    - 0
+    samples:
+    - 0
+    seeds:
+    - 0
+    - 1
+    - 2
+    validation_seed: 0
+- name: any_gpu_tabpfnv2
+  resource: gpu_any_5h
+  datasets:
+  - Another-Dataset-on-used-Fiat-500
+  - Fitness_Club
+  - Is-this-a-good-customer
+  - MIC
+  - Marketing_Campaign
+  - QSAR_fish_toxicity
+  - airfoil_self_noise
+  - anneal
+  - blood-transfusion-service-center
+  - concrete_compressive_strength
+  - credit-g
+  - diabetes
+  - hazelnut-spread-contaminant-detection
+  - healthcare_insurance_expenses
+  - maternal_health_risk
+  - qsar-biodeg
+  - website_phishing
+  models:
+  - name: tabpfnv2
+    config: configs/finetuning/default_tabpfnv2_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2
+      foundation_model.classifier_checkpoint: models/tabpfn-v2-classifier.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2-regressor.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 0
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: medium_40gb_tabpfnv2
+  resource: gpu_40gb_5h
+  datasets:
+  - Amazon_employee_access
+  - Bank_Customer_Churn
+  - E-CommereShippingData
+  - HR_Analytics_Job_Change_of_Data_Scientists
+  - SDSS17
+  - bank-marketing
+  - churn
+  - credit_card_clients_default
+  - heloc
+  - houses
+  - in_vehicle_coupon_recommendation
+  - jm1
+  - miami_housing
+  - online_shoppers_intention
+  - polish_companies_bankruptcy
+  - seismic-bumps
+  - splice
+  - students_dropout_and_academic_success
+  - wine_quality
+  models:
+  - name: tabpfnv2
+    config: configs/finetuning/default_tabpfnv2_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2
+      foundation_model.classifier_checkpoint: models/tabpfn-v2-classifier.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2-regressor.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 0
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: large_80gb_tabpfnv2
+  resource: gpu_80gb_5h
+  datasets:
+  - APSFailure
+  - Bioresponse
+  - Diabetes130US
+  - Food_Delivery_Time
+  - GiveMeSomeCredit
+  - MiniBooNE
+  - NATICUSdroid
+  - QSAR-TID-11
+  - airlines
+  - coil2000_insurance_policies
+  - covertype
+  - customer_satisfaction_in_airline
+  - diamonds
+  - hiva_agnostic
+  - kddcup09_appetency
+  - physiochemical_protein
+  - superconductivity
+  - taiwanese_bankruptcy_prediction
+  models:
+  - name: tabpfnv2
+    config: configs/finetuning/default_tabpfnv2_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2
+      foundation_model.classifier_checkpoint: models/tabpfn-v2-classifier.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2-regressor.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 0
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+- name: openml_addendum_any_gpu_tabpfnv2
+  resource: gpu_any_5h
+  datasets:
+  - satimage
+  - segment
+  models:
+  - name: tabpfnv2
+    config: configs/finetuning/default_tabpfnv2_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2
+      foundation_model.classifier_checkpoint: models/tabpfn-v2-classifier.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2-regressor.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 0
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+  split:
+    protocol: fixed_split_repeated_seeds
+    folds:
+    - 0
+    repeats:
+    - 0
+    samples:
+    - 0
+    seeds:
+    - 0
+    - 1
+    - 2
+    validation_seed: 0
+- name: openml_addendum_sylva_prior_40gb_tabpfnv2
+  resource: gpu_40gb_5h
+  datasets:
+  - sylva_prior
+  models:
+  - name: tabpfnv2
+    config: configs/finetuning/default_tabpfnv2_foundation.toml
+    settings:
+      foundation_model.model_id: tabpfn_v2
+      foundation_model.classifier_checkpoint: models/tabpfn-v2-classifier.ckpt
+      foundation_model.regressor_checkpoint: models/tabpfn-v2-regressor.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    foundation_model.n_estimators_finetune: 2
+    foundation_model.n_estimators_validation: 2
+    foundation_model.n_estimators_final_inference: 2
+    foundation_model.baseline_only: false
+    foundation_model.epochs: 100
+    foundation_model.early_stopping: false
+    foundation_model.keep_intermediate_checkpoints: false
+    foundation_model.test_eval_interval_epochs: 0
+    foundation_model.final_eval_checkpoint: best
+    foundation_model.test_context_includes_validation_data: true
+    foundation_model.validation_split_ratio: 0.1
+    foundation_model.validation_split_seed: 0
+    foundation_model.train_max_rows: 200000
+    foundation_model.inference_context_max_rows: 50000
+    foundation_model.ignore_pretraining_limits: true
+    foundation_model.resource_fallback_policy: oom_context_retry
+    foundation_model.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    foundation_model.grad_clip: 1
+    foundation_model.mitra_finetune_interface: local_chunked
+    foundation_model.mitra_scheduler_policy: cosine_warmup
+    foundation_model.save_best_val_checkpoint: false
+    foundation_model.test_context_comparison.enabled: false
+    foundation_model.use_lr_scheduler: true
+    foundation_model.warmup_proportion: 0.1
+  split:
+    protocol: fixed_split_repeated_seeds
+    folds:
+    - 0
+    repeats:
+    - 0
+    samples:
+    - 0
+    seeds:
+    - 0
+    - 1
+    - 2
+    validation_seed: 0

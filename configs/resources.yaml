@@ -1,0 +1,28 @@
+# Thesis hardware requirements, expressed as Submitit parameters.
+schema_version: 1
+profiles:
+  gpu_any_5h:
+    gpu_class: any
+    timeout_min: 300
+    gpus_per_node: 1
+  gpu_40gb_5h:
+    gpu_class: 40gb
+    timeout_min: 300
+    gpus_per_node: 1
+  gpu_80gb_5h:
+    gpu_class: 80gb
+    timeout_min: 300
+    gpus_per_node: 1
+  gpu_40gb_2d:
+    gpu_class: 40gb
+    timeout_min: 2880
+    gpus_per_node: 1
+  gpu_80gb_2d:
+    gpu_class: 80gb
+    timeout_min: 2880
+    gpus_per_node: 1
+  gpu_80gb_5h_mem64g:
+    gpu_class: 80gb
+    timeout_min: 300
+    gpus_per_node: 1
+    mem_gb: 64

@@ -1,0 +1,100 @@
+[input]
+results_root = "results"
+studies = ["unified_foundation_baseline"]
+meta_feature_cache = "results/dataset_characteristics.json"
+
+[output]
+root = "results/analysis/thesis_findings/default_overview"
+thesis_assets = "results/figure_assets/findings/default_overview"
+
+[analysis]
+bootstrap_seed = 20260710
+bootstrap_resamples = 5000
+default_preprocessing = "shared"
+default_context_size = 10000
+# Match the 55-dataset panel currently reported in the manuscript.
+excluded_datasets = ["airlines", "miniboone"]
+openml_addendum_datasets = [
+  "airlines",
+  "covertype",
+  "miniboone",
+  "satimage",
+  "segment",
+  "sylva_prior",
+]
+features = [
+  "baseTrainRows",
+  "nFeaturesTotal",
+  "trainingTableCells",
+  "rowToFeatureRatio",
+  "numericFeatureShare",
+  "numHighCardinalityCategoricalFeatures",
+  "maxCategoricalCardinality",
+  "missingValueShare",
+  "labelEntropyNormalized",
+  "targetP99OverMedian",
+  "targetRobustTailIndex",
+  "univariateSignalTop5Share",
+]
+[[analysis.structural_hypotheses]]
+feature = "univariateSignalTop5Share"
+family = "signal_geometry"
+expected_direction = "negative"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains decrease when the five strongest columns contain a larger share of the univariate target signal, because there is less distributed signal for task-specific updates to combine."
+
+[[analysis.structural_hypotheses]]
+feature = "numericEffectiveRankRatio"
+family = "signal_geometry"
+expected_direction = "positive"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains increase when numeric features span more independent directions and offer less redundant information."
+
+[[analysis.structural_hypotheses]]
+feature = "localClassDisagreementRate"
+family = "distribution_geometry"
+expected_direction = "negative"
+tasks = ["binary", "multiclass"]
+hypothesis = "SFT gains decrease when nearby rows often have different labels, because local overlap leaves less stable target structure to learn."
+
+[[analysis.structural_hypotheses]]
+feature = "localTargetVariationIqr"
+family = "distribution_geometry"
+expected_direction = "negative"
+tasks = ["regression"]
+hypothesis = "SFT gains decrease when neighbouring rows have large target differences relative to the target IQR."
+
+[[analysis.structural_hypotheses]]
+feature = "schemaTypeEntropyNormalized"
+family = "schema_complexity"
+expected_direction = "positive"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains increase for schemas with a more even mixture of numeric and categorical columns."
+
+[[analysis.structural_hypotheses]]
+feature = "categoricalRareValueShare"
+family = "schema_complexity"
+expected_direction = "negative"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains decrease when categorical observations are concentrated in rare levels that provide sparse update evidence."
+
+[[analysis.structural_hypotheses]]
+feature = "marginalShapeHeterogeneity"
+family = "distribution_geometry"
+expected_direction = "positive"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains increase when numeric columns have more heterogeneous marginal shapes, leaving more dataset-specific distribution structure for updates to adapt to."
+
+[[analysis.structural_hypotheses]]
+feature = "sparseRegionOutlierMass"
+family = "distribution_geometry"
+expected_direction = "negative"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains decrease when the sparsest training rows are much farther from ordinary local support."
+
+[[analysis.structural_hypotheses]]
+feature = "categoricalCooccurrenceSparsity"
+family = "schema_complexity"
+expected_direction = "negative"
+tasks = ["binary", "multiclass", "regression"]
+hypothesis = "SFT gains decrease when many rows belong to rare joint categorical patterns that provide little repeated update evidence."

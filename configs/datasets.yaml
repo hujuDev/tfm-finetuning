@@ -1,0 +1,199 @@
+APSFailure:
+  n_rows: 76000
+  outer_train_rows: 50666
+Amazon_employee_access:
+  n_rows: 32769
+  outer_train_rows: 21846
+Another-Dataset-on-used-Fiat-500:
+  n_rows: 1538
+  outer_train_rows: 1025
+Bank_Customer_Churn:
+  n_rows: 10000
+  outer_train_rows: 6666
+Bioresponse:
+  n_rows: 3751
+  outer_train_rows: 2500
+Diabetes130US:
+  n_rows: 71518
+  outer_train_rows: 47678
+E-CommereShippingData:
+  n_rows: 10999
+  outer_train_rows: 7332
+Fitness_Club:
+  n_rows: 1500
+  outer_train_rows: 1000
+Food_Delivery_Time:
+  n_rows: 45451
+  outer_train_rows: 30300
+GiveMeSomeCredit:
+  n_rows: 150000
+  outer_train_rows: 100000
+HR_Analytics_Job_Change_of_Data_Scientists:
+  n_rows: 19158
+  outer_train_rows: 12772
+Higgs:
+  n_rows: 1000000
+  outer_train_rows: 666666
+  task_id: 360114
+Is-this-a-good-customer:
+  n_rows: 1723
+  outer_train_rows: 1148
+KDDCup09_churn:
+  n_rows: 50000
+  outer_train_rows: 33333
+  task_id: 3946
+KDDCup99:
+  n_rows: 4898431
+  outer_train_rows: 3265620
+  task_id: 360112
+MIC:
+  n_rows: 1699
+  outer_train_rows: 1132
+Marketing_Campaign:
+  n_rows: 2240
+  outer_train_rows: 1493
+MiniBooNE:
+  n_rows: 130064
+  outer_train_rows: 86709
+  task_id: 168798
+NATICUSdroid:
+  n_rows: 7491
+  outer_train_rows: 4994
+QSAR-TID-11:
+  n_rows: 5742
+  outer_train_rows: 3828
+QSAR_fish_toxicity:
+  n_rows: 907
+  outer_train_rows: 604
+SDSS17:
+  n_rows: 78053
+  outer_train_rows: 52035
+airfoil_self_noise:
+  n_rows: 1503
+  outer_train_rows: 1002
+airlines:
+  n_rows: 539383
+  outer_train_rows: 359588
+  task_id: 75127
+anneal:
+  n_rows: 898
+  outer_train_rows: 598
+bank-marketing:
+  n_rows: 45211
+  outer_train_rows: 30140
+blood-transfusion-service-center:
+  n_rows: 748
+  outer_train_rows: 498
+churn:
+  n_rows: 5000
+  outer_train_rows: 3333
+coil2000_insurance_policies:
+  n_rows: 9822
+  outer_train_rows: 6548
+concrete_compressive_strength:
+  n_rows: 1030
+  outer_train_rows: 686
+covertype:
+  n_rows: 110393
+  outer_train_rows: 73595
+  task_id: 2118
+credit-g:
+  n_rows: 1000
+  outer_train_rows: 666
+credit_card_clients_default:
+  n_rows: 30000
+  outer_train_rows: 20000
+customer_satisfaction_in_airline:
+  n_rows: 129880
+  outer_train_rows: 86586
+diabetes:
+  n_rows: 768
+  outer_train_rows: 512
+diamonds:
+  n_rows: 53940
+  outer_train_rows: 35960
+ecoli:
+  n_rows: 336
+  outer_train_rows: 224
+  task_id: 38
+glass:
+  n_rows: 214
+  outer_train_rows: 142
+  task_id: 40
+hazelnut-spread-contaminant-detection:
+  n_rows: 2400
+  outer_train_rows: 1600
+healthcare_insurance_expenses:
+  n_rows: 1338
+  outer_train_rows: 892
+heloc:
+  n_rows: 10459
+  outer_train_rows: 6972
+hiva_agnostic:
+  n_rows: 3845
+  outer_train_rows: 2563
+houses:
+  n_rows: 20640
+  outer_train_rows: 13760
+in_vehicle_coupon_recommendation:
+  n_rows: 12684
+  outer_train_rows: 8456
+ionosphere:
+  n_rows: 351
+  outer_train_rows: 234
+  task_id: 57
+jm1:
+  n_rows: 10885
+  outer_train_rows: 7256
+kddcup09_appetency:
+  n_rows: 50000
+  outer_train_rows: 33333
+maternal_health_risk:
+  n_rows: 1014
+  outer_train_rows: 676
+miami_housing:
+  n_rows: 13776
+  outer_train_rows: 9184
+online_shoppers_intention:
+  n_rows: 12330
+  outer_train_rows: 8220
+physiochemical_protein:
+  n_rows: 45730
+  outer_train_rows: 30486
+polish_companies_bankruptcy:
+  n_rows: 5910
+  outer_train_rows: 3940
+qsar-biodeg:
+  n_rows: 1054
+  outer_train_rows: 702
+seismic-bumps:
+  n_rows: 2584
+  outer_train_rows: 1722
+sonar:
+  n_rows: 208
+  outer_train_rows: 138
+  task_id: 39
+splice:
+  n_rows: 3190
+  outer_train_rows: 2126
+students_dropout_and_academic_success:
+  n_rows: 4424
+  outer_train_rows: 2949
+superconductivity:
+  n_rows: 21263
+  outer_train_rows: 14175
+taiwanese_bankruptcy_prediction:
+  n_rows: 6819
+  outer_train_rows: 4546
+website_phishing:
+  n_rows: 1353
+  outer_train_rows: 902
+wine_quality:
+  n_rows: 6497
+  outer_train_rows: 4331
+satimage:
+  task_id: 2074
+segment:
+  task_id: 36
+sylva_prior:
+  task_id: 3893

@@ -1,0 +1,25 @@
+# HYDRA (TU Berlin) defaults. Uses the scheduler account selected by the cluster.
+# If an explicit account is required, add slurm_account under parameters.
+schema_version: 1
+# Jobs use the Python interpreter running the launcher or notebook.
+# That environment must also be accessible on compute nodes.
+profiles:
+  gpu_any_5h:
+    slurm_partition: gpu-5h
+  gpu_40gb_5h:
+    slurm_partition: gpu-5h
+    slurm_constraint: 40gb
+  gpu_80gb_5h:
+    slurm_partition: gpu-5h
+    slurm_constraint: 80gb
+  gpu_40gb_2d:
+    slurm_partition: gpu-2d
+    slurm_constraint: 40gb
+  gpu_80gb_2d:
+    slurm_partition: gpu-2d
+    slurm_constraint: 80gb
+  gpu_80gb_5h_mem64g:
+    slurm_partition: gpu-5h
+    slurm_constraint: 80gb
+parameters:
+  slurm_array_parallelism: 8

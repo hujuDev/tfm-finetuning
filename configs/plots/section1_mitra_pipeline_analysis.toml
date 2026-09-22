@@ -1,0 +1,8 @@
+[input]
+results_root = "results"
+dataset_bundle = "all_tabarena"
+dataset_bundles_path = "configs/panels.yaml"
+
+[output]
+root = "results/analysis/thesis_findings/mitra_pipeline_comparison"
+thesis_assets = "results/figure_assets/findings/appendix"

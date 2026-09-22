@@ -1,0 +1,6 @@
+[input]
+results_root = "results"
+
+[output]
+analysis_dir = "results/analysis/thesis_findings/cross_dataset_transfer/learned_retention"
+thesis_assets = "results/figure_assets/findings/cross_dataset_transfer"

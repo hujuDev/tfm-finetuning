@@ -1,0 +1,23 @@
+name: Lightweight checks
+on: [push, pull_request, workflow_dispatch]
+permissions:
+  contents: read
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install lightweight test dependencies
+        run: >-
+          python -m pip install pytest pyyaml numpy scipy pandas scikit-learn
+          submitit python-dotenv pydantic tomli-w loguru wandb openml psutil IPython nbformat
+          'matplotlib==3.10.1' 'ruff==0.14.14'
+      - name: Check Python syntax and lint
+        run: |
+          python -m compileall -q src tests
+          ruff check src tests
+      - name: Run CPU reproduction checks
+        run: bash scripts/development/check_cpu.sh

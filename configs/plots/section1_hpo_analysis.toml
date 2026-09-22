@@ -1,0 +1,10 @@
+[input]
+results_root = "results"
+
+[output]
+root = "results/analysis/thesis_findings/hyperparameter_tuning"
+thesis_assets = "results/figure_assets/findings/hyperparameter_tuning"
+
+[analysis]
+models = ["tabpfnv25", "tabiclv2", "mitra"]
+surface_datasets = ["covertype", "diamonds", "houses"]

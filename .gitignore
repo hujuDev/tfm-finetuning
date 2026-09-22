@@ -1,0 +1,46 @@
+# Local environment and credentials
+.env
+.env.*
+!.env.example
+*.local.yaml
+.openml/
+.netrc
+.venv/
+__pycache__/
+.ipynb_checkpoints/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+build/
+dist/
+
+# Downloaded data, model weights, and generated experiment artifacts
+/data/
+/models/
+/libs/
+/results/
+/logs/
+/saves/
+/checkpoints/
+/outputs/
+/wandb/
+/var/
+/review/
+/reports/
+/latex/
+*.log
+*.sif
+configs/experiments/generated/
+configs/datasets/out/
+
+# Local editor and agent state
+.worktrees/
+.vscode/
+.idea/
+.agent/
+.agents/
+.codex/
+.DS_Store
