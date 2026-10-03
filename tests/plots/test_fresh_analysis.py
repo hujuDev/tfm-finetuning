@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import warnings
 from pathlib import Path
 
 import pytest
@@ -11,7 +12,7 @@ import pytest
 from tfm_finetuning.plots.overview.hpo_analysis import generate_hpo_analysis
 from tfm_finetuning.plots.overview.pattern_data import _canonical_frame
 from tfm_finetuning.plots.overview.result_table import dataset_result_table_latex
-from tfm_finetuning.plots.results import aggregate_metrics, metric_frame, read_runs
+from tfm_finetuning.plots.results import aggregate_metrics, metric_frame, read_runs, validate_study
 from tfm_finetuning.plots.thesis_resource_analysis import generate as generate_resources
 
 
@@ -99,6 +100,22 @@ def test_completed_duplicate_corrupt_and_failed_runs_are_not_silently_pooled(tmp
     (directory / "finetune_report.json").unlink()
     with pytest.raises(FileNotFoundError):
         list(read_runs(tmp_path))
+
+
+def test_unavailable_runs_are_skipped_silently_but_count_as_accounted_for(tmp_path, monkeypatch):
+    done = write_run(tmp_path)
+    directory = write_run(tmp_path, run_id="never-run", seed=1, status="unavailable")
+    (directory / "finetune_report.json").unlink()
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        assert [run.metadata["run_id"] for run in read_runs(tmp_path)] == [done.name]
+    recipe = {"study": "overview_baseline"}
+    monkeypatch.setattr("tfm_finetuning.utils.config.read_yaml_mapping", lambda path: recipe)
+    monkeypatch.setattr(
+        "tfm_finetuning.experiments.configuration.expand_runs",
+        lambda recipe, repo_root: [{"run_id": done.name}, {"run_id": "never-run"}],
+    )
+    validate_study(tmp_path, "overview_baseline", repo_root=tmp_path)
 
 
 def test_hpo_selects_validation_config_and_renders_final_artifacts_from_fresh_runs(tmp_path):

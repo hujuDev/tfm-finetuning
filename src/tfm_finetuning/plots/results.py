@@ -68,6 +68,7 @@ def read_runs(root: Path, studies: Sequence[str] | None = None) -> Iterator[Run]
 
     A running/failed run is excluded with a warning. A complete run lacking its
     report is corrupt and raises an error; missing measurements are never zero.
+    Runs marked ``unavailable`` were never executed and are skipped silently.
     """
     root = resolve_results_root(root)
     if studies:
@@ -82,6 +83,8 @@ def read_runs(root: Path, studies: Sequence[str] | None = None) -> Iterator[Run]
     seen = set()
     for path in sorted(paths):
         metadata = json.loads(path.read_text())
+        if metadata["status"] == "unavailable":
+            continue
         if metadata["status"] != "complete":
             warnings.warn(f"Excluded {metadata['status']} run: {path}", stacklevel=2)
             continue
@@ -189,6 +192,11 @@ def validate_study(results_root: Path, study: str, *, repo_root: Path) -> None:
     recipe = read_yaml_mapping(repo_root / "configs/experiments" / f"{study}.yaml")
     expected = {run["run_id"] for run in expand_runs(recipe, repo_root=repo_root)}
     observed = {run.metadata["run_id"] for run in read_runs(results_root, [study])}
+    observed |= {
+        json.loads(path.read_text())["run_id"]
+        for path in resolve_results_root(results_root).glob(f"{study}/*/run.json")
+        if json.loads(path.read_text())["status"] == "unavailable"
+    }
     missing, extra = expected - observed, observed - expected
     if missing or extra:
         raise ValueError(
