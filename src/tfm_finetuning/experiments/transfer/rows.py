@@ -92,7 +92,7 @@ def apply_train_subset_to_split(
     append the unchanged outer-validation queries after checkpoint selection.
 
     This function expects the ``SplitEvaluationData`` field contract but remains
-    independent of any foundation-model adapter.
+    independent of any adapter.
     """
     train_X = subset.take_frame(data.train_X)
     train_y = subset.take_array(data.train_y)

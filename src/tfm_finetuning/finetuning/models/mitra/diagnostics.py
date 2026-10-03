@@ -30,7 +30,7 @@ def capture_epoch_logging(estimator: Any) -> Iterator[None]:
         logger_obj.log_epoch(epoch_payload(epoch, metrics_train, metrics_valid), step=int(epoch))
         checkpoint = getattr(trainer, "checkpoint", None)
         if checkpoint is not None:
-            checkpoint._foundation_current_epoch = int(epoch)
+            checkpoint._tfm_current_epoch = int(epoch)
         return original(trainer, epoch, metrics_train, metrics_valid)
 
     def wrapped_checkpoint_call(checkpoint: Any, net: Any, loss: float) -> Any:
@@ -38,13 +38,13 @@ def capture_epoch_logging(estimator: Any) -> Iterator[None]:
         result = original_checkpoint_call(checkpoint, net, loss)
         with contextlib.suppress(Exception):
             if previous is None or float(loss) < float(previous):
-                checkpoint._foundation_best_epoch = getattr(checkpoint, "_foundation_current_epoch", None)
+                checkpoint._tfm_best_epoch = getattr(checkpoint, "_tfm_current_epoch", None)
         return result
 
     def wrapped_set_to_best(checkpoint: Any, net: Any) -> Any:
-        checkpoint._foundation_final_epoch = getattr(checkpoint, "_foundation_current_epoch", None)
-        checkpoint._foundation_final_state = clone_torch_state_dict(net.state_dict())
-        checkpoint._foundation_best_state = clone_torch_state_dict(getattr(checkpoint, "best_model", {}))
+        checkpoint._tfm_final_epoch = getattr(checkpoint, "_tfm_current_epoch", None)
+        checkpoint._tfm_final_state = clone_torch_state_dict(net.state_dict())
+        checkpoint._tfm_best_state = clone_torch_state_dict(getattr(checkpoint, "best_model", {}))
         return original_set_to_best(checkpoint, net)
 
     trainer_cls.log_metrics = wrapped
@@ -100,7 +100,7 @@ def final_logged_epoch(estimator: Any) -> int:
 
 def best_logged_epoch(estimator: Any) -> int | None:
     epochs = [
-        getattr(getattr(trainer, "checkpoint", None), "_foundation_best_epoch", None)
+        getattr(getattr(trainer, "checkpoint", None), "_tfm_best_epoch", None)
         for trainer in getattr(estimator, "trainers", [])
     ]
     numeric = [int(epoch) for epoch in epochs if epoch is not None]

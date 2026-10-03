@@ -192,7 +192,7 @@ def initialize_stage_estimator(
         device,
         initial_checkpoint=initial_checkpoint,
     )
-    if getattr(estimator, "foundation_mitra_finetune_interface", None) != "local_chunked":
+    if getattr(estimator, "tfm_mitra_finetune_interface", None) != "local_chunked":
         raise ValueError("Mitra transfer training requires mitra_finetune_interface='local_chunked'.")
     task = Task.REGRESSION if task_type == "regression" else Task.CLASSIFICATION
     dim_output = 1 if task == Task.REGRESSION else _MITRA_CLASS_OUTPUTS
@@ -200,7 +200,7 @@ def initialize_stage_estimator(
     estimator.task = task
     cfg, model_cls = estimator._create_config(task, dim_output, None)
     cfg.task = task
-    initial_states = getattr(estimator, "_foundation_initial_trainer_states", None)
+    initial_states = getattr(estimator, "_tfm_initial_trainer_states", None)
     estimator.trainers = _fresh_local_trainers(
         estimator,
         cfg=cfg,
@@ -210,7 +210,7 @@ def initialize_stage_estimator(
         n_classes=n_classes,
         states=initial_states,
     )
-    estimator._foundation_initial_trainer_states = None
+    estimator._tfm_initial_trainer_states = None
     if len(estimator.trainers) != int(common_config.n_estimators_finetune):
         raise RuntimeError("Mitra transfer ensemble size differs from n_estimators_finetune.")
     for trainer in estimator.trainers:
@@ -279,12 +279,12 @@ def exact_stage_schedulers(
         params = trainer.cfg.hyperparams
         item = LocalMitraFineTuneDiagnostics(
             context_size=int(params["max_samples_support"]) + int(params["max_samples_query"]),
-            query_ratio=float(params.get("foundation_query_ratio", 0.2)),
+            query_ratio=float(params.get("tfm_query_ratio", 0.2)),
             max_samples_support=int(params["max_samples_support"]),
             max_samples_query=int(params["max_samples_query"]),
             use_lr_scheduler=bool(params.get("lr_scheduler", False)),
-            scheduler_policy=str(params.get("foundation_scheduler_policy", "cosine_warmup")),
-            warmup_proportion=float(params.get("foundation_warmup_proportion", 0.1)),
+            scheduler_policy=str(params.get("tfm_scheduler_policy", "cosine_warmup")),
+            warmup_proportion=float(params.get("tfm_warmup_proportion", 0.1)),
             total_optimizer_steps_planned=int(update_budget),
             epochs_configured=int(update_budget),
             grad_clip=float(params.get("grad_clip") or 0.0) or None,
@@ -423,7 +423,7 @@ def _member_index(trainer: Any, dataset: PreparedMitraDataset) -> int:
             return index
     # At call entry the session assigns by trainer order, while the first call
     # has no cached preprocessor identity yet. The constructor stores the index.
-    index = getattr(trainer, "_foundation_transfer_member_index", None)
+    index = getattr(trainer, "_tfm_transfer_member_index", None)
     if isinstance(index, int) and 0 <= index < len(dataset.member_preprocessors):
         return index
     raise RuntimeError("Mitra transfer trainer lacks an ensemble-member index.")
@@ -432,7 +432,7 @@ def _member_index(trainer: Any, dataset: PreparedMitraDataset) -> int:
 def assign_transfer_member_indices(trainers: tuple[Any, ...]) -> None:
     """Bind stable member indices used by per-dataset preprocessing caches."""
     for index, trainer in enumerate(trainers):
-        trainer._foundation_transfer_member_index = index
+        trainer._tfm_transfer_member_index = index
 
 
 def _derived_seed(seed: int, dataset_name: str, *indices: int) -> int:

@@ -1,4 +1,4 @@
-"""Run data-preparation phase for foundation-model fine-tuning."""
+"""Run data-preparation phase for fine-tuning."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from typing import Any
 
 from tfm_finetuning.finetuning.datasets.loading import (
     SplitEvaluationData,
-    _apply_foundation_model_row_limits,
+    _apply_model_row_limits,
     _densify_sparse_feature_frames,
     load_split_evaluation_data,
 )
@@ -29,7 +29,7 @@ from tfm_finetuning.finetuning.models.base import FoundationModelAdapter
 from tfm_finetuning.finetuning.training.fit import _record_runtime_phase
 
 
-def _prepare_foundation_run_data(
+def _prepare_run_data(
     *,
     config: Mapping[str, Any],
     repo_root: Path,
@@ -42,7 +42,7 @@ def _prepare_foundation_run_data(
     """Load and transform run data before estimator construction.
 
     Example:
-        >>> callable(_prepare_foundation_run_data)
+        >>> callable(_prepare_run_data)
         True
     """
     phase_started = time.monotonic()
@@ -75,7 +75,7 @@ def _prepare_foundation_run_data(
         test_context_rows=len(data.test_context_X),
     )
     phase_started = time.monotonic()
-    data = _apply_foundation_model_row_limits(data, config=config, seed=int(resolved_seed))
+    data = _apply_model_row_limits(data, config=config, seed=int(resolved_seed))
     row_limits = data.metadata.get("row_limits")
     effective_rows = row_limits.get("effective_rows") if isinstance(row_limits, Mapping) else {}
     if not isinstance(effective_rows, Mapping):
@@ -160,7 +160,7 @@ def _prepare_foundation_run_data(
     if shift_comparison_data is not None and context_comparison_data is not None:
         raise ValueError(
             "A run cannot combine a distribution-shift test-view comparison with "
-            "foundation_model.test_context_comparison"
+            "finetune.test_context_comparison"
         )
     comparison_data = shift_comparison_data or context_comparison_data
     if context_comparison_data is not None:

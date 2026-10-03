@@ -3,7 +3,7 @@ title: 'Dataset Transfer: Expanded Classification Source-Only Inference'
 category: transfer
 models:
 - name: tabpfnv25
-  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+  config: configs/finetuning/default_tabpfnv2_5.toml
 - name: tabiclv2
   config: configs/finetuning/default_tabicl_v2.toml
 - name: mitra
@@ -12,7 +12,7 @@ axes:
   preprocessing:
   - value: shared
     settings:
-      foundation_model.preprocessing_protocol: shared
+      finetune.preprocessing_protocol: shared
   sourceCheckpoint:
   - value: satimage
     settings:
@@ -44,14 +44,14 @@ split:
 settings:
   data.backend: tabarena_openml_task_wrapper
   evaluation.backend: tabarena_aligned
-  foundation_model.preprocessing_protocol: shared
-  foundation_model.use_lr_scheduler: false
-  foundation_model.early_stopping: false
-  foundation_model.test_context_includes_validation_data: true
-  foundation_model.validation_split_ratio: 0.1
-  foundation_model.validation_split_seed: 0
-  foundation_model.ignore_pretraining_limits: true
-  foundation_model.resource_fallback_policy: strict
+  finetune.preprocessing_protocol: shared
+  finetune.use_lr_scheduler: false
+  finetune.early_stopping: false
+  finetune.test_context_includes_validation_data: true
+  finetune.validation_split_ratio: 0.1
+  finetune.validation_split_seed: 0
+  finetune.ignore_pretraining_limits: true
+  finetune.resource_fallback_policy: strict
   dataset_transfer.enabled: true
   dataset_transfer.family: dataset_transfer_source_only_eval
   dataset_transfer.task_family: classification

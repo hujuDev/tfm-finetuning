@@ -9,8 +9,8 @@ from tfm_finetuning.finetuning.evaluation.core import (
     _build_test_context_comparison_payload,
 )
 from tfm_finetuning.finetuning.reporting.report import finish_run
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
-from tfm_finetuning.finetuning.run.training import FoundationTrainingOutcome
+from tfm_finetuning.finetuning.run.setup import RunSetup
+from tfm_finetuning.finetuning.run.training import TrainingOutcome
 from tfm_finetuning.finetuning.training.checkpoint_retention import checkpoint_retention_payload
 from tfm_finetuning.finetuning.training.checkpoints import _epoch_from_checkpoint, _fit_controller_checkpoint_policy
 from tfm_finetuning.finetuning.training.fit import _record_runtime_phase
@@ -23,12 +23,12 @@ from tfm_finetuning.finetuning.training.resource_policy import _runtime_option_p
 
 
 def complete_finetuned_run(
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     *,
     data: Any,
     comparison_data: Any,
     feature_preprocessing: dict[str, Any],
-    training: FoundationTrainingOutcome,
+    training: TrainingOutcome,
     configured_common_config: Any,
     estimator_fallback: dict[str, Any],
     baseline_metrics: dict[str, Any],
@@ -96,8 +96,8 @@ def complete_finetuned_run(
         final_timing_phase="final_in_memory" if fit_controller is not None else "final_checkpoint",
     )
     report = {
-        "pipeline_mode": "foundation_model",
-        "foundation_model": {
+        "pipeline_mode": "finetune",
+        "finetune": {
             "model_id": setup.spec.model_id,
             "display_name": setup.spec.display_name,
             "version_payload": setup.spec.version_payload,
@@ -123,7 +123,7 @@ def complete_finetuned_run(
             "seed_delta": setup.seed_delta,
         },
         "score_metric": score_metric,
-        "score_metric_source": "foundation_model.metric",
+        "score_metric_source": "finetune.metric",
         "evaluation": {
             "eval_interval_epochs": int(setup.test_eval_interval),
             "test_evaluation_policy": "periodic" if setup.test_eval_interval > 0 else "selected_and_final_only",
@@ -169,7 +169,7 @@ def complete_finetuned_run(
         "final_checkpoint_metrics": final_metrics,
         "train_history": train_history,
         "epoch_evaluations": epoch_evaluations,
-        "foundation_model_test_eval_interval_epochs": int(setup.test_eval_interval),
+        "finetune_test_eval_interval_epochs": int(setup.test_eval_interval),
         "final_train_epoch": final_train_epoch,
         "runtime_seconds": elapsed,
         "runtime": {

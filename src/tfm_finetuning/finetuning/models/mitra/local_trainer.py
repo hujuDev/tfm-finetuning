@@ -164,7 +164,7 @@ class LocalMitraTrainer(TrainerFinetune):
     def _set_checkpoint_epoch(self, epoch: int) -> None:
         checkpoint = getattr(self, "checkpoint", None)
         if checkpoint is not None:
-            checkpoint._foundation_current_epoch = int(epoch)
+            checkpoint._tfm_current_epoch = int(epoch)
 
     def _run_training_epoch(
         self,
@@ -254,25 +254,25 @@ class LocalMitraTrainer(TrainerFinetune):
         return False
 
     def _initialize_diagnostics(self, *, n_samples: int) -> LocalMitraFineTuneDiagnostics:
-        context_size = max(2, int(self.cfg.hyperparams.get("foundation_context_size") or 0))
+        context_size = max(2, int(self.cfg.hyperparams.get("tfm_context_size") or 0))
         if context_size <= 2:
             context_size = int(self.cfg.hyperparams["max_samples_support"]) + int(
                 self.cfg.hyperparams["max_samples_query"]
             )
-        min_chunk_size = max(2, int(self.cfg.hyperparams.get("foundation_mitra_chunk_min_rows", 50)))
+        min_chunk_size = max(2, int(self.cfg.hyperparams.get("tfm_mitra_chunk_min_rows", 50)))
         chunks_per_epoch = count_mitra_epoch_chunks(n_samples, context_size, min_chunk_size)
         max_epochs = int(self.cfg.hyperparams["max_epochs"])
         diagnostics = LocalMitraFineTuneDiagnostics(
             context_size=context_size,
-            query_ratio=float(self.cfg.hyperparams.get("foundation_query_ratio", 0.2)),
+            query_ratio=float(self.cfg.hyperparams.get("tfm_query_ratio", 0.2)),
             min_chunk_size=min_chunk_size,
             max_samples_support=int(self.cfg.hyperparams["max_samples_support"]),
             max_samples_query=int(self.cfg.hyperparams["max_samples_query"]),
             use_lr_scheduler=bool(self.cfg.hyperparams.get("lr_scheduler", False)),
             scheduler_policy=str(
-                self.cfg.hyperparams.get("foundation_scheduler_policy", MITRA_SCHEDULER_COSINE_WARMUP)
+                self.cfg.hyperparams.get("tfm_scheduler_policy", MITRA_SCHEDULER_COSINE_WARMUP)
             ),
-            warmup_proportion=float(self.cfg.hyperparams.get("foundation_warmup_proportion", 0.1)),
+            warmup_proportion=float(self.cfg.hyperparams.get("tfm_warmup_proportion", 0.1)),
             chunks_per_epoch=chunks_per_epoch,
             epochs_configured=max_epochs,
             total_optimizer_steps_planned=max(1, chunks_per_epoch * max_epochs),

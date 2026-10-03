@@ -64,22 +64,22 @@ from tfm_finetuning.finetuning.models.mitra.vendor import MitraBindings, load_mi
 from tfm_finetuning.finetuning.models.preprocessing import (
     FiniteFeaturePreprocessor,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 
 
 class MitraAdapter:
     """Complete thesis-side Mitra slice for official and local-chunked training.
 
     Example:
-        >>> from tfm_finetuning.finetuning.models.registry import get_foundation_model_spec
-        >>> adapter = MitraAdapter(get_foundation_model_spec("mitra"))
+        >>> from tfm_finetuning.finetuning.models.registry import get_model_spec
+        >>> adapter = MitraAdapter(get_model_spec("mitra"))
         >>> adapter.resolved_model_params(CommonFineTuneConfig(epochs=3))["fine_tune_steps"]
         3
     """
 
     model_id = "mitra"
 
-    def __init__(self, spec: FoundationModelSpec, *, bindings: MitraBindings | None = None) -> None:
+    def __init__(self, spec: ModelSpec, *, bindings: MitraBindings | None = None) -> None:
         self.spec = spec
         self._bindings = bindings
         self._last_finetuned_estimator: Any | None = None
@@ -146,14 +146,14 @@ class MitraAdapter:
         estimator.n_estimators_finetune = int(config.n_estimators_finetune)
         estimator.n_estimators_validation = int(config.n_estimators_validation)
         estimator.n_estimators_inference = int(config.n_estimators_final_inference)
-        estimator._foundation_common_config = config
+        estimator._tfm_common_config = config
         if initial_checkpoint is not None:
-            estimator._foundation_initial_trainer_states = read_checkpoint_for_finetuning(
+            estimator._tfm_initial_trainer_states = read_checkpoint_for_finetuning(
                 initial_checkpoint,
                 task_type=task_type,
                 expected_ensemble_size=options.n_estimators,
             )
-            estimator._foundation_initial_checkpoint = str(initial_checkpoint)
+            estimator._tfm_initial_checkpoint = str(initial_checkpoint)
         return estimator
 
     def fit_finetuned(
@@ -167,7 +167,7 @@ class MitraAdapter:
     ) -> Any:
         """Fit Mitra with explicit validation data and write project checkpoints."""
         preprocessor = FiniteFeaturePreprocessor.fit(train_X)
-        estimator._foundation_mitra_feature_preprocessor = preprocessor
+        estimator._tfm_mitra_feature_preprocessor = preprocessor
         train_X_fit = preprocessor.transform(train_X)
         val_X_fit = preprocessor.transform(val_X)
         self._last_finetune_diagnostics = {
@@ -199,15 +199,15 @@ class MitraAdapter:
             self._last_finetune_diagnostics["mitra_local_trainer"] = local_diagnostics
         final_epoch = final_logged_epoch(result)
         best_epoch = best_logged_epoch(result)
-        result._foundation_final_epoch = final_epoch
-        result._foundation_best_epoch = best_epoch
+        result._tfm_final_epoch = final_epoch
+        result._tfm_best_epoch = best_epoch
         suppress_checkpoints = bool(
-            getattr(result, "_foundation_suppress_adapter_checkpoints", False)
-            or getattr(estimator, "_foundation_suppress_adapter_checkpoints", False)
+            getattr(result, "_tfm_suppress_adapter_checkpoints", False)
+            or getattr(estimator, "_tfm_suppress_adapter_checkpoints", False)
         )
         if not suppress_checkpoints:
             write_checkpoint_package(result, output_dir / "best.ckpt")
-            final_states = captured_trainer_states(result, "_foundation_final_state")
+            final_states = captured_trainer_states(result, "_tfm_final_state")
             if final_states:
                 write_checkpoint_with_trainer_states(
                     result,
@@ -261,7 +261,7 @@ class MitraAdapter:
         )
         if not getattr(estimator, "trainers", None):
             raise RuntimeError(f"Mitra checkpoint has no trained ensemble members: {checkpoint_path}.")
-        portable_metadata = getattr(estimator, "_foundation_portable_checkpoint_metadata", None)
+        portable_metadata = getattr(estimator, "_tfm_portable_checkpoint_metadata", None)
         if isinstance(portable_metadata, dict):
             task_family = "regression" if task_type == "regression" else "classification"
             checkpoint_family = portable_metadata.get("task_family")
@@ -340,14 +340,14 @@ class MitraAdapter:
     def capture_finetuned_states(self, estimator: Any) -> dict[str, dict[str, Any]]:
         """Return best/final states captured from Mitra trainer checkpoint callbacks."""
         payload: dict[str, dict[str, Any]] = {}
-        best_states = captured_trainer_states(estimator, "_foundation_best_state")
+        best_states = captured_trainer_states(estimator, "_tfm_best_state")
         if best_states:
             payload["best"] = {
                 "state": estimator_state_with_trainer_states(estimator, best_states),
                 "epoch": best_logged_epoch(estimator),
                 "metric": None,
             }
-        final_states = captured_trainer_states(estimator, "_foundation_final_state")
+        final_states = captured_trainer_states(estimator, "_tfm_final_state")
         if final_states:
             payload["final"] = {
                 "state": estimator_state_with_trainer_states(estimator, final_states),
@@ -417,5 +417,5 @@ class MitraAdapter:
         )
 
     def resolved_model_params(self, common_config: CommonFineTuneConfig) -> dict[str, Any]:
-        """Map common foundation-model settings to Mitra constructor parameters."""
+        """Map common settings to Mitra constructor parameters."""
         return MitraFineTuneOptions.from_common(common_config).report_params()

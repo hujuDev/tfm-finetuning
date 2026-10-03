@@ -22,7 +22,7 @@ def config(route="pooled_sources_then_target", **transfer):
     return {
         "seed": 2,
         "data": {"path": "data/tabarena/credit-g", "split": "fold0_repeat0_sample0"},
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabpfn_v2_5",
             "classifier_checkpoint": "base.ckpt",
             "use_lr_scheduler": False,

@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: training."""
+"""Tests for model finetune: training."""
 
 from __future__ import annotations
 
@@ -36,7 +36,7 @@ def test_select_checkpoint_path_prefers_latest_epoch_for_final_mode(tmp_path: Pa
     assert checkpoint_runner.select_checkpoint_path(tmp_path, checkpoint_mode="final") == tmp_path / "checkpoint_2K_5.pth"
     assert checkpoint_runner.select_checkpoint_path(tmp_path, checkpoint_mode="best") == tmp_path / "best.ckpt"
 
-def test_foundation_model_main_validation_only_in_memory_exports_best_checkpoint(
+def test_finetune_main_validation_only_in_memory_exports_best_checkpoint(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
@@ -153,7 +153,7 @@ def test_foundation_model_main_validation_only_in_memory_exports_best_checkpoint
         adapter_cls=FakeAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(
         run_data_runner,
         "load_split_evaluation_data",
@@ -181,7 +181,7 @@ def test_foundation_model_main_validation_only_in_memory_exports_best_checkpoint
         {
             "paths": {"results_root": str(tmp_path / "results")},
             "seed": 0,
-            "foundation_model": {
+            "finetune": {
                 "model_id": "tabicl_v2",
                 "epochs": 2,
                 "test_eval_interval_epochs": 0,
@@ -232,7 +232,7 @@ def test_foundation_model_main_validation_only_in_memory_exports_best_checkpoint
         (False, None, 0, "zero_shot_initial", 0.5),
     ],
 )
-def test_foundation_model_main_uses_adapter_captured_in_memory_states_without_best_checkpoint(
+def test_finetune_main_uses_adapter_captured_in_memory_states_without_best_checkpoint(
     tmp_path: Path,
     monkeypatch,
     capture_best_state: bool,
@@ -327,7 +327,7 @@ def test_foundation_model_main_uses_adapter_captured_in_memory_states_without_be
         adapter_cls=FakeMitraLikeAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(
         run_data_runner,
         "load_split_evaluation_data",
@@ -355,7 +355,7 @@ def test_foundation_model_main_uses_adapter_captured_in_memory_states_without_be
         {
             "paths": {"results_root": str(tmp_path / "results")},
             "seed": 0,
-            "foundation_model": {
+            "finetune": {
                 "model_id": "mitra",
                 "epochs": 2,
                 "test_eval_interval_epochs": 1,
@@ -391,7 +391,7 @@ def test_foundation_model_main_uses_adapter_captured_in_memory_states_without_be
     assert (2, "test", "in_memory_final") in epoch_rows
     assert (2, "test", "final_checkpoint") not in epoch_rows
 
-def test_foundation_model_main_allows_zero_shot_initial_best_with_saved_checkpoint(
+def test_finetune_main_allows_zero_shot_initial_best_with_saved_checkpoint(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
@@ -444,7 +444,7 @@ def test_foundation_model_main_allows_zero_shot_initial_best_with_saved_checkpoi
         adapter_cls=DiskCheckpointAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(
         run_data_runner,
         "load_split_evaluation_data",
@@ -472,7 +472,7 @@ def test_foundation_model_main_allows_zero_shot_initial_best_with_saved_checkpoi
         {
             "paths": {"results_root": str(tmp_path / "results")},
             "seed": 0,
-            "foundation_model": {
+            "finetune": {
                 "model_id": "tabpfn_v2_5",
                 "epochs": 2,
                 "test_eval_interval_epochs": 0,
@@ -634,8 +634,8 @@ def test_log_wandb_summary_merges_periodic_rows_into_epoch_steps(tmp_path: Path)
         fake_run,
         report={
             "score_metric": "roc_auc",
-            "score_metric_source": "foundation_model.metric",
-            "foundation_model_test_eval_interval_epochs": 1,
+            "score_metric_source": "finetune.metric",
+            "finetune_test_eval_interval_epochs": 1,
             "final_train_epoch": 2,
             "fit_diagnostics": {
                 "tabicl_meta_batch_split": {

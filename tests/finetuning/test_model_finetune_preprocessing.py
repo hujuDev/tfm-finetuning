@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: preprocessing."""
+"""Tests for model finetune: preprocessing."""
 
 from __future__ import annotations
 
@@ -24,7 +24,7 @@ from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
 from tfm_finetuning.finetuning.models.preprocessing import (
     feature_schema_metadata,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 
 
 def test_feature_schema_metadata_marks_native_categorical_columns() -> None:
@@ -160,7 +160,7 @@ def test_load_split_evaluation_data_defaults_test_context_to_inner_train(
     data = data_runner.load_split_evaluation_data(
         config={
             "data": {"path": str(dataset_path), "split": "fold0_repeat0_sample0"},
-            "foundation_model": {"validation_split_ratio": 0.1, "validation_split_seed": 7},
+            "finetune": {"validation_split_ratio": 0.1, "validation_split_seed": 7},
         },
         repo_root=tmp_path,
     )
@@ -175,8 +175,8 @@ def test_load_split_evaluation_data_defaults_test_context_to_inner_train(
 @pytest.mark.parametrize(
     "context_flag_config",
     [
-        {"foundation_model": {"test_context_includes_validation_data": True}},
-        {"foundation_model": {"test_context_includes_explicit_validation_data": True}},
+        {"finetune": {"test_context_includes_validation_data": True}},
+        {"finetune": {"test_context_includes_explicit_validation_data": True}},
     ],
 )
 def test_load_split_evaluation_data_validation_context_flag_selects_outer_train(
@@ -235,8 +235,8 @@ def test_resolve_preprocessing_protocol_defaults_to_model_native() -> None:
 
 
 
-def test_resolve_configured_foundation_model_spec_honors_checkpoint_metadata(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+def test_resolve_configured_model_spec_honors_checkpoint_metadata(tmp_path: Path) -> None:
+    spec = ModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter",
@@ -252,10 +252,10 @@ def test_resolve_configured_foundation_model_spec_honors_checkpoint_metadata(tmp
         },
     )
 
-    resolved = config_runner.resolve_configured_foundation_model_spec(
+    resolved = config_runner.resolve_configured_model_spec(
         spec,
         {
-            "foundation_model": {
+            "finetune": {
                 "classifier_checkpoint": "tabicl-classifier-v2-20260212.ckpt",
                 "regressor_checkpoint": "tabicl-regressor-v2-20260212.ckpt",
             }

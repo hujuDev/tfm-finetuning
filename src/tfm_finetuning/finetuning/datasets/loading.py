@@ -1,4 +1,4 @@
-"""Split data loading and row-shaping helpers for foundation-model fine-tuning."""
+"""Split data loading and row-shaping helpers for fine-tuning."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from tfm_finetuning.finetuning.datasets.runner_data import load_foundation_split_data
+from tfm_finetuning.finetuning.datasets.runner_data import load_split_data
 from tfm_finetuning.finetuning.distribution_shift import TargetTransformState
 from tfm_finetuning.finetuning.models.base import TaskKind, task_kind_from_value
 from tfm_finetuning.finetuning.run import eval_shared as _pipeline_eval_shared
@@ -26,7 +26,7 @@ TEST_CONTEXT_POLICY_BALANCED_ORIGINAL_MAJORITY = "balanced_original_majority_dow
 
 @dataclass(frozen=True)
 class SplitEvaluationData:
-    """Data needed to fit and evaluate one foundation-model run.
+    """Data needed to fit and evaluate one run.
 
     Example:
         >>> SplitEvaluationData.__name__
@@ -84,7 +84,7 @@ def _coerce_bool_config(value: Any, *, dotted_key: str) -> bool:
 
 def _resolve_validation_fraction(config: Mapping[str, Any]) -> float:
     for dotted_key in (
-        "foundation_model.validation_split_ratio",
+        "finetune.validation_split_ratio",
         "evaluation.val_fraction",
     ):
         value = get_nested(config, dotted_key)
@@ -95,7 +95,7 @@ def _resolve_validation_fraction(config: Mapping[str, Any]) -> float:
 
 def _resolve_validation_seed(config: Mapping[str, Any]) -> int:
     for dotted_key in (
-        "foundation_model.validation_split_seed",
+        "finetune.validation_split_seed",
         "evaluation.val_seed",
         "data.seed",
         "seed",
@@ -112,8 +112,8 @@ def _resolve_validation_seed(config: Mapping[str, Any]) -> int:
 
 def _resolve_test_context_includes_validation_data(config: Mapping[str, Any]) -> bool:
     for dotted_key in (
-        "foundation_model.test_context_includes_validation_data",
-        "foundation_model.test_context_includes_explicit_validation_data",
+        "finetune.test_context_includes_validation_data",
+        "finetune.test_context_includes_explicit_validation_data",
     ):
         value = get_nested(config, dotted_key)
         if value is not None:
@@ -123,8 +123,8 @@ def _resolve_test_context_includes_validation_data(config: Mapping[str, Any]) ->
 
 def _resolve_test_context_comparison_enabled(config: Mapping[str, Any]) -> bool:
     for dotted_key in (
-        "foundation_model.test_context_comparison.enabled",
-        "foundation_model.compare_test_contexts",
+        "finetune.test_context_comparison.enabled",
+        "finetune.compare_test_contexts",
     ):
         value = get_nested(config, dotted_key)
         if value is not None:
@@ -144,7 +144,7 @@ def _test_context_flag_config(config: Mapping[str, Any], *, includes_validation_
     copied = json.loads(json.dumps(config))
     set_nested(
         copied,
-        "foundation_model.test_context_includes_validation_data",
+        "finetune.test_context_includes_validation_data",
         bool(includes_validation_data),
     )
     return copied
@@ -282,7 +282,7 @@ def _densify_sparse_feature_frames(data: SplitEvaluationData) -> SplitEvaluation
     )
 
 
-def _apply_foundation_model_row_limits(
+def _apply_model_row_limits(
     data: SplitEvaluationData,
     *,
     config: Mapping[str, Any],
@@ -300,32 +300,32 @@ def _apply_foundation_model_row_limits(
         ...     test_X=pd.DataFrame({"x": range(2)}), test_y=np.array([0, 1]),
         ...     metadata={},
         ... )
-        >>> _apply_foundation_model_row_limits(
-        ...     data, config={"foundation_model": {"train_max_rows": 2}}, seed=0
+        >>> _apply_model_row_limits(
+        ...     data, config={"finetune": {"train_max_rows": 2}}, seed=0
         ... ).train_X.shape[0]
         2
     """
     train_max_rows = _resolve_optional_positive_int(
         config,
         (
-            "foundation_model.train_max_rows",
-            "foundation_model.fit_train_max_rows",
-            "foundation_model.max_train_rows",
+            "finetune.train_max_rows",
+            "finetune.fit_train_max_rows",
+            "finetune.max_train_rows",
             "preprocess.clamp_train_pool.max_size",
         ),
     )
     inference_context_max_rows = _resolve_optional_positive_int(
         config,
         (
-            "foundation_model.inference_context_max_rows",
-            "foundation_model.eval_context_max_rows",
+            "finetune.inference_context_max_rows",
+            "finetune.eval_context_max_rows",
         ),
     )
     eval_query_max_rows = _resolve_optional_positive_int(
         config,
         (
-            "foundation_model.eval_query_max_rows",
-            "foundation_model.inference_query_max_rows",
+            "finetune.eval_query_max_rows",
+            "finetune.inference_query_max_rows",
         ),
     )
     if train_max_rows is None and inference_context_max_rows is None and eval_query_max_rows is None:
@@ -385,7 +385,7 @@ def _resolve_dataset_path(config: Mapping[str, Any], *, repo_root: Path) -> Path
     raw_path = str(data_cfg.get("path") or "").strip()
     raw_path = raw_path.removeprefix(":")
     if not raw_path:
-        raise SystemExit("data.path is required for foundation_model finetuning.")
+        raise SystemExit("data.path is required for finetune finetuning.")
     path = Path(raw_path)
     return path if path.is_absolute() else (repo_root / path).resolve()
 
@@ -406,7 +406,7 @@ def _split_tuple(config: Mapping[str, Any]) -> tuple[int, int, int]:
     split_name = data_cfg.get("split")
     split_tuple = _pipeline_shared.parse_split_tuple_name(split_name)
     if split_tuple is None:
-        raise SystemExit("data.split must be fold<k>_repeat<r>_sample<s> for foundation_model finetuning.")
+        raise SystemExit("data.split must be fold<k>_repeat<r>_sample<s> for finetune finetuning.")
     return split_tuple
 
 
@@ -520,7 +520,7 @@ def load_split_evaluation_data(
             ),
         )
 
-    hpo_split = load_foundation_split_data(
+    hpo_split = load_split_data(
         repo_root=repo_root,
         dataset_id=dataset_path.name,
         split_tuple=split_tuple,

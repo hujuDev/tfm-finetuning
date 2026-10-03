@@ -103,7 +103,7 @@ def test_completed_report_is_saved_even_when_tracking_fails(tmp_path):
 
 def test_experiment_runner_and_training_setup_share_output_without_replacing_lock(tmp_path):
     from tfm_finetuning.experiments.run_experiment import execute_run
-    from tfm_finetuning.finetuning.run.setup import initialize_foundation_run
+    from tfm_finetuning.finetuning.run.setup import initialize_run
 
     spec = SimpleNamespace(ensure_source_available=lambda: None, adapter_cls=lambda _: SimpleNamespace())
     run = {
@@ -111,13 +111,13 @@ def test_experiment_runner_and_training_setup_share_output_without_replacing_loc
         "study": "example",
         "run_id": "example-seed7",
         "dataset": "example",
-        "config": {"seed": 7, "foundation_model": {"model_id": "fake"}, "wandb": {"mode": "disabled"}},
+        "config": {"seed": 7, "finetune": {"model_id": "fake"}, "wandb": {"mode": "disabled"}},
     }
     observed_inodes = []
 
     def train(config, output, *, force):
         inode = (output / ".lock").stat().st_ino
-        setup = initialize_foundation_run(config, output, force=force, model_spec_resolver=lambda *a, **kw: spec)
+        setup = initialize_run(config, output, force=force, model_spec_resolver=lambda *a, **kw: spec)
         assert (output / ".lock").stat().st_ino == inode
         assert json.loads((output / "run.json").read_text())["status"] == "running"
         observed_inodes.append(inode)

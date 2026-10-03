@@ -255,8 +255,8 @@ def test_mitra_stage_initializer_sets_portable_task_and_architecture_metadata(mo
     observed = {}
 
     class Estimator:
-        foundation_mitra_finetune_interface = "local_chunked"
-        _foundation_initial_trainer_states = [{"weight": 1}, {"weight": 2}]
+        tfm_mitra_finetune_interface = "local_chunked"
+        _tfm_initial_trainer_states = [{"weight": 1}, {"weight": 2}]
         trainers = []
 
         def _create_config(self, task, dim_output, budget):
@@ -298,7 +298,7 @@ def test_mitra_stage_initializer_sets_portable_task_and_architecture_metadata(mo
     assert observed["create"] == (Task.CLASSIFICATION, 10, None)
     assert observed["fresh"][3:6] == (Task.CLASSIFICATION, 10, 10)
     assert observed["fresh"][6] == [{"weight": 1}, {"weight": 2}]
-    assert estimator._foundation_initial_trainer_states is None
+    assert estimator._tfm_initial_trainer_states is None
 
 
 def test_mitra_stage_initializer_uses_regression_architecture(monkeypatch) -> None:
@@ -307,8 +307,8 @@ def test_mitra_stage_initializer_uses_regression_architecture(monkeypatch) -> No
     observed = {}
 
     class Estimator:
-        foundation_mitra_finetune_interface = "local_chunked"
-        _foundation_initial_trainer_states = None
+        tfm_mitra_finetune_interface = "local_chunked"
+        _tfm_initial_trainer_states = None
         trainers = []
 
         def _create_config(self, task, dim_output, budget):
@@ -496,7 +496,7 @@ def test_mitra_stage_early_stopping_waits_for_checkpoint_view_boundary(monkeypat
         def fit_inference_context(self, estimator, context_X, context_y):
             self.fitted_context_width = context_X.shape[1]
             estimator.classes_ = np.unique(context_y)
-            estimator._foundation_mitra_feature_preprocessor = {"target_width": context_X.shape[1]}
+            estimator._tfm_mitra_feature_preprocessor = {"target_width": context_X.shape[1]}
             return estimator
 
         def predict_for_metrics(self, estimator, query_X, task_type):

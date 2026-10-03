@@ -7,9 +7,9 @@ import pytest
 
 from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
 from tfm_finetuning.finetuning.models.registry import (
-    FoundationModelRegistryError,
-    get_foundation_model_spec,
-    iter_foundation_model_specs,
+    ModelRegistryError,
+    get_model_spec,
+    iter_model_specs,
 )
 from tfm_finetuning.finetuning.models.tabpfn.versions import (
     TABPFN_VERSIONS,
@@ -18,7 +18,7 @@ from tfm_finetuning.finetuning.models.tabpfn.versions import (
 from tfm_finetuning.finetuning.training import fit as fit_runner
 
 
-def test_foundation_model_dependencies_are_packaged_for_cluster_image() -> None:
+def test_finetune_dependencies_are_packaged_for_cluster_image() -> None:
     pyproject = tomllib.loads(Path("pyproject.toml").read_text())
     dependencies = pyproject["project"]["dependencies"]
 
@@ -29,7 +29,7 @@ def test_foundation_model_dependencies_are_packaged_for_cluster_image() -> None:
 
 
 def test_registry_reports_pinned_sources() -> None:
-    specs = {spec.model_id: spec for spec in iter_foundation_model_specs(repo_root=Path.cwd())}
+    specs = {spec.model_id: spec for spec in iter_model_specs(repo_root=Path.cwd())}
 
     assert set(specs) == {"tabpfn_v2", "tabpfn_v2_5", "tabicl_v2", "mitra"}
     assert specs["tabpfn_v2"].version_payload["git_commit"]
@@ -54,12 +54,12 @@ def test_tabpfn_version_catalog_separates_supported_and_vendor_only_models() -> 
     assert VENDOR_ONLY_TABPFN_ARCHITECTURES == ("tabpfn_v2_6", "tabpfn_v3")
 
     for model_id in VENDOR_ONLY_TABPFN_ARCHITECTURES:
-        with pytest.raises(FoundationModelRegistryError, match="Unknown"):
-            get_foundation_model_spec(model_id, repo_root=Path.cwd())
+        with pytest.raises(ModelRegistryError, match="Unknown"):
+            get_model_spec(model_id, repo_root=Path.cwd())
 
 
 def test_tabpfn_adapter_maps_common_config_to_official_kwargs() -> None:
-    spec = get_foundation_model_spec("tabpfn_v2_5", repo_root=Path.cwd())
+    spec = get_model_spec("tabpfn_v2_5", repo_root=Path.cwd())
     adapter = spec.adapter_cls(spec)
     assert CommonFineTuneConfig().ignore_pretraining_limits is True
     assert adapter._pretraining_limit_kwargs()["ignore_pretraining_limits"] is True
@@ -79,14 +79,14 @@ def test_tabpfn_adapter_maps_common_config_to_official_kwargs() -> None:
 
 
 def test_tabpfn_adapter_uses_registry_model_id() -> None:
-    spec = get_foundation_model_spec("tabpfn_v2", repo_root=Path.cwd())
+    spec = get_model_spec("tabpfn_v2", repo_root=Path.cwd())
     adapter = spec.adapter_cls(spec)
 
     assert adapter.model_id == "tabpfn_v2"
 
 
 def test_tabpfn_adapter_resolves_auto_device_for_official_finetuner() -> None:
-    spec = get_foundation_model_spec("tabpfn_v2_5", repo_root=Path.cwd())
+    spec = get_model_spec("tabpfn_v2_5", repo_root=Path.cwd())
     adapter = spec.adapter_cls(spec)
 
     estimator = adapter.resolve_finetune_estimator(
@@ -101,7 +101,7 @@ def test_tabpfn_adapter_resolves_auto_device_for_official_finetuner() -> None:
 
 
 def test_tabicl_adapter_maps_common_config_to_official_kwargs() -> None:
-    spec = get_foundation_model_spec("tabicl_v2", repo_root=Path.cwd())
+    spec = get_model_spec("tabicl_v2", repo_root=Path.cwd())
     adapter = spec.adapter_cls(spec)
     params = adapter.resolved_model_params(
         CommonFineTuneConfig(learning_rate=3e-6, weight_decay=1e-3, context_size=2500)
@@ -118,7 +118,7 @@ def test_tabicl_adapter_maps_common_config_to_official_kwargs() -> None:
     assert params["warmup_proportion"] == 0.1
 
 
-def test_tabicl_epoch_logger_hook_is_captured_by_foundation_model_runner() -> None:
+def test_tabicl_epoch_logger_hook_is_captured_by_finetune_runner() -> None:
     class DummyTabICLEstimator:
         def _make_experiment_logger(self) -> InMemoryFinetuneLogger:
             raise AssertionError("logger hook should be replaced")

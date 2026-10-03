@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: evaluation."""
+"""Tests for model finetune: evaluation."""
 
 from __future__ import annotations
 
@@ -38,12 +38,12 @@ from tfm_finetuning.utils.config import get_nested
 def test_evaluation_splits_default_to_test_and_allow_validation_only_calibration() -> None:
     assert runner._resolve_evaluation_splits({}) == ("val", "test")
     assert runner._resolve_evaluation_splits(
-        {"foundation_model": {"evaluation_splits": ["val"]}}
+        {"finetune": {"evaluation_splits": ["val"]}}
     ) == ("val",)
 
     with pytest.raises(ValueError, match="may contain only val and test"):
         runner._resolve_evaluation_splits(
-            {"foundation_model": {"evaluation_splits": ["train"]}}
+            {"finetune": {"evaluation_splits": ["train"]}}
         )
 
 
@@ -120,12 +120,12 @@ def test_resolve_oom_retry_context_sizes_can_disable_retry() -> None:
     common_config = CommonFineTuneConfig(context_size=10000)
 
     assert policy_runner._resolve_oom_retry_context_sizes(
-        {"foundation_model": {"oom_retry_context_sizes": "off"}},
+        {"finetune": {"oom_retry_context_sizes": "off"}},
         model_id="tabicl_v2",
         common_config=common_config,
     ) == (10000,)
 
-def test_apply_foundation_model_row_limits_caps_train_and_context_rows() -> None:
+def test_apply_model_row_limits_caps_train_and_context_rows() -> None:
     data = SplitEvaluationData(
         task_type="binary",
         problem_type="binary",
@@ -143,22 +143,22 @@ def test_apply_foundation_model_row_limits_caps_train_and_context_rows() -> None
         metadata={},
     )
 
-    limited = data_runner._apply_foundation_model_row_limits(
+    limited = data_runner._apply_model_row_limits(
         data,
         config={
             "preprocess": {"clamp_train_pool": {"max_size": 10}},
-            "foundation_model": {
+            "finetune": {
                 "inference_context_max_rows": 12,
                 "eval_query_max_rows": 7,
             },
         },
         seed=123,
     )
-    repeated = data_runner._apply_foundation_model_row_limits(
+    repeated = data_runner._apply_model_row_limits(
         data,
         config={
             "preprocess": {"clamp_train_pool": {"max_size": 10}},
-            "foundation_model": {
+            "finetune": {
                 "inference_context_max_rows": 12,
                 "eval_query_max_rows": 7,
             },
@@ -181,7 +181,7 @@ def test_apply_foundation_model_row_limits_caps_train_and_context_rows() -> None
         "test_query": 7,
     }
 
-def test_foundation_model_baseline_only_runs_test_context_comparison_once_per_policy(
+def test_finetune_baseline_only_runs_test_context_comparison_once_per_policy(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
@@ -213,7 +213,7 @@ def test_foundation_model_baseline_only_runs_test_context_comparison_once_per_po
     def fake_load_split_evaluation_data(*, config, repo_root):
         _ = repo_root
         includes_validation = bool(
-            get_nested(config, "foundation_model.test_context_includes_validation_data")
+            get_nested(config, "finetune.test_context_includes_validation_data")
         )
         test_context_len = 3 if includes_validation else 2
         return SplitEvaluationData(
@@ -244,7 +244,7 @@ def test_foundation_model_baseline_only_runs_test_context_comparison_once_per_po
         adapter_cls=FakeAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(run_data_runner, "load_split_evaluation_data", fake_load_split_evaluation_data)
     monkeypatch.setattr(preprocessing_runner, "load_split_evaluation_data", fake_load_split_evaluation_data)
 
@@ -252,7 +252,7 @@ def test_foundation_model_baseline_only_runs_test_context_comparison_once_per_po
         {
             "paths": {"results_root": str(tmp_path / "results")},
             "seed": 0,
-            "foundation_model": {
+            "finetune": {
                 "model_id": "tabpfn_v2",
                 "baseline_only": True,
                 "test_context_includes_validation_data": False,
@@ -455,7 +455,7 @@ def test_in_memory_controller_streams_periodic_eval_during_validation() -> None:
     }
 
 @pytest.mark.parametrize("model_id", ["tabpfn_v2_5", "mitra"])
-def test_foundation_model_main_writes_disk_checkpoint_history_contract(
+def test_finetune_main_writes_disk_checkpoint_history_contract(
     tmp_path: Path,
     monkeypatch,
     model_id: str,
@@ -502,7 +502,7 @@ def test_foundation_model_main_writes_disk_checkpoint_history_contract(
         adapter_cls=DiskCheckpointAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(
         run_data_runner,
         "load_split_evaluation_data",
@@ -529,7 +529,7 @@ def test_foundation_model_main_writes_disk_checkpoint_history_contract(
     config = {
         "paths": {"results_root": str(tmp_path / "results")},
         "seed": 0,
-        "foundation_model": {
+        "finetune": {
             "model_id": model_id,
             "epochs": 2,
             "test_eval_interval_epochs": 1,
@@ -546,7 +546,7 @@ def test_foundation_model_main_writes_disk_checkpoint_history_contract(
     artifact_dir = tmp_path / "generated" / model_id
     report_payload = json.loads((artifact_dir / "finetune_report.json").read_text(encoding="utf-8"))
     assert (artifact_dir / "best.ckpt").exists()
-    assert report_payload["foundation_model"]["model_id"] == model_id
+    assert report_payload["finetune"]["model_id"] == model_id
     assert report_payload["checkpoint_available"] is True
     assert report_payload["checkpoint_retention"]["kept_files"] == 1
     assert report_payload["selected_checkpoint_path"] == str(artifact_dir / "best.ckpt")
@@ -639,7 +639,7 @@ def test_original_majority_comparison_pairs_full_training_with_balanced_icl_cont
         metadata={"test_context_includes_validation_data": True},
     )
     config = {
-        "foundation_model": {
+        "finetune": {
             "test_context_comparison": {
                 "enabled": True,
                 "mode": "original_majority_downsampling",

@@ -68,12 +68,12 @@ def base_report(run):
     return {
         "config": run["config"],
         "score_metric": metric_for(run["dataset"]),
-        "foundation_model": {"model_id": MODEL_IDS[run["model"]]},
+        "finetune": {"model_id": MODEL_IDS[run["model"]]},
         "data_task": {"dataset_id": run["dataset"], "fold": run["fold"]},
         "zero_shot_metrics": metrics(run["dataset"], seed=run["seed"]),
         "selected_checkpoint_metrics": metrics(run["dataset"], seed=run["seed"], adapted=True),
         "final_checkpoint_metrics": metrics(run["dataset"], seed=run["seed"], adapted=True),
-        "evaluation": {"selected_epoch": 2, "final_epoch": run["config"]["foundation_model"].get("epochs", 100)},
+        "evaluation": {"selected_epoch": 2, "final_epoch": run["config"]["finetune"].get("epochs", 100)},
         "runtime": {"total_seconds": 30 + run["seed"]},
     }
 

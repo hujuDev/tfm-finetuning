@@ -34,7 +34,7 @@ def test_materializer_writes_ten_leakage_safe_local_exports(tmp_path: Path) -> N
             "path": str(output / "heart_disease_cleveland"),
             "split": "fold0_repeat0_sample0",
         },
-        "foundation_model": {
+        "finetune": {
             "validation_split_ratio": 0.1,
             "validation_split_seed": 0,
             "test_context_includes_validation_data": True,

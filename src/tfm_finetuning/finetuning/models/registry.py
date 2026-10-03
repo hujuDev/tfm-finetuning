@@ -23,16 +23,16 @@ MITRA_CLASSIFIER_CHECKPOINT = "autogluon/mitra-classifier"
 MITRA_REGRESSOR_CHECKPOINT = "autogluon/mitra-regressor"
 
 
-class FoundationModelRegistryError(RuntimeError):
-    """Raised when a foundation model cannot be resolved."""
+class ModelRegistryError(RuntimeError):
+    """Raised when a model cannot be resolved."""
 
 
 @dataclass(frozen=True)
-class FoundationModelSpec:
-    """Registry entry for an adapter-backed foundation model.
+class ModelSpec:
+    """Registry entry for an adapter-backed model.
 
     Example:
-        >>> spec = get_foundation_model_spec("tabpfn_v2_5")
+        >>> spec = get_model_spec("tabpfn_v2_5")
         >>> spec.display_name
         'TabPFN v2.5'
     """
@@ -52,20 +52,20 @@ class FoundationModelSpec:
         """Import and return the adapter class lazily."""
         module_name, _, class_name = self.adapter_cls_path.rpartition(".")
         if not module_name or not class_name:
-            raise FoundationModelRegistryError(f"Invalid adapter path for {self.model_id}: {self.adapter_cls_path}")
+            raise ModelRegistryError(f"Invalid adapter path for {self.model_id}: {self.adapter_cls_path}")
         module = importlib.import_module(module_name)
         adapter_cls = getattr(module, class_name)
         if not isinstance(adapter_cls, type):
-            raise FoundationModelRegistryError(f"Adapter is not a class for {self.model_id}: {self.adapter_cls_path}")
+            raise ModelRegistryError(f"Adapter is not a class for {self.model_id}: {self.adapter_cls_path}")
         return adapter_cls
 
     def ensure_source_available(self) -> None:
         """Fail loudly when package source metadata is unavailable."""
         if self.version_payload.get("source_available"):
             return
-        raise FoundationModelRegistryError(
+        raise ModelRegistryError(
             f"{self.model_id} requires installed Git package metadata for {self.source_path}. "
-            "Run `uv sync` before launching foundation-model runs."
+            "Run `uv sync` before launching runs."
         )
 
 
@@ -73,7 +73,7 @@ def _tabpfn_spec(
     repo_root: Path,
     *,
     version: TabPFNVersion,
-) -> FoundationModelSpec:
+) -> ModelSpec:
     source_path = ensure_official_tabpfn_on_path(repo_root=repo_root)
     payload = installed_package_version_payload(
         repo_root=repo_root,
@@ -81,7 +81,7 @@ def _tabpfn_spec(
         module_name="tabpfn",
         package_version=installed_module_version("tabpfn"),
     )
-    return FoundationModelSpec(
+    return ModelSpec(
         model_id=version.model_id,
         display_name=version.display_name,
         adapter_cls_path="tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter",
@@ -98,9 +98,9 @@ def _tabpfn_spec(
     )
 
 
-def _mitra_spec(repo_root: Path) -> FoundationModelSpec:
+def _mitra_spec(repo_root: Path) -> ModelSpec:
     source_path = ensure_mitra_on_path(repo_root=repo_root)
-    return FoundationModelSpec(
+    return ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -117,7 +117,7 @@ def _mitra_spec(repo_root: Path) -> FoundationModelSpec:
     )
 
 
-def _tabicl_spec(repo_root: Path) -> FoundationModelSpec:
+def _tabicl_spec(repo_root: Path) -> ModelSpec:
     source_path = ensure_tabicl_on_path(repo_root=repo_root)
     payload = installed_package_version_payload(
         repo_root=repo_root,
@@ -125,7 +125,7 @@ def _tabicl_spec(repo_root: Path) -> FoundationModelSpec:
         module_name="tabicl",
         package_version=installed_module_version("tabicl"),
     )
-    return FoundationModelSpec(
+    return ModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter",
@@ -142,15 +142,15 @@ def _tabicl_spec(repo_root: Path) -> FoundationModelSpec:
     )
 
 
-def get_foundation_model_spec(
+def get_model_spec(
     model_id: str,
     *,
     repo_root: Path | None = None,
-) -> FoundationModelSpec:
-    """Return one foundation-model spec by stable model id.
+) -> ModelSpec:
+    """Return one spec by stable model id.
 
     Example:
-        >>> get_foundation_model_spec("tabicl_v2").classifier_checkpoint
+        >>> get_model_spec("tabicl_v2").classifier_checkpoint
         'tabicl-classifier-v2-20260212.ckpt'
     """
     root = repo_root or get_repo_root(Path(__file__))
@@ -167,16 +167,16 @@ def get_foundation_model_spec(
         spec = factories[normalized](root)
     except KeyError as exc:
         supported = ", ".join(sorted([*factories, *(version.model_id for version in TABPFN_VERSIONS)]))
-        raise FoundationModelRegistryError(
-            f"Unknown foundation model_id={model_id!r}; expected one of {supported}."
+        raise ModelRegistryError(
+            f"Unknown model_id={model_id!r}; expected one of {supported}."
         ) from exc
     return spec
 
 
-def iter_foundation_model_specs(*, repo_root: Path | None = None) -> list[FoundationModelSpec]:
-    """Return all foundation model specs in canonical order."""
+def iter_model_specs(*, repo_root: Path | None = None) -> list[ModelSpec]:
+    """Return all model specs in canonical order."""
     return [
-        *(get_foundation_model_spec(version.model_id, repo_root=repo_root) for version in TABPFN_VERSIONS),
-        get_foundation_model_spec("tabicl_v2", repo_root=repo_root),
-        get_foundation_model_spec("mitra", repo_root=repo_root),
+        *(get_model_spec(version.model_id, repo_root=repo_root) for version in TABPFN_VERSIONS),
+        get_model_spec("tabicl_v2", repo_root=repo_root),
+        get_model_spec("mitra", repo_root=repo_root),
     ]

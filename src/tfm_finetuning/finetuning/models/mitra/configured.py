@@ -62,37 +62,37 @@ class _ConfiguredMitraMixin:
         mitra_chunk_min_rows: int,
         **kwargs: Any,
     ) -> None:
-        self.foundation_weight_decay = float(weight_decay)
-        self.foundation_max_samples_support = int(max_samples_support)
-        self.foundation_max_samples_query = int(max_samples_query)
-        self.foundation_query_ratio = float(query_ratio)
-        self.foundation_grad_clip = float(grad_clip)
-        self.foundation_use_lr_scheduler = bool(use_lr_scheduler)
-        self.foundation_warmup_proportion = float(warmup_proportion)
-        self.foundation_min_delta = float(min_delta)
-        self.foundation_mitra_finetune_interface = str(mitra_finetune_interface)
-        self.foundation_mitra_scheduler_policy = str(mitra_scheduler_policy)
-        self.foundation_mitra_chunk_min_rows = int(mitra_chunk_min_rows)
+        self.tfm_weight_decay = float(weight_decay)
+        self.tfm_max_samples_support = int(max_samples_support)
+        self.tfm_max_samples_query = int(max_samples_query)
+        self.tfm_query_ratio = float(query_ratio)
+        self.tfm_grad_clip = float(grad_clip)
+        self.tfm_use_lr_scheduler = bool(use_lr_scheduler)
+        self.tfm_warmup_proportion = float(warmup_proportion)
+        self.tfm_min_delta = float(min_delta)
+        self.tfm_mitra_finetune_interface = str(mitra_finetune_interface)
+        self.tfm_mitra_scheduler_policy = str(mitra_scheduler_policy)
+        self.tfm_mitra_chunk_min_rows = int(mitra_chunk_min_rows)
         super().__init__(*args, **kwargs)
 
     def _create_config(self, *args: Any, **kwargs: Any) -> Any:
         host = cast("_MitraEstimatorHost", super())
         cfg, model_cls = host._create_config(*args, **kwargs)
-        cfg.hyperparams["weight_decay"] = float(self.foundation_weight_decay)
-        cfg.hyperparams["max_samples_support"] = int(self.foundation_max_samples_support)
-        cfg.hyperparams["max_samples_query"] = int(self.foundation_max_samples_query)
-        cfg.hyperparams["foundation_mitra_finetune_interface"] = str(self.foundation_mitra_finetune_interface)
-        if self.foundation_mitra_finetune_interface == MITRA_INTERFACE_LOCAL_CHUNKED:
-            cfg.hyperparams["grad_clip"] = float(self.foundation_grad_clip)
-            cfg.hyperparams["lr_scheduler"] = bool(self.foundation_use_lr_scheduler)
-            cfg.hyperparams["foundation_warmup_proportion"] = float(self.foundation_warmup_proportion)
-            cfg.hyperparams["early_stopping_delta"] = float(self.foundation_min_delta)
-            cfg.hyperparams["foundation_context_size"] = int(self.foundation_max_samples_support) + int(
-                self.foundation_max_samples_query
+        cfg.hyperparams["weight_decay"] = float(self.tfm_weight_decay)
+        cfg.hyperparams["max_samples_support"] = int(self.tfm_max_samples_support)
+        cfg.hyperparams["max_samples_query"] = int(self.tfm_max_samples_query)
+        cfg.hyperparams["tfm_mitra_finetune_interface"] = str(self.tfm_mitra_finetune_interface)
+        if self.tfm_mitra_finetune_interface == MITRA_INTERFACE_LOCAL_CHUNKED:
+            cfg.hyperparams["grad_clip"] = float(self.tfm_grad_clip)
+            cfg.hyperparams["lr_scheduler"] = bool(self.tfm_use_lr_scheduler)
+            cfg.hyperparams["tfm_warmup_proportion"] = float(self.tfm_warmup_proportion)
+            cfg.hyperparams["early_stopping_delta"] = float(self.tfm_min_delta)
+            cfg.hyperparams["tfm_context_size"] = int(self.tfm_max_samples_support) + int(
+                self.tfm_max_samples_query
             )
-            cfg.hyperparams["foundation_query_ratio"] = float(self.foundation_query_ratio)
-            cfg.hyperparams["foundation_scheduler_policy"] = str(self.foundation_mitra_scheduler_policy)
-            cfg.hyperparams["foundation_mitra_chunk_min_rows"] = int(self.foundation_mitra_chunk_min_rows)
+            cfg.hyperparams["tfm_query_ratio"] = float(self.tfm_query_ratio)
+            cfg.hyperparams["tfm_scheduler_policy"] = str(self.tfm_mitra_scheduler_policy)
+            cfg.hyperparams["tfm_mitra_chunk_min_rows"] = int(self.tfm_mitra_chunk_min_rows)
         return cfg, model_cls
 
     def _train_local_chunked_trainers(
@@ -140,7 +140,7 @@ class _ConfiguredMitraMixin:
         n_classes: int = 0,
         time_limit: float | None = None,
     ) -> Any:
-        if self.foundation_mitra_finetune_interface == MITRA_INTERFACE_OFFICIAL_SKLEARN:
+        if self.tfm_mitra_finetune_interface == MITRA_INTERFACE_OFFICIAL_SKLEARN:
             host = cast("_MitraEstimatorHost", super())
             return host._train_ensemble(
                 X_train,
@@ -152,16 +152,16 @@ class _ConfiguredMitraMixin:
                 n_classes,
                 time_limit,
             )
-        if self.foundation_mitra_finetune_interface != MITRA_INTERFACE_LOCAL_CHUNKED:
-            raise ValueError(f"Unsupported Mitra fine-tune interface: {self.foundation_mitra_finetune_interface!r}")
+        if self.tfm_mitra_finetune_interface != MITRA_INTERFACE_LOCAL_CHUNKED:
+            raise ValueError(f"Unsupported Mitra fine-tune interface: {self.tfm_mitra_finetune_interface!r}")
 
         cfg, model_cls = self._create_config(task, dim_output, time_limit)
         torch = importlib.import_module("torch")
 
         self.trainers.clear()
         self.train_time = 0.0
-        controller = getattr(self, "_foundation_in_memory_controller", None)
-        initial_states = getattr(self, "_foundation_initial_trainer_states", None)
+        controller = getattr(self, "_tfm_in_memory_controller", None)
+        initial_states = getattr(self, "_tfm_initial_trainer_states", None)
         if initial_states is not None and len(initial_states) != int(self.n_estimators):
             raise RuntimeError(
                 "Mitra warm starts require an exact ensemble match "
@@ -191,7 +191,7 @@ class _ConfiguredMitraMixin:
                 max_epochs=int(cfg.hyperparams["max_epochs"]),
             )
             self.train_time += time.time() - started_at
-            self._foundation_initial_trainer_states = None
+            self._tfm_initial_trainer_states = None
         except torch.cuda.OutOfMemoryError:
             self.trainers.clear()
             raise
@@ -207,7 +207,7 @@ def restore_portable_mitra_ensemble(
     n_classes: int,
 ) -> None:
     """Rebuild inference trainers from CPU weights without serialized training state."""
-    if getattr(estimator, "foundation_mitra_finetune_interface", None) != MITRA_INTERFACE_LOCAL_CHUNKED:
+    if getattr(estimator, "tfm_mitra_finetune_interface", None) != MITRA_INTERFACE_LOCAL_CHUNKED:
         raise RuntimeError("Portable Mitra checkpoints require the local_chunked interface.")
     if len(states) != int(estimator.n_estimators):
         raise RuntimeError(

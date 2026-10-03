@@ -66,7 +66,7 @@ def test_baseline_includes_main_panel_addendum_and_all_four_models(tmp_path, clu
     assert len({d for job in jobs for d in job["datasets"]}) == 57
     assert {m for job in jobs for m in job["models"]} == {"tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"}
     assert sum(len(job["runs"]) for job in jobs) == 2184
-    assert all(run["config"]["foundation_model"]["test_context_includes_validation_data"] for job in jobs for run in job["runs"])
+    assert all(run["config"]["finetune"]["test_context_includes_validation_data"] for job in jobs for run in job["runs"])
     assert not any("v15" in job["resource_rule"] for job in jobs)
     v2 = [job for job in jobs if job["models"] == ["tabpfnv2"]]
     assert all(run["model"] == "tabpfnv2" for job in v2 for run in job["runs"])
@@ -276,7 +276,7 @@ def test_copied_configuration_is_loaded_and_saved_with_launch(tmp_path):
     original = ROOT / 'configs/experiments/distribution_shift_label_noise.yaml'
     original_bytes = original.read_bytes()
     config = read_yaml_mapping(original)
-    config['settings']['foundation_model.epochs'] = 7
+    config['settings']['finetune.epochs'] = 7
     config['groups'][0]['datasets'].append('churn')
     copied = tmp_path / 'custom-experiment.yaml'
     copied.write_text(yaml.safe_dump(config))
@@ -284,7 +284,7 @@ def test_copied_configuration_is_loaded_and_saved_with_launch(tmp_path):
                       datasets=['churn'], models=['tabpfnv25'])
     runs = [run for group in plan['jobs'] for run in group['runs']]
     assert runs and all(run['dataset'] == 'churn' for run in runs)
-    assert all(run['config']['foundation_model']['epochs'] == 7 for run in runs)
+    assert all(run['config']['finetune']['epochs'] == 7 for run in runs)
     write_bundle(plan)
     saved = json.loads((tmp_path / 'launch/plan.json').read_text())
     assert saved['config_path'] == str(copied)

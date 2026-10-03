@@ -3,7 +3,7 @@ title: 'Dataset Transfer: Multi-Dataset Schedules'
 category: transfer
 models:
 - name: tabpfnv25
-  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+  config: configs/finetuning/default_tabpfnv2_5.toml
 - name: tabiclv2
   config: configs/finetuning/default_tabicl_v2.toml
 - name: mitra
@@ -27,20 +27,20 @@ settings:
   preprocess.clamp_train_pool.max_size: 200000
   data.backend: tabarena_openml_task_wrapper
   evaluation.backend: tabarena_aligned
-  foundation_model.preprocessing_protocol: shared
-  foundation_model.epochs: 100
-  foundation_model.use_lr_scheduler: false
-  foundation_model.early_stopping: false
-  foundation_model.patience: 16
-  foundation_model.min_delta: 0.0001
-  foundation_model.final_eval_checkpoint: best
-  foundation_model.keep_intermediate_checkpoints: false
-  foundation_model.test_eval_interval_epochs: 0
-  foundation_model.test_context_includes_validation_data: true
-  foundation_model.validation_split_ratio: 0.1
-  foundation_model.validation_split_seed: 0
-  foundation_model.ignore_pretraining_limits: true
-  foundation_model.resource_fallback_policy: strict
+  finetune.preprocessing_protocol: shared
+  finetune.epochs: 100
+  finetune.use_lr_scheduler: false
+  finetune.early_stopping: false
+  finetune.patience: 16
+  finetune.min_delta: 0.0001
+  finetune.final_eval_checkpoint: best
+  finetune.keep_intermediate_checkpoints: false
+  finetune.test_eval_interval_epochs: 0
+  finetune.test_context_includes_validation_data: true
+  finetune.validation_split_ratio: 0.1
+  finetune.validation_split_seed: 0
+  finetune.ignore_pretraining_limits: true
+  finetune.resource_fallback_policy: strict
   dataset_transfer.enabled: true
   dataset_transfer.family: dataset_transfer
   dataset_transfer.execution_mode: train
@@ -58,7 +58,7 @@ groups:
     preprocessing:
     - value: shared
       settings:
-        foundation_model.preprocessing_protocol: shared
+        finetune.preprocessing_protocol: shared
     transferRoute:
     - value: target_compute_matched
       settings:
@@ -71,7 +71,7 @@ groups:
     preprocessing:
     - value: shared
       settings:
-        foundation_model.preprocessing_protocol: shared
+        finetune.preprocessing_protocol: shared
     transferRoute:
     - value: pooled_target_sources
       settings:
@@ -93,7 +93,7 @@ groups:
     preprocessing:
     - value: shared
       settings:
-        foundation_model.preprocessing_protocol: shared
+        finetune.preprocessing_protocol: shared
     transferRoute:
     - value: target_compute_matched
       settings:
@@ -121,7 +121,7 @@ groups:
     preprocessing:
     - value: shared
       settings:
-        foundation_model.preprocessing_protocol: shared
+        finetune.preprocessing_protocol: shared
     transferRoute:
     - value: target_compute_matched
       settings:
@@ -134,7 +134,7 @@ groups:
     preprocessing:
     - value: shared
       settings:
-        foundation_model.preprocessing_protocol: shared
+        finetune.preprocessing_protocol: shared
     transferRoute:
     - value: pooled_target_covertype
       settings:

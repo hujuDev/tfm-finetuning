@@ -12,7 +12,7 @@ from typing import Any
 
 from tfm_finetuning.experiments.transfer.rows import apply_train_subset_to_split, build_nested_train_subsets
 from tfm_finetuning.finetuning.datasets.preprocessing import _configure_adapter_preprocessing_protocol
-from tfm_finetuning.finetuning.run.data import _prepare_foundation_run_data
+from tfm_finetuning.finetuning.run.data import _prepare_run_data
 from tfm_finetuning.utils.config import set_nested
 
 _MODEL_DISTRIBUTIONS = {"tabpfn_v2_5": ("tabpfn",), "tabicl_v2": ("tabicl",), "mitra": ("autogluon.tabular",)}
@@ -55,7 +55,7 @@ class TransferDatasetLoader:
                 name,
                 repo_root=self.setup.paths.repo_root,
             )
-            data, _, comparison = _prepare_foundation_run_data(
+            data, _, comparison = _prepare_run_data(
                 config=dataset_config,
                 repo_root=self.setup.paths.repo_root,
                 adapter=adapter,

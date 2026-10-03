@@ -37,7 +37,7 @@ def write_run(
     directory = root / study / run_id
     directory.mkdir(parents=True, exist_ok=True)
     parameters = {"learningRate": learning_rate, "contextSize": context}
-    config = {"foundation_model": {"learning_rate": learning_rate, "weight_decay": 0.01, "context_size": context}}
+    config = {"finetune": {"learning_rate": learning_rate, "weight_decay": 0.01, "context_size": context}}
     metadata = dict(
         study=study,
         dataset=dataset,

@@ -19,7 +19,7 @@ def _config(
         },
         "evaluation": {"backend": "tabarena_aligned"},
         "preprocess": {"steps": ["clamp_train_pool"], "clamp_train_pool": {"max_size": 200000}},
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabpfn_v2_5",
             checkpoint_key: "models/base.ckpt",
             "use_lr_scheduler": False,
@@ -140,8 +140,8 @@ def test_houses_source_checkpoint_route_is_regression_and_reusable() -> None:
 
 def test_balanced_budget_rejects_classifier_checkpoint_for_regression() -> None:
     config = _config(target="physiochemical_protein", route_id=TARGET_ONLY_ROUTE, task_family="regression")
-    foundation = config["foundation_model"]
-    assert isinstance(foundation, dict)
-    foundation["classifier_checkpoint"] = foundation.pop("regressor_checkpoint")
+    finetune = config["finetune"]
+    assert isinstance(finetune, dict)
+    finetune["classifier_checkpoint"] = finetune.pop("regressor_checkpoint")
     with pytest.raises(ValueError, match="regressor_checkpoint"):
         resolve_transfer_route(config)

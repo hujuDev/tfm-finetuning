@@ -80,9 +80,9 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
                 command += [flag, value]
             command += [
                 "--val-fraction",
-                str(config.get("foundation_model", {}).get("validation_split_ratio", 0.1)),
+                str(config.get("finetune", {}).get("validation_split_ratio", 0.1)),
                 "--seed",
-                str(config.get("foundation_model", {}).get("validation_split_seed", 0)),
+                str(config.get("finetune", {}).get("validation_split_seed", 0)),
             ]
             subprocess.run(command, cwd=repo_root, check=True)
         if not _ready(output, split):

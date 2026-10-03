@@ -1,4 +1,4 @@
-"""Evaluation helpers for unified foundation-model fine-tuning."""
+"""Evaluation helpers for unified fine-tuning."""
 
 from __future__ import annotations
 

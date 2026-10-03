@@ -113,11 +113,11 @@ class InMemoryFitController:
         self.original_save_interval = getattr(estimator, "save_interval", None)
         if self.original_save_interval is not None:
             estimator.save_interval = 0
-        estimator._foundation_suppress_adapter_checkpoints = True
-        estimator._foundation_in_memory_controller = self
+        estimator._tfm_suppress_adapter_checkpoints = True
+        estimator._tfm_in_memory_controller = self
         logger.info(
             (
-                "Foundation-model in-memory fit controller enabled: "
+                "in-memory fit controller enabled: "
                 "checkpoint_mode={} test_eval_interval={} original_save_interval={} "
                 "active_save_interval={}"
             ),
@@ -241,7 +241,7 @@ class InMemoryFitController:
         self.best_metric = primary
         self.best_epoch = epoch
         logger.debug(
-            "Foundation-model in-memory best state captured: epoch={} primary={} seconds={:.3f}",
+            "in-memory best state captured: epoch={} primary={} seconds={:.3f}",
             epoch,
             primary,
             time.monotonic() - started_at,
@@ -254,7 +254,7 @@ class InMemoryFitController:
         self.final_metric = primary
         self.final_epoch = int(epoch)
         logger.debug(
-            "Foundation-model in-memory final state captured: epoch={} primary={} seconds={:.3f}",
+            "in-memory final state captured: epoch={} primary={} seconds={:.3f}",
             epoch,
             primary,
             time.monotonic() - started_at,
@@ -282,7 +282,7 @@ class InMemoryFitController:
             }
         )
         logger.debug(
-            "Foundation-model periodic in-memory eval finished: epoch={} seconds={:.3f}",
+            "periodic in-memory eval finished: epoch={} seconds={:.3f}",
             epoch,
             elapsed,
         )
@@ -311,7 +311,7 @@ class InMemoryFitController:
             }
         )
         logger.debug(
-            "Foundation-model validation in-memory eval finished: epoch={} seconds={:.3f}",
+            "validation in-memory eval finished: epoch={} seconds={:.3f}",
             epoch,
             elapsed,
         )
@@ -333,7 +333,7 @@ class InMemoryFitController:
         self.best_metrics = metrics
         self.best_metrics_source = "in_memory_best"
         logger.debug(
-            "Foundation-model best-validation captured-state eval finished: epoch={} seconds={:.3f}",
+            "best-validation captured-state eval finished: epoch={} seconds={:.3f}",
             epoch,
             elapsed,
         )
@@ -363,7 +363,7 @@ class InMemoryFitController:
         self.final_eval_count += 1
         self.final_metrics = metrics
         logger.debug(
-            "Foundation-model final in-memory eval finished: epoch={} seconds={:.3f}",
+            "final in-memory eval finished: epoch={} seconds={:.3f}",
             epoch,
             elapsed,
         )
@@ -398,7 +398,7 @@ class InMemoryFitController:
         self.exported_checkpoint_path = checkpoint_path
         logger.info(
             (
-                "Foundation-model in-memory checkpoint exported: mode={} source={} "
+                "in-memory checkpoint exported: mode={} source={} "
                 "epoch={} seconds={:.3f} checkpoint={}"
             ),
             checkpoint_mode,

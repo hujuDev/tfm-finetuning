@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: tabpfn."""
+"""Tests for model finetune: tabpfn."""
 
 from __future__ import annotations
 
@@ -22,7 +22,7 @@ from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_SHARED,
 )
 from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabpfn.model import TabPFNAdapter
 from tfm_finetuning.finetuning.models.tabpfn.vendor import TabPFNBindings
 from tfm_finetuning.finetuning.training import fit as fit_runner
@@ -76,7 +76,7 @@ def test_fit_with_oom_retry_can_be_enabled_for_tabpfn_context(tmp_path: Path, mo
             metadata={},
         ),
         spec=SimpleNamespace(model_id="tabpfn_v2_5"),
-        config={"foundation_model": {"oom_retry_context_sizes": [5000, 2500]}},
+        config={"finetune": {"oom_retry_context_sizes": [5000, 2500]}},
         common_config=CommonFineTuneConfig(context_size=10000),
         resolved_seed=0,
         device=None,
@@ -164,7 +164,7 @@ def test_estimator_fallback_strict_fails_loudly_for_tabpfn_wide_feature_count() 
             adapter=FakeAdapter(),
             data=data,
             spec=SimpleNamespace(model_id="tabpfn_v2_5"),
-            config={"foundation_model": {"estimator_fallback_policy": "strict"}},
+            config={"finetune": {"estimator_fallback_policy": "strict"}},
             common_config=CommonFineTuneConfig(n_estimators_finetune=2),
         )
 
@@ -349,7 +349,7 @@ def test_tabpfn_export_requires_best_checkpoint_but_falls_back_for_final(tmp_pat
         saved["additional_fields"] = additional_fields
         save_path.write_text("saved", encoding="utf-8")
 
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="tabpfn_v2_5",
         display_name="TabPFNv2.5",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter",

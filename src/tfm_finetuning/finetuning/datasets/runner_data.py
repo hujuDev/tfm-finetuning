@@ -1,4 +1,4 @@
-"""Data loading helpers for unified foundation-model runs."""
+"""Data loading helpers for unified runs."""
 
 from __future__ import annotations
 
@@ -15,12 +15,12 @@ from tfm_finetuning.finetuning.models.base import TaskKind, task_kind_from_value
 
 
 @dataclass(frozen=True)
-class FoundationSplitData:
-    """Concrete train/validation/test data for one foundation-model split.
+class SplitData:
+    """Concrete train/validation/test data for one split.
 
     Example:
-        >>> FoundationSplitData.__name__
-        'FoundationSplitData'
+        >>> SplitData.__name__
+        'SplitData'
     """
 
     task_type: TaskKind
@@ -98,7 +98,7 @@ def dataset_part_to_frame(dataset: Dataset, part: str) -> pd.DataFrame:
     return pd.concat(frames, axis=1)
 
 
-def load_foundation_split_data(
+def load_split_data(
     *,
     repo_root: Path,
     dataset_id: str,
@@ -107,7 +107,7 @@ def load_foundation_split_data(
     inner_validation_seed: int,
     catalog_record: dict[str, Any] | None = None,
     dataset_path: Path | None = None,
-) -> FoundationSplitData:
+) -> SplitData:
     """Load a dataset split and derive inner train/validation data."""
     dataset_path = (
         Path(dataset_path)
@@ -147,7 +147,7 @@ def load_foundation_split_data(
         dtype=object,
     )
     test_X = dataset_part_to_frame(dataset, "test").reset_index(drop=True)
-    return FoundationSplitData(
+    return SplitData(
         task_type=task_type,
         train_X=train_X,
         train_y=np.asarray(train_y),

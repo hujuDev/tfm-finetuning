@@ -127,13 +127,13 @@ def _periodic_epoch_metrics(
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     if interval <= 0:
-        logger.debug("Foundation-model periodic checkpoint eval disabled: interval={}", interval)
+        logger.debug("periodic checkpoint eval disabled: interval={}", interval)
         return rows
     epoch_checkpoints = _epoch_checkpoint_candidates(output_dir)
     selected = [(epoch, path) for epoch, path in epoch_checkpoints if epoch % interval == 0]
     logger.info(
         (
-            "Foundation-model periodic checkpoint eval start: interval={} "
+            "periodic checkpoint eval start: interval={} "
             "selected_checkpoints={} available_checkpoints={} output_dir={}"
         ),
         interval,
@@ -156,7 +156,7 @@ def _periodic_epoch_metrics(
         )
         checkpoint_seconds = time.monotonic() - checkpoint_started
         logger.debug(
-            "Foundation-model periodic checkpoint eval finished: epoch={} seconds={:.3f} checkpoint={}",
+            "periodic checkpoint eval finished: epoch={} seconds={:.3f} checkpoint={}",
             epoch,
             checkpoint_seconds,
             checkpoint_path,

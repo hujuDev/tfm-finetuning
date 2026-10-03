@@ -39,7 +39,7 @@ def resolve_transfer_route(config: Mapping[str, Any], *, target_dataset: str | N
     Example:
         >>> route = resolve_transfer_route({
         ...   "data": {"path": "data/tabarena/credit-g", "split": "fold0_repeat0_sample0"},
-        ...   "foundation_model": {"model_id": "tabpfn_v2_5", "classifier_checkpoint": "base.ckpt",
+        ...   "finetune": {"model_id": "tabpfn_v2_5", "classifier_checkpoint": "base.ckpt",
         ...       "test_context_includes_validation_data": True},
         ...   "dataset_transfer": {"enabled": True, "family": "dataset_transfer",
         ...       "route_id": "pooled_sources_then_target", "updates_per_dataset": 5,

@@ -1,4 +1,4 @@
-"""Preprocessing protocol helpers for foundation-model fine-tuning."""
+"""Preprocessing protocol helpers for fine-tuning."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ from typing import Any
 from tfm_finetuning.finetuning.datasets.loading import (
     TEST_CONTEXT_POLICY_FULL_ORIGINAL,
     SplitEvaluationData,
-    _apply_foundation_model_row_limits,
+    _apply_model_row_limits,
     _densify_sparse_feature_frames,
     _resolve_test_context_comparison_enabled,
     _test_context_flag_config,
@@ -43,7 +43,7 @@ TEST_CONTEXT_COMPARISON_MAJORITY_DOWNSAMPLING = "original_majority_downsampling"
 
 
 def _resolve_test_context_comparison_mode(config: Mapping[str, Any]) -> str:
-    raw_mode = get_nested(config, "foundation_model.test_context_comparison.mode")
+    raw_mode = get_nested(config, "finetune.test_context_comparison.mode")
     mode = str(raw_mode or TEST_CONTEXT_COMPARISON_TOGGLE_VALIDATION).strip().lower().replace("-", "_")
     aliases = {
         "toggle_validation": TEST_CONTEXT_COMPARISON_TOGGLE_VALIDATION,
@@ -56,7 +56,7 @@ def _resolve_test_context_comparison_mode(config: Mapping[str, Any]) -> str:
     }
     if mode not in supported:
         raise ValueError(
-            "foundation_model.test_context_comparison.mode must be one of "
+            "finetune.test_context_comparison.mode must be one of "
             f"{sorted(supported)}, got {raw_mode!r}"
         )
     return mode
@@ -78,22 +78,22 @@ def _mark_primary_test_context_comparison_data(
 
 
 def _resolve_preprocessing_protocol(config: Mapping[str, Any]) -> str:
-    """Resolve the feature preprocessing protocol for a foundation-model run.
+    """Resolve the feature preprocessing protocol for a run.
 
     Example:
         >>> _resolve_preprocessing_protocol({})
         'native'
     """
-    if get_nested(config, "foundation_model.feature_preprocessing") is not None:
-        raise ValueError("Use foundation_model.preprocessing_protocol = native or shared.")
-    raw_protocol = get_nested(config, "foundation_model.preprocessing_protocol")
+    if get_nested(config, "finetune.feature_preprocessing") is not None:
+        raise ValueError("Use finetune.preprocessing_protocol = native or shared.")
+    raw_protocol = get_nested(config, "finetune.preprocessing_protocol")
     protocol = normalize_preprocessing_protocol(raw_protocol)
     if protocol in {None, ""}:
         return PREPROCESSING_NATIVE
     if protocol not in SUPPORTED_PREPROCESSING_PROTOCOLS:
         supported = ", ".join(sorted(SUPPORTED_PREPROCESSING_PROTOCOLS))
         raise SystemExit(
-            f"foundation_model.preprocessing_protocol={raw_protocol!r} is unsupported; expected one of {supported}."
+            f"finetune.preprocessing_protocol={raw_protocol!r} is unsupported; expected one of {supported}."
         )
     return protocol
 
@@ -295,7 +295,7 @@ def _prepare_alternate_test_context_data(
         return None
     comparison_mode = _resolve_test_context_comparison_mode(config)
     if comparison_mode == TEST_CONTEXT_COMPARISON_MAJORITY_DOWNSAMPLING:
-        comparison_cfg = get_nested(config, "foundation_model.test_context_comparison")
+        comparison_cfg = get_nested(config, "finetune.test_context_comparison")
         if not isinstance(comparison_cfg, Mapping):
             comparison_cfg = {}
         alternate, _report = apply_test_context_majority_downsampling(
@@ -311,7 +311,7 @@ def _prepare_alternate_test_context_data(
     )
     alternate = load_split_evaluation_data(config=alternate_config, repo_root=repo_root)
     alternate = apply_pre_finite_distribution_shift(alternate, config, seed=seed)
-    alternate = _apply_foundation_model_row_limits(alternate, config=config, seed=seed)
+    alternate = _apply_model_row_limits(alternate, config=config, seed=seed)
     alternate = _densify_sparse_feature_frames(alternate)
     alternate = _apply_preprocessing_protocol(
         alternate,

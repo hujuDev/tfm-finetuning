@@ -3,7 +3,7 @@
 The orchestrator in this module is intentionally backend-injectable: production
 uses :class:`TabICLTransferEngine`, while focused tests can verify scheduling,
 selection, early stopping, prefix views, and report contracts without loading
-the multi-gigabyte foundation checkpoint.
+the multi-gigabyte pretrained checkpoint.
 """
 
 from __future__ import annotations
@@ -352,7 +352,7 @@ class TabICLDatasetTransferStageTrainer:
             report.update(
                 {
                     "score_metric": datasets[target].metric_name,
-                    "score_metric_source": "foundation_model.metric",
+                    "score_metric_source": "finetune.metric",
                     "metrics": dict(terminal_metrics),
                     "zero-shot-metrics": dict(terminal_baseline),
                 }

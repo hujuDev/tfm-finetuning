@@ -1,4 +1,4 @@
-"""Role-aware distribution-shift transforms for unified foundation-model runs.
+"""Role-aware distribution-shift transforms for unified runs.
 
 Example:
     >>> from tfm_finetuning.finetuning.distribution_shift import apply_pre_finite_distribution_shift

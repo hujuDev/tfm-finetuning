@@ -17,13 +17,13 @@ from tfm_finetuning.experiments.transfer.runner.executor import execute_route
 from tfm_finetuning.experiments.transfer.runner.reporting import training_report
 from tfm_finetuning.experiments.transfer.runner.training import build_stage_trainer
 from tfm_finetuning.finetuning.reporting.report import finish_run
-from tfm_finetuning.finetuning.run.setup import initialize_foundation_run
+from tfm_finetuning.finetuning.run.setup import initialize_run
 
 
 def run_dataset_transfer(config: dict[str, Any], output_path: Path, *, force: bool = False) -> dict[str, Any]:
     """Execute a fresh run, requiring completed producers before any consumer."""
     started = time.monotonic()
-    setup = initialize_foundation_run(config, output_path, force=force)
+    setup = initialize_run(config, output_path, force=force)
     try:
         # Resolve routes after split-specific seed adjustments in run setup.
         route = resolve_transfer_route(setup.config)
@@ -46,8 +46,8 @@ def run_dataset_transfer(config: dict[str, Any], output_path: Path, *, force: bo
             report = training_report(route, stages)
         report.update(
             {
-                "pipeline_mode": "foundation_model_dataset_transfer",
-                "foundation_model": {
+                "pipeline_mode": "finetune_dataset_transfer",
+                "finetune": {
                     "model_id": setup.spec.model_id,
                     "display_name": setup.spec.display_name,
                     "preprocessing_protocol": setup.preprocessing_protocol,
@@ -59,7 +59,7 @@ def run_dataset_transfer(config: dict[str, Any], output_path: Path, *, force: bo
                     "resolved_seed": setup.resolved_seed,
                     "seed_delta": setup.seed_delta,
                 },
-                "score_metric_source": "foundation_model.metric",
+                "score_metric_source": "finetune.metric",
                 "runtime_seconds": time.monotonic() - started,
             }
         )

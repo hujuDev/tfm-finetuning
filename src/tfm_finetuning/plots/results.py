@@ -110,7 +110,7 @@ def metric_frame(root: Path, studies: Sequence[str] | None = None) -> pd.DataFra
     for run in read_runs(root, studies):
         report, config = run.report, run.metadata["config"]
         metric_name = normalize_metric_key(report["score_metric"])
-        foundation = config.get("foundation_model", {})
+        finetune = config.get("finetune", {})
         evaluation = report.get("evaluation", {})
         for split in ("val", "test"):
             phases = {
@@ -154,9 +154,9 @@ def metric_frame(root: Path, studies: Sequence[str] | None = None) -> pd.DataFra
                         "final_effect": fine_tuning_gain(values["baseline"], values["final"], metric),
                         "selected_epoch": evaluation.get("selected_epoch"),
                         "training_epochs": evaluation.get("final_epoch"),
-                        "learning_rate": foundation.get("learning_rate"),
-                        "weight_decay": foundation.get("weight_decay"),
-                        "context_size": foundation.get("context_size"),
+                        "learning_rate": finetune.get("learning_rate"),
+                        "weight_decay": finetune.get("weight_decay"),
+                        "context_size": finetune.get("context_size"),
                         **run.parameters,
                     }
                 )

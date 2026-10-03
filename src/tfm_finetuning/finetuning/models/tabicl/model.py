@@ -24,7 +24,7 @@ from tfm_finetuning.finetuning.models.base import (
     TaskKind,
     validation_metric_for_task,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabicl.finetune_compat import patch_tabicl_finetune_meta_batches
 from tfm_finetuning.finetuning.models.tabicl.preprocessing import (
     prepare_native_finetune_inputs,
@@ -37,15 +37,15 @@ class TabICLAdapter:
     """Complete thesis-side fine-tuning slice for TabICLv2.
 
     Example:
-        >>> from tfm_finetuning.finetuning.models.registry import get_foundation_model_spec
-        >>> adapter = TabICLAdapter(get_foundation_model_spec("tabicl_v2"))
+        >>> from tfm_finetuning.finetuning.models.registry import get_model_spec
+        >>> adapter = TabICLAdapter(get_model_spec("tabicl_v2"))
         >>> adapter.resolved_model_params(CommonFineTuneConfig())["max_data_size"]
         10000
     """
 
     model_id = "tabicl_v2"
 
-    def __init__(self, spec: FoundationModelSpec, *, bindings: TabICLBindings | None = None) -> None:
+    def __init__(self, spec: ModelSpec, *, bindings: TabICLBindings | None = None) -> None:
         self.spec = spec
         self._bindings = bindings
         self._preprocessing_protocol = PREPROCESSING_NATIVE

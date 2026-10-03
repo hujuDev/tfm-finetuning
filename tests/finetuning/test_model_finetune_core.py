@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: core."""
+"""Tests for model finetune: core."""
 
 from __future__ import annotations
 
@@ -65,7 +65,7 @@ def test_estimator_fallback_treats_none_minimum_as_no_requirement() -> None:
     "checkpoint_mode",
     ["final", "best"],
 )
-def test_foundation_model_main_writes_direct_run_artifacts(
+def test_finetune_main_writes_direct_run_artifacts(
     tmp_path: Path,
     monkeypatch,
     checkpoint_mode: str,
@@ -233,7 +233,7 @@ def test_foundation_model_main_writes_direct_run_artifacts(
         adapter_cls=FakeAdapter,
         ensure_source_available=lambda: None,
     )
-    monkeypatch.setattr(runner, "get_foundation_model_spec", lambda *_args, **_kwargs: fake_spec)
+    monkeypatch.setattr(runner, "get_model_spec", lambda *_args, **_kwargs: fake_spec)
     monkeypatch.setattr(
         run_data_runner,
         "load_split_evaluation_data",
@@ -261,7 +261,7 @@ def test_foundation_model_main_writes_direct_run_artifacts(
     config = {
         "paths": {"results_root": str(tmp_path / "results")},
         "seed": 0,
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabicl_v2",
             "epochs": 2,
             "preprocessing_protocol": "shared",
@@ -285,14 +285,14 @@ def test_foundation_model_main_writes_direct_run_artifacts(
     assert report_payload["checkpoint_available"] is False
     assert report_payload["checkpoint_retention"]["retained"] is False
     assert report_payload["checkpoint_retention"]["deleted_files"] == 0
-    assert report_payload["foundation_model"]["model_id"] == "tabicl_v2"
-    assert report_payload["foundation_model"]["preprocessing_protocol"] == PREPROCESSING_SHARED
-    assert report_payload["foundation_model"]["feature_preprocessing"]["method"] == (
+    assert report_payload["finetune"]["model_id"] == "tabicl_v2"
+    assert report_payload["finetune"]["preprocessing_protocol"] == PREPROCESSING_SHARED
+    assert report_payload["finetune"]["feature_preprocessing"]["method"] == (
         SHARED_FEATURE_PREPROCESSING
     )
-    assert report_payload["foundation_model"]["feature_preprocessing"]["raw_feature_count"] == 1
-    assert report_payload["foundation_model"]["feature_preprocessing"]["effective_feature_count"] == 1
-    assert report_payload["foundation_model"]["fit_diagnostics"]["tabicl_meta_batch_split"]["fallback_count"] == 2
+    assert report_payload["finetune"]["feature_preprocessing"]["raw_feature_count"] == 1
+    assert report_payload["finetune"]["feature_preprocessing"]["effective_feature_count"] == 1
+    assert report_payload["finetune"]["fit_diagnostics"]["tabicl_meta_batch_split"]["fallback_count"] == 2
     assert report_payload["fit_diagnostics"]["tabicl_meta_batch_split"]["dense_label_remap_count"] == 1
     assert report_payload["data_task"]["feature_preprocessing"]["method"] == SHARED_FEATURE_PREPROCESSING
     assert {(row["epoch"], row["split"]) for row in report_payload["epoch_evaluations"]} == {
@@ -362,4 +362,4 @@ def test_foundation_model_main_writes_direct_run_artifacts(
     assert checkpoint_events[0]["status"] == "skipped"
     assert checkpoint_events[0]["reason"] == "in_memory_checkpoint_policy"
     metadata = report_payload
-    assert metadata["config"]["foundation_model"]["model_id"] == "tabicl_v2"
+    assert metadata["config"]["finetune"]["model_id"] == "tabicl_v2"

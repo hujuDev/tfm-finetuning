@@ -11,7 +11,7 @@ from tfm_finetuning.experiments.transfer.runner.data import TransferDatasetLoade
 from tfm_finetuning.experiments.transfer.runner.executor import StageProduction
 from tfm_finetuning.experiments.transfer.spec import TransferRouteSpec, TransferStageSpec, TransferTrainingRecipe
 from tfm_finetuning.finetuning.models.base import DatasetTransferStageTrainerAdapter, DatasetTransferTrainerRequest
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
+from tfm_finetuning.finetuning.run.setup import RunSetup
 
 
 class ValidatedStageTrainer:
@@ -80,7 +80,7 @@ def _validate_scores(payload: Any) -> None:
 
 
 def build_stage_trainer(
-    setup: FoundationRunSetup, *, route: TransferRouteSpec, dataset_loader: TransferDatasetLoader
+    setup: RunSetup, *, route: TransferRouteSpec, dataset_loader: TransferDatasetLoader
 ) -> ValidatedStageTrainer:
     """Create a supported exact-update trainer; no epoch approximations are used."""
     if not isinstance(setup.adapter, DatasetTransferStageTrainerAdapter):

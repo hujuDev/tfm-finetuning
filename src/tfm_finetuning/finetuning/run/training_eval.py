@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from tfm_finetuning.finetuning.evaluation.core import _evaluate_checkpoint, _evaluate_in_memory_estimator_on_data
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
+from tfm_finetuning.finetuning.run.setup import RunSetup
 from tfm_finetuning.finetuning.training.checkpoints import (
     _epoch_from_checkpoint,
     _fallback_periodic_rows_from_final_checkpoint,
@@ -22,7 +22,7 @@ from tfm_finetuning.finetuning.training.history import (
 
 def _evaluate_final_checkpoint(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     data: Any,
     comparison_data: Any,
     estimator: Any,
@@ -79,7 +79,7 @@ def _evaluate_final_checkpoint(
 
 def _evaluate_final_test_context_comparison(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     comparison_data: Any,
     estimator: Any,
     fit_controller: Any,
@@ -133,7 +133,7 @@ def _evaluate_final_test_context_comparison(
 
 def _evaluate_periodic_checkpoints(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     data: Any,
     fit_controller: Any,
     effective_common_config: Any,
@@ -211,7 +211,7 @@ def _fallback_final_epoch(
 
 def _select_checkpoint_for_report(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     data: Any,
     estimator: Any,
     fit_controller: Any,
@@ -286,7 +286,7 @@ def _select_checkpoint_for_report(
     if fit_controller is None and setup.save_best_val_checkpoint and selected_eval_source != "zero_shot_initial":
         if best_checkpoint is None:
             raise RuntimeError(
-                "foundation_model.save_best_val_checkpoint=true requires a real best-validation checkpoint, "
+                "finetune.save_best_val_checkpoint=true requires a real best-validation checkpoint, "
                 f"but none was found in {setup.output}."
             )
         selected_checkpoint_for_report = best_checkpoint
@@ -324,7 +324,7 @@ def _checkpoint_from_periodic_selection(
 
 def _evaluate_selected_test_context_comparison(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     comparison_data: Any,
     comparison_baseline_metrics: dict[str, Any] | None,
     estimator: Any,

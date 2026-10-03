@@ -66,7 +66,7 @@ def _base_report(
             "distribution_shift": shift,
         },
         "split": {"base_seed": seed, "resolved_seed": seed},
-        "foundation_model": {"model_id": "tabpfn_v2_5"},
+        "finetune": {"model_id": "tabpfn_v2_5"},
         "score_metric": metric,
         "zero_shot_metrics": {"test": _metric(baseline, metric)},
         "selected_checkpoint_metrics": {"test": _metric(selected, metric)},

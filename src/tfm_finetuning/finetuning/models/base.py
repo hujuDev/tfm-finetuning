@@ -84,7 +84,7 @@ def task_kind_from_value(value: Any) -> TaskKind:
         return "multiclass"
     if text == "regression":
         return "regression"
-    raise ValueError(f"Unsupported task type for foundation-model fine-tuning: {value!r}")
+    raise ValueError(f"Unsupported task type for fine-tuning: {value!r}")
 
 
 def validation_metric_for_task(task_type: TaskKind, *, model_id: str) -> str:

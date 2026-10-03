@@ -52,12 +52,12 @@ def adapter_input_preprocessing_metadata(
 def context_features(estimator: Any, context_X: pd.DataFrame) -> pd.DataFrame:
     """Fit a fresh outer preprocessor on the active target ICL context."""
     preprocessor = FiniteFeaturePreprocessor.fit(context_X)
-    estimator._foundation_mitra_feature_preprocessor = preprocessor
+    estimator._tfm_mitra_feature_preprocessor = preprocessor
     return preprocessor.transform(context_X)
 
 
 def predict_features(estimator: Any, query_X: pd.DataFrame) -> pd.DataFrame:
-    preprocessor = getattr(estimator, "_foundation_mitra_feature_preprocessor", None)
+    preprocessor = getattr(estimator, "_tfm_mitra_feature_preprocessor", None)
     return query_X if preprocessor is None else preprocessor.transform(query_X)
 
 

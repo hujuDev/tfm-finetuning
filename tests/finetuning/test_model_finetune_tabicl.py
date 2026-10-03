@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: tabicl."""
+"""Tests for model finetune: tabicl."""
 
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from tfm_finetuning.finetuning.models.preprocessing import (
     SHARED_FEATURE_PREPROCESSING,
     FiniteFeaturePreprocessor,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabicl.model import TabICLAdapter
 from tfm_finetuning.finetuning.training import fit as fit_runner
 
@@ -185,7 +185,7 @@ def test_tabicl_native_finetune_converts_categorical_features_before_fit(tmp_pat
             assert self.X_val.dtype.kind in {"f", "i", "u"}
             return self
 
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter",
@@ -224,7 +224,7 @@ def test_tabicl_shared_finetune_keeps_shared_numeric_inputs(tmp_path: Path) -> N
             self.output_dir = output_dir
             return self
 
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter",

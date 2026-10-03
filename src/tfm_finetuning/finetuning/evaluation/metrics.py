@@ -1,4 +1,4 @@
-"""Metric helpers for unified foundation-model runs."""
+"""Metric helpers for unified runs."""
 
 from __future__ import annotations
 

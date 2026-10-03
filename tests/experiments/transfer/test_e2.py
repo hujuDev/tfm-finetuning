@@ -16,7 +16,7 @@ def _route_config(route_id: str, *, rows: int = 64, seed: int = 2) -> dict[str, 
         },
         "evaluation": {"backend": "tabarena_aligned"},
         "preprocess": {"steps": ["clamp_train_pool"], "clamp_train_pool": {"max_size": 200000}},
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabpfn_v2_5",
             "classifier_checkpoint": "models/base.ckpt",
             "use_lr_scheduler": False,

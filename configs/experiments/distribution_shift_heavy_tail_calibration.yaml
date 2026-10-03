@@ -3,10 +3,10 @@ title: 'Distribution Shift: Heavy-Tail Calibration'
 category: transformations
 models:
 - name: tabpfnv25
-  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+  config: configs/finetuning/default_tabpfnv2_5.toml
   settings:
-    foundation_model.model_id: tabpfn_v2_5
-    foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+    finetune.model_id: tabpfn_v2_5
+    finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
 settings:
   preprocess.steps:
   - heavy_tail_contamination
@@ -14,16 +14,16 @@ settings:
   preprocess.clamp_train_pool.max_size: 200000
   data.backend: tabarena_openml_task_wrapper
   evaluation.backend: tabarena_aligned
-  foundation_model.preprocessing_protocol: shared
-  foundation_model.n_estimators_validation: 2
-  foundation_model.baseline_only: true
-  foundation_model.evaluation_splits:
+  finetune.preprocessing_protocol: shared
+  finetune.n_estimators_validation: 2
+  finetune.baseline_only: true
+  finetune.evaluation_splits:
   - val
-  foundation_model.test_eval_interval_epochs: 0
-  foundation_model.test_context_includes_validation_data: true
-  foundation_model.test_context_comparison.enabled: false
-  foundation_model.inference_context_max_rows: 50000
-  foundation_model.ignore_pretraining_limits: true
+  finetune.test_eval_interval_epochs: 0
+  finetune.test_context_includes_validation_data: true
+  finetune.test_context_comparison.enabled: false
+  finetune.inference_context_max_rows: 50000
+  finetune.ignore_pretraining_limits: true
 groups:
 - name: standard_80gb_zero_main
   resource: gpu_80gb_5h

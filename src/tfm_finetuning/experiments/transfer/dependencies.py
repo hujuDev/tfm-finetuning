@@ -40,15 +40,15 @@ def producer_config(config: Mapping[str, Any], route: TransferRouteSpec) -> dict
         transfer.pop("nested_row_seed", None)
     else:
         transfer["nested_row_seed"] = dependency.producer_row_subset_seed
-    foundation = result.setdefault("foundation_model", {})
-    foundation.update(asdict(dependency.producer_training_recipe))
-    foundation["test_context_includes_validation_data"] = (
+    finetune = result.setdefault("finetune", {})
+    finetune.update(asdict(dependency.producer_training_recipe))
+    finetune["test_context_includes_validation_data"] = (
         dependency.producer_context_policy == "target_train_plus_validation"
     )
     recipe = dependency.producer_data_recipe
     result.setdefault("data", {})["backend"] = recipe.data_backend
     result.setdefault("evaluation", {})["backend"] = recipe.evaluation_backend
-    foundation.update(
+    finetune.update(
         validation_split_ratio=recipe.validation_split_ratio,
         validation_split_seed=recipe.validation_split_seed,
     )
@@ -61,11 +61,11 @@ def producer_config(config: Mapping[str, Any], route: TransferRouteSpec) -> dict
         "eval_query_max_rows",
         "inference_query_max_rows",
     ):
-        foundation.pop(key, None)
+        finetune.pop(key, None)
     for key in ("train_max_rows", "inference_context_max_rows", "eval_query_max_rows"):
         value = getattr(recipe, key)
         if value is not None:
-            foundation[key] = value
+            finetune[key] = value
     result.pop("preprocess", None)
     if recipe.preprocess_steps:
         result["preprocess"] = {"steps": list(recipe.preprocess_steps)}

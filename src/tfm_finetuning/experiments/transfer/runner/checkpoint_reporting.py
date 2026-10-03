@@ -13,7 +13,7 @@ from tfm_finetuning.finetuning.datasets.preprocessing import (
     _configure_adapter_feature_schema,
     _configure_adapter_preprocessing_protocol,
 )
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
+from tfm_finetuning.finetuning.run.setup import RunSetup
 from tfm_finetuning.finetuning.training.resource_policy import (
     _apply_estimator_fallback_policy,
     _configure_adapter_common_config,
@@ -21,7 +21,7 @@ from tfm_finetuning.finetuning.training.resource_policy import (
 
 
 def run_checkpoint_evaluation(
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     *,
     route: TransferRouteSpec,
     checkpoint_path: Path,

@@ -58,7 +58,7 @@ def load_retention(
     for run in read_runs(Path(config["results_root"]), studies):
         report = run.report
         transfer = report.get("dataset_transfer", {})
-        model_id = report.get("foundation_model", {}).get("model_id")
+        model_id = report.get("finetune", {}).get("model_id")
         if model_id not in MODEL_ALIASES:
             continue
         model = MODEL_ALIASES[model_id]

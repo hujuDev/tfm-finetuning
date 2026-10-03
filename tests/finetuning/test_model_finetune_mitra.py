@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: mitra."""
+"""Tests for model finetune: mitra."""
 
 from __future__ import annotations
 
@@ -28,13 +28,13 @@ from tfm_finetuning.finetuning.models.mitra.model import MitraAdapter
 from tfm_finetuning.finetuning.models.preprocessing import (
     FiniteFeaturePreprocessor,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 
 
 def test_resolve_common_finetune_config_accepts_mitra_local_trainer_options() -> None:
     cfg = config_runner.resolve_common_finetune_config(
         {
-            "foundation_model": {
+            "finetune": {
                 "model_id": "mitra",
                 "mitra_finetune_interface": "official_sklearn",
                 "mitra_scheduler_policy": "official_plateau",
@@ -78,11 +78,11 @@ def test_mitra_local_trainer_marks_checkpoint_epoch_for_state_capture() -> None:
 
     LocalMitraTrainer._set_checkpoint_epoch(trainer, 2)
 
-    assert checkpoint._foundation_current_epoch == 2
+    assert checkpoint._tfm_current_epoch == 2
 
 
 def test_mitra_adapter_dense_labels_and_project_checkpoint_packages(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -131,16 +131,16 @@ def test_mitra_adapter_dense_labels_and_project_checkpoint_packages(tmp_path: Pa
     assert (tmp_path / "epoch2.ckpt").exists()
     assert loaded.classes_.tolist() == ["no", "yes"]
     assert proba.shape == (2, 2)
-    assert estimator.foundation_weight_decay == 0.01
-    assert estimator.foundation_mitra_finetune_interface == "local_chunked"
-    assert estimator.foundation_mitra_scheduler_policy == "cosine_warmup"
-    assert estimator.foundation_grad_clip == 1.0
-    assert estimator.foundation_use_lr_scheduler is True
+    assert estimator.tfm_weight_decay == 0.01
+    assert estimator.tfm_mitra_finetune_interface == "local_chunked"
+    assert estimator.tfm_mitra_scheduler_policy == "cosine_warmup"
+    assert estimator.tfm_grad_clip == 1.0
+    assert estimator.tfm_use_lr_scheduler is True
     assert diagnostics["mitra_adapter_input_preprocessing"]["method"] == "mitra_adapter_finite_numeric_guard"
     assert diagnostics["mitra_adapter_input_preprocessing"]["input_already_shared_preprocessed"] is False
 
 def test_mitra_adapter_resolved_params_expose_local_and_legacy_interfaces(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -179,7 +179,7 @@ def test_mitra_adapter_resolved_params_expose_local_and_legacy_interfaces(tmp_pa
     assert local_params["max_samples_query"] == 25
     assert official_params["mitra_finetune_interface"] == "official_sklearn"
     assert official_params["warmup_steps_scope"] == "official_epoch"
-    assert estimator.foundation_mitra_finetune_interface == "official_sklearn"
+    assert estimator.tfm_mitra_finetune_interface == "official_sklearn"
 
 def test_mitra_local_chunked_oom_propagates_without_mutating_caps(monkeypatch) -> None:
     class FakeCudaOom(RuntimeError):
@@ -257,11 +257,11 @@ def test_mitra_local_chunked_oom_propagates_without_mutating_caps(monkeypatch) -
         )
 
     assert estimator.trainers == []
-    assert estimator.foundation_max_samples_support == 8_000
-    assert estimator.foundation_max_samples_query == 2_000
+    assert estimator.tfm_max_samples_support == 8_000
+    assert estimator.tfm_max_samples_query == 2_000
 
 def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -274,7 +274,7 @@ def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: 
     )
     adapter = MitraAdapter(spec)
     estimator = FakeStatefulMitraClassifier(value=1)
-    estimator._foundation_mitra_feature_preprocessor = FiniteFeaturePreprocessor.fit(pd.DataFrame({"x": [0.0, 1.0]}))
+    estimator._tfm_mitra_feature_preprocessor = FiniteFeaturePreprocessor.fit(pd.DataFrame({"x": [0.0, 1.0]}))
 
     state = adapter.clone_finetuned_state(estimator)
     estimator.trainers[0].model.load_state_dict({"weight": FakeTorchTensor(2)})
@@ -307,11 +307,11 @@ def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: 
     assert loaded.trainers[0].model.value == 1
     assert loaded.classes_.tolist() == ["no", "yes"]
     assert loaded.n_estimators == 5
-    assert loaded._foundation_checkpoint_epoch == 1
-    assert loaded._foundation_checkpoint_mode == "best"
+    assert loaded._tfm_checkpoint_epoch == 1
+    assert loaded._tfm_checkpoint_mode == "best"
 
 def test_mitra_adapter_captures_best_and_final_states_from_trainer_checkpoints(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -325,11 +325,11 @@ def test_mitra_adapter_captures_best_and_final_states_from_trainer_checkpoints(t
     adapter = MitraAdapter(spec)
     estimator = FakeStatefulMitraClassifier(value=3)
     estimator.trainers[0].checkpoint = SimpleNamespace(
-        _foundation_best_state={"weight": FakeTorchTensor(1)},
-        _foundation_final_state={"weight": FakeTorchTensor(2)},
-        _foundation_best_epoch=1,
+        _tfm_best_state={"weight": FakeTorchTensor(1)},
+        _tfm_final_state={"weight": FakeTorchTensor(2)},
+        _tfm_best_epoch=1,
     )
-    estimator._foundation_mitra_feature_preprocessor = FiniteFeaturePreprocessor.fit(pd.DataFrame({"x": [0.0, 1.0]}))
+    estimator._tfm_mitra_feature_preprocessor = FiniteFeaturePreprocessor.fit(pd.DataFrame({"x": [0.0, 1.0]}))
 
     captured = adapter.capture_finetuned_states(estimator)
     adapter.apply_finetuned_state(estimator, captured["best"]["state"])
@@ -346,7 +346,7 @@ def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
     tmp_path: Path,
     monkeypatch,
 ) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
@@ -369,7 +369,7 @@ def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
         seed=3,
         device="cpu",
     )
-    estimator._foundation_suppress_adapter_checkpoints = True
+    estimator._tfm_suppress_adapter_checkpoints = True
 
     adapter.fit_finetuned(
         estimator,
@@ -384,7 +384,7 @@ def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
     assert not list(tmp_path.glob("epoch*.ckpt"))
 
 def test_mitra_zero_shot_context_fit_initializes_empty_ensemble(tmp_path: Path) -> None:
-    spec = FoundationModelSpec(
+    spec = ModelSpec(
         model_id="mitra",
         display_name="Mitra",
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",

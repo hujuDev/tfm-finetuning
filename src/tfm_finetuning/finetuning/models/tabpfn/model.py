@@ -24,7 +24,7 @@ from tfm_finetuning.finetuning.models.base import (
     TaskKind,
     validation_metric_for_task,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabpfn.preprocessing import NativeCategoricalEncoder
 from tfm_finetuning.finetuning.models.tabpfn.vendor import TabPFNBindings, load_tabpfn_bindings
 from tfm_finetuning.utils.paths import get_repo_root
@@ -36,15 +36,15 @@ class TabPFNAdapter:
     """Complete thesis-side fine-tuning slice for TabPFN v2 and v2.5.
 
     Example:
-        >>> from tfm_finetuning.finetuning.models.registry import get_foundation_model_spec
-        >>> adapter = TabPFNAdapter(get_foundation_model_spec("tabpfn_v2_5"))
+        >>> from tfm_finetuning.finetuning.models.registry import get_model_spec
+        >>> adapter = TabPFNAdapter(get_model_spec("tabpfn_v2_5"))
         >>> adapter.resolved_model_params(CommonFineTuneConfig())["use_fixed_preprocessing_seed"]
         False
     """
 
     model_id = "tabpfn_v2_5"
 
-    def __init__(self, spec: FoundationModelSpec, *, bindings: TabPFNBindings | None = None) -> None:
+    def __init__(self, spec: ModelSpec, *, bindings: TabPFNBindings | None = None) -> None:
         self.spec = spec
         self.model_id = spec.model_id
         self._bindings = bindings

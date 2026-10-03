@@ -9,7 +9,7 @@ from tfm_finetuning.finetuning.evaluation.core import (
     _build_test_context_comparison_payload,
 )
 from tfm_finetuning.finetuning.reporting.report import finish_run
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
+from tfm_finetuning.finetuning.run.setup import RunSetup
 from tfm_finetuning.finetuning.training.checkpoint_retention import checkpoint_retention_payload
 from tfm_finetuning.finetuning.training.fit import _record_runtime_phase
 from tfm_finetuning.finetuning.training.history import _baseline_epoch_rows, _score_metric_name
@@ -17,7 +17,7 @@ from tfm_finetuning.finetuning.training.resource_policy import _runtime_option_p
 
 
 def complete_baseline_only_run(
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     *,
     data: Any,
     comparison_data: Any,
@@ -31,7 +31,7 @@ def complete_baseline_only_run(
     eval_timing_rows: list[dict[str, Any]],
     started_at: float,
 ) -> dict[str, Any]:
-    """Build, log, and finish a baseline-only foundation-model report."""
+    """Build, log, and finish a baseline-only report."""
     elapsed = time.monotonic() - started_at
     score_metric = _score_metric_name(data)
     baseline_epoch_rows = _baseline_epoch_rows(
@@ -40,8 +40,8 @@ def complete_baseline_only_run(
         timing_rows=eval_timing_rows,
     )
     report = {
-        "pipeline_mode": "foundation_model",
-        "foundation_model": {
+        "pipeline_mode": "finetune",
+        "finetune": {
             "model_id": setup.spec.model_id,
             "display_name": setup.spec.display_name,
             "version_payload": setup.spec.version_payload,
@@ -66,7 +66,7 @@ def complete_baseline_only_run(
             "seed_delta": setup.seed_delta,
         },
         "score_metric": score_metric,
-        "score_metric_source": "foundation_model.metric",
+        "score_metric_source": "finetune.metric",
         "evaluation": {
             "eval_interval_epochs": int(setup.test_eval_interval),
             "test_evaluation_policy": "baseline_only",
@@ -91,11 +91,11 @@ def complete_baseline_only_run(
             "periodic_eval_source": "disabled",
             "save_best_val_checkpoint": bool(setup.save_best_val_checkpoint),
         },
-        "foundation_model_baseline_only": True,
+        "finetune_baseline_only": True,
         "zero_shot_metrics": baseline_metrics,
         "train_history": [],
         "epoch_evaluations": baseline_epoch_rows,
-        "foundation_model_test_eval_interval_epochs": int(setup.test_eval_interval),
+        "finetune_test_eval_interval_epochs": int(setup.test_eval_interval),
         "final_train_epoch": 0,
         "runtime_seconds": elapsed,
         "runtime": {

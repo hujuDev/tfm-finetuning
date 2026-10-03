@@ -9,9 +9,9 @@ import numpy as np
 
 from tfm_finetuning.finetuning import model_finetune as runner
 from tfm_finetuning.finetuning.models.mitra.vendor import MitraBindings
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 
-run_data_runner = importlib.import_module(runner._prepare_foundation_run_data.__module__)
+run_data_runner = importlib.import_module(runner._prepare_run_data.__module__)
 
 preprocessing_runner = importlib.import_module(
     run_data_runner._prepare_alternate_test_context_data.__module__
@@ -95,8 +95,8 @@ class FakeStatefulMitraClassifier:
         self.n_estimators_inference = 1
         self.device = "cpu"
 
-def _tabpfn_test_spec(tmp_path: Path) -> FoundationModelSpec:
-    return FoundationModelSpec(
+def _tabpfn_test_spec(tmp_path: Path) -> ModelSpec:
+    return ModelSpec(
         model_id="tabpfn_v2_5",
         display_name="TabPFNv2.5",
         adapter_cls_path="tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter",

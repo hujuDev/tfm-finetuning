@@ -21,10 +21,10 @@ _SOURCE_BOUND_ESTIMATOR_ATTRS = (
     "X_val",
     "y_val",
     "classes_",
-    "_foundation_mitra_feature_preprocessor",
-    "_foundation_in_memory_controller",
-    "_foundation_initial_checkpoint",
-    "_foundation_suppress_adapter_checkpoints",
+    "_tfm_mitra_feature_preprocessor",
+    "_tfm_in_memory_controller",
+    "_tfm_initial_checkpoint",
+    "_tfm_suppress_adapter_checkpoints",
     "experiment_logger",
 )
 
@@ -65,8 +65,8 @@ def write_checkpoint_with_finetuned_state(
     original_state = clone_estimator_state(estimator)
     try:
         apply_estimator_state(estimator, state)
-        estimator._foundation_checkpoint_epoch = int(epoch)
-        estimator._foundation_checkpoint_mode = str(checkpoint_mode)
+        estimator._tfm_checkpoint_epoch = int(epoch)
+        estimator._tfm_checkpoint_mode = str(checkpoint_mode)
         write_checkpoint_package(estimator, path)
     finally:
         apply_estimator_state(estimator, original_state)
@@ -92,7 +92,7 @@ def read_checkpoint_package(path: Path, *, device: str | None = None) -> Any:
         dim_output=int(metadata["dim_output"]),
         n_classes=int(metadata["n_classes"]),
     )
-    estimator._foundation_portable_checkpoint_metadata = metadata
+    estimator._tfm_portable_checkpoint_metadata = metadata
     return estimator
 
 
@@ -169,9 +169,9 @@ def clone_estimator_state(estimator: Any) -> dict[str, Any]:
     if hasattr(estimator, "classes_"):
         classes = estimator.classes_
         state["classes_"] = None if classes is None else np.asarray(classes).copy()
-    preprocessor = getattr(estimator, "_foundation_mitra_feature_preprocessor", None)
+    preprocessor = getattr(estimator, "_tfm_mitra_feature_preprocessor", None)
     if preprocessor is not None:
-        state["_foundation_mitra_feature_preprocessor"] = copy.deepcopy(preprocessor)
+        state["_tfm_mitra_feature_preprocessor"] = copy.deepcopy(preprocessor)
     return state
 
 
@@ -188,9 +188,9 @@ def apply_estimator_state(estimator: Any, state: dict[str, Any]) -> None:
     if "classes_" in state:
         classes = state["classes_"]
         estimator.classes_ = None if classes is None else np.asarray(classes).copy()
-    if "_foundation_mitra_feature_preprocessor" in state:
-        estimator._foundation_mitra_feature_preprocessor = copy.deepcopy(
-            state["_foundation_mitra_feature_preprocessor"]
+    if "_tfm_mitra_feature_preprocessor" in state:
+        estimator._tfm_mitra_feature_preprocessor = copy.deepcopy(
+            state["_tfm_mitra_feature_preprocessor"]
         )
     for attr in ("n_estimators", "n_estimators_inference"):
         if attr in state and state[attr] is not None:
@@ -228,7 +228,7 @@ def epoch_from_checkpoint_name(path: Path) -> int:
 
 
 def _portable_checkpoint_payload(estimator: Any) -> dict[str, Any] | None:
-    interface = getattr(estimator, "foundation_mitra_finetune_interface", None)
+    interface = getattr(estimator, "tfm_mitra_finetune_interface", None)
     trainers = list(getattr(estimator, "trainers", []) or [])
     states = clone_current_trainer_states(estimator)
     if interface != MITRA_INTERFACE_LOCAL_CHUNKED:
@@ -276,7 +276,7 @@ def _inference_template_without_source_state(estimator: Any) -> Any:
     template = copy.copy(estimator)
     for attr in _SOURCE_BOUND_ESTIMATOR_ATTRS:
         _remove_or_clear_attr(template, attr)
-    template._foundation_initial_trainer_states = None
+    template._tfm_initial_trainer_states = None
     template.trainers = []
     return template
 

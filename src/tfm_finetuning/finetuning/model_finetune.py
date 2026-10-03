@@ -1,4 +1,4 @@
-"""Fine-tune registry-backed foundation models through the main pipeline.
+"""Fine-tune registry-backed models through the main pipeline.
 
 Example:
     uv run python src/tfm_finetuning/finetuning/model_finetune.py path/to/finetune.toml
@@ -25,11 +25,11 @@ if str(_SRC_ROOT) not in sys.path:
 from tfm_finetuning.finetuning.config import (
     _resolve_baseline_only,
 )
-from tfm_finetuning.finetuning.models.registry import get_foundation_model_spec
+from tfm_finetuning.finetuning.models.registry import get_model_spec
 from tfm_finetuning.finetuning.run.baseline import complete_baseline_only_run
-from tfm_finetuning.finetuning.run.data import _prepare_foundation_run_data
+from tfm_finetuning.finetuning.run.data import _prepare_run_data
 from tfm_finetuning.finetuning.run.final import complete_finetuned_run
-from tfm_finetuning.finetuning.run.setup import initialize_foundation_run
+from tfm_finetuning.finetuning.run.setup import initialize_run
 from tfm_finetuning.finetuning.run.training import run_finetuned_training_phases
 from tfm_finetuning.finetuning.run.zero_shot import evaluate_zero_shot_baselines
 from tfm_finetuning.finetuning.training.fit import _record_runtime_phase
@@ -52,15 +52,15 @@ def _configure_logging() -> None:
 
 def _resolve_evaluation_splits(config: dict[str, Any]) -> tuple[str, ...]:
     """Resolve optional validation-only evaluation used by calibration runs."""
-    foundation = config.get("foundation_model")
-    raw = foundation.get("evaluation_splits") if isinstance(foundation, dict) else None
+    finetune = config.get("finetune")
+    raw = finetune.get("evaluation_splits") if isinstance(finetune, dict) else None
     if raw is None:
         return ("val", "test")
     if not isinstance(raw, list) or not raw:
-        raise ValueError("foundation_model.evaluation_splits must be a non-empty list")
+        raise ValueError("finetune.evaluation_splits must be a non-empty list")
     splits = tuple(str(value).strip().lower() for value in raw)
     if any(value not in {"val", "test"} for value in splits):
-        raise ValueError("foundation_model.evaluation_splits may contain only val and test")
+        raise ValueError("finetune.evaluation_splits may contain only val and test")
     return splits
 
 
@@ -81,11 +81,11 @@ def main(config: dict[str, Any], output_path: Path, *, force: bool = False) -> d
             force=force,
         )
 
-    setup = initialize_foundation_run(
+    setup = initialize_run(
         config,
         output_path,
         force=force,
-        model_spec_resolver=get_foundation_model_spec,
+        model_spec_resolver=get_model_spec,
     )
     config = setup.config
     paths = setup.paths
@@ -100,7 +100,7 @@ def main(config: dict[str, Any], output_path: Path, *, force: bool = False) -> d
     start = time.monotonic()
     runtime_phases: list[dict[str, Any]] = []
     eval_timing_rows: list[dict[str, Any]] = []
-    data, feature_preprocessing, comparison_data = _prepare_foundation_run_data(
+    data, feature_preprocessing, comparison_data = _prepare_run_data(
         config=config,
         repo_root=paths.repo_root,
         adapter=adapter,
@@ -181,7 +181,7 @@ def main(config: dict[str, Any], output_path: Path, *, force: bool = False) -> d
 
 
 def _run_main_cli() -> None:
-    parser = argparse.ArgumentParser(description="Run one registry-backed foundation-model fine-tune config.")
+    parser = argparse.ArgumentParser(description="Run one registry-backed fine-tune config.")
     parser.add_argument("config", metavar="FILE")
     parser.add_argument("--force", action="store_true")
     parser.add_argument("--output", required=True, type=Path)

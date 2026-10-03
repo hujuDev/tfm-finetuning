@@ -1,4 +1,4 @@
-"""Tests for foundation model finetune: runner."""
+"""Tests for model finetune: runner."""
 
 from __future__ import annotations
 
@@ -7,10 +7,10 @@ from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig
 from tfm_finetuning.finetuning.training import resource_policy as policy_runner
 
 
-def test_resolve_common_finetune_config_uses_foundation_model_settings() -> None:
+def test_resolve_common_finetune_config_uses_finetune_settings() -> None:
     cfg = config_runner.resolve_common_finetune_config(
         {
-            "foundation_model": {
+            "finetune": {
                 "model_id": "tabicl_v2",
                 "epochs": 5,
                 "early_stopping": False,
@@ -27,7 +27,7 @@ def test_resource_fallback_policy_can_enable_oom_retry_for_any_model() -> None:
     common_config = CommonFineTuneConfig(context_size=10000)
 
     assert policy_runner._resolve_oom_retry_context_sizes(
-        {"foundation_model": {"resource_fallback_policy": "oom_context_retry"}},
+        {"finetune": {"resource_fallback_policy": "oom_context_retry"}},
         model_id="mitra",
         common_config=common_config,
     ) == (10000, 5000, 2500, 1000, 500)

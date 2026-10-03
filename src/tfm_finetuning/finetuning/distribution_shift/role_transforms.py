@@ -1,4 +1,4 @@
-"""Role-aware distribution-shift facade for unified foundation-model data.
+"""Role-aware distribution-shift facade for unified data.
 
 The module intentionally depends only on local data objects plus numpy/pandas/
 sklearn.  It has no W&B, web, Slurm, or launch-layer dependencies.

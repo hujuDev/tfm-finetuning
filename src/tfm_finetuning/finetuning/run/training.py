@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from tfm_finetuning.finetuning.run.setup import FoundationRunSetup
+from tfm_finetuning.finetuning.run.setup import RunSetup
 from tfm_finetuning.finetuning.run.training_eval import (
     _evaluate_final_checkpoint,
     _evaluate_periodic_checkpoints,
@@ -29,7 +29,7 @@ from tfm_finetuning.utils.gpu_memory import CudaMemoryTracker
 
 
 @dataclass
-class FoundationTrainingOutcome:
+class TrainingOutcome:
     fit_result: Any
     fit_controller: Any
     fit_probe: Any
@@ -57,7 +57,7 @@ class FoundationTrainingOutcome:
 
 
 def run_finetuned_training_phases(
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     *,
     data: Any,
     comparison_data: Any,
@@ -66,8 +66,8 @@ def run_finetuned_training_phases(
     comparison_baseline_metrics: dict[str, Any] | None,
     runtime_phases: list[dict[str, Any]],
     eval_timing_rows: list[dict[str, Any]],
-) -> FoundationTrainingOutcome:
-    """Fit, evaluate, and select the configured foundation-model checkpoint."""
+) -> TrainingOutcome:
+    """Fit, evaluate, and select the configured checkpoint."""
     phase_started = time.monotonic()
     with CudaMemoryTracker(setup.device) as fit_memory_tracker:
         fit_result = _fit_with_oom_retry(
@@ -183,7 +183,7 @@ def run_finetuned_training_phases(
     comparison_configured_metrics = (
         comparison_final_metrics if setup.checkpoint_mode == "final" else comparison_selected_checkpoint_metrics
     )
-    return FoundationTrainingOutcome(
+    return TrainingOutcome(
         fit_result=fit_result,
         fit_controller=fit_controller,
         fit_probe=fit_probe,
@@ -213,7 +213,7 @@ def run_finetuned_training_phases(
 
 def _capture_checkpoints(
     *,
-    setup: FoundationRunSetup,
+    setup: RunSetup,
     fit_controller: Any,
     runtime_phases: list[dict[str, Any]],
 ) -> tuple[Path | None, Path | None, Path | None]:

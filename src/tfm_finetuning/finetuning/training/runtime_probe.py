@@ -1,4 +1,4 @@
-"""Runtime instrumentation for in-memory foundation-model fine-tuning."""
+"""Runtime instrumentation for in-memory fine-tuning."""
 
 from __future__ import annotations
 
@@ -72,7 +72,7 @@ class _FitRuntimeProbe:
             started_at = time.monotonic()
             logger.debug(
                 (
-                    "Foundation-model fit validation start: stage={} epoch={} "
+                    "fit validation start: stage={} epoch={} "
                     "train_rows={} val_rows={}"
                 ),
                 stage,
@@ -94,7 +94,7 @@ class _FitRuntimeProbe:
                     error=repr(exc),
                 )
                 logger.warning(
-                    "Foundation-model fit validation failed: stage={} epoch={} seconds={:.3f} error={}",
+                    "fit validation failed: stage={} epoch={} seconds={:.3f} error={}",
                     stage,
                     epoch,
                     time.monotonic() - started_at,
@@ -132,7 +132,7 @@ class _FitRuntimeProbe:
             )
             logger.debug(
                 (
-                    "Foundation-model fit validation finished: stage={} epoch={} "
+                    "fit validation finished: stage={} epoch={} "
                     "seconds={:.3f} primary={}"
                 ),
                 stage,
@@ -168,7 +168,7 @@ class _FitRuntimeProbe:
                 )
                 logger.debug(
                     (
-                        "Foundation-model fit checkpoint save skipped: epoch={} "
+                        "fit checkpoint save skipped: epoch={} "
                         "is_best={} save_interval={} reason=in_memory_checkpoint_policy"
                     ),
                     epoch,
@@ -178,7 +178,7 @@ class _FitRuntimeProbe:
                 return None
             logger.debug(
                 (
-                    "Foundation-model fit checkpoint save start: epoch={} "
+                    "fit checkpoint save start: epoch={} "
                     "is_best={} save_interval={} output_dir={}"
                 ),
                 epoch,
@@ -199,7 +199,7 @@ class _FitRuntimeProbe:
                     error=repr(exc),
                 )
                 logger.warning(
-                    "Foundation-model fit checkpoint save failed: epoch={} seconds={:.3f} error={}",
+                    "fit checkpoint save failed: epoch={} seconds={:.3f} error={}",
                     epoch,
                     time.monotonic() - started_at,
                     repr(exc),
@@ -222,7 +222,7 @@ class _FitRuntimeProbe:
             )
             logger.debug(
                 (
-                    "Foundation-model fit checkpoint save finished: epoch={} seconds={:.3f} "
+                    "fit checkpoint save finished: epoch={} seconds={:.3f} "
                     "best_mib={} epoch_mib={}"
                 ),
                 epoch,
@@ -254,7 +254,7 @@ class _FitRuntimeProbe:
             )
             logger.debug(
                 (
-                    "Foundation-model fit inner estimator built: stage={} epoch={} "
+                    "fit inner estimator built: stage={} epoch={} "
                     "n_estimators={} seconds={:.3f}"
                 ),
                 context.get("stage"),
@@ -285,7 +285,7 @@ class _FitRuntimeProbe:
             started_at = time.monotonic()
             logger.debug(
                 (
-                    "Foundation-model fit inner method start: method={} stage={} "
+                    "fit inner method start: method={} stage={} "
                     "epoch={} n_estimators={} input_rows={}"
                 ),
                 method_name,
@@ -309,7 +309,7 @@ class _FitRuntimeProbe:
                 )
                 logger.warning(
                     (
-                        "Foundation-model fit inner method failed: method={} stage={} "
+                        "fit inner method failed: method={} stage={} "
                         "epoch={} seconds={:.3f} error={}"
                     ),
                     method_name,
@@ -330,7 +330,7 @@ class _FitRuntimeProbe:
             )
             logger.debug(
                 (
-                    "Foundation-model fit inner method finished: method={} stage={} "
+                    "fit inner method finished: method={} stage={} "
                     "epoch={} seconds={:.3f}"
                 ),
                 method_name,

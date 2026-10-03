@@ -1,4 +1,4 @@
-"""Installed-package discovery for foundation-model registry entries."""
+"""Installed-package discovery for registry entries."""
 
 from __future__ import annotations
 

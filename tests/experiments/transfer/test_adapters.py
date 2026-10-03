@@ -20,7 +20,7 @@ from tfm_finetuning.finetuning.models.mitra.checkpoints import (
     write_checkpoint_package,
 )
 from tfm_finetuning.finetuning.models.mitra.configured import _ConfiguredMitraMixin
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabicl.model import TabICLAdapter
 from tfm_finetuning.finetuning.models.tabicl.vendor import TabICLBindings
 from tfm_finetuning.finetuning.models.tabpfn.model import TabPFNAdapter
@@ -69,7 +69,7 @@ class _PortableTrainer:
 class _PortableEstimator:
     def __init__(self, values: tuple[int, ...] = (3, 5)) -> None:
         self.task = "classification"
-        self.foundation_mitra_finetune_interface = "local_chunked"
+        self.tfm_mitra_finetune_interface = "local_chunked"
         self.n_estimators = len(values)
         self.n_estimators_inference = len(values)
         self.device = "cuda"
@@ -77,7 +77,7 @@ class _PortableEstimator:
         self.verbose = False
         self.trainers = [_PortableTrainer(value, seed=index) for index, value in enumerate(values)]
         self.classes_ = np.array(["source_no", "source_yes"])
-        self._foundation_mitra_feature_preprocessor = {"source_width": 2}
+        self._tfm_mitra_feature_preprocessor = {"source_width": 2}
         self.X = np.zeros((2, 2), dtype=np.float32)
         self.y = np.array([0, 1])
 
@@ -85,7 +85,7 @@ class _PortableEstimator:
         return SimpleNamespace(seed=0, hyperparams={"dim_output": 10}), _Model
 
 
-def _spec(model_id: str, tmp_path: Path) -> FoundationModelSpec:
+def _spec(model_id: str, tmp_path: Path) -> ModelSpec:
     if model_id == "tabpfn_v2_5":
         adapter = "tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter"
         classifier = "models/tabpfn-classifier.ckpt"
@@ -98,7 +98,7 @@ def _spec(model_id: str, tmp_path: Path) -> FoundationModelSpec:
         adapter = "tfm_finetuning.finetuning.models.mitra.model.MitraAdapter"
         classifier = "autogluon/mitra-classifier"
         regressor = "autogluon/mitra-regressor"
-    return FoundationModelSpec(
+    return ModelSpec(
         model_id=model_id,
         display_name=model_id,
         adapter_cls_path=adapter,
@@ -160,7 +160,7 @@ def test_mitra_portable_checkpoint_contains_only_reset_safe_state(tmp_path: Path
     assert payload["metadata"]["source_classes_included"] is False
     assert payload["estimator_template"].trainers == []
     assert not hasattr(payload["estimator_template"], "classes_")
-    assert not hasattr(payload["estimator_template"], "_foundation_mitra_feature_preprocessor")
+    assert not hasattr(payload["estimator_template"], "_tfm_mitra_feature_preprocessor")
     states = read_checkpoint_for_finetuning(checkpoint, task_type="multiclass", expected_ensemble_size=2)
     assert [state["weight"].value for state in states] == [3, 5]
 
@@ -200,7 +200,7 @@ def test_mitra_portable_inference_rebuilds_fresh_trainers_from_weights(
     assert [trainer.model.value for trainer in loaded.trainers] == [3, 5]
     assert all(trainer.preprocessor is None for trainer in loaded.trainers)
     assert not hasattr(loaded, "classes_")
-    assert not hasattr(loaded, "_foundation_mitra_feature_preprocessor")
+    assert not hasattr(loaded, "_tfm_mitra_feature_preprocessor")
 
 
 def test_mitra_loads_warm_start_weights_before_fresh_trainer_construction(monkeypatch) -> None:
@@ -254,7 +254,7 @@ def test_mitra_loads_warm_start_weights_before_fresh_trainer_construction(monkey
         mitra_scheduler_policy="cosine_warmup",
         mitra_chunk_min_rows=2,
     )
-    estimator._foundation_initial_trainer_states = [
+    estimator._tfm_initial_trainer_states = [
         {"weight": _Tensor(11)},
         {"weight": _Tensor(13)},
     ]
@@ -270,7 +270,7 @@ def test_mitra_loads_warm_start_weights_before_fresh_trainer_construction(monkey
     )
 
     assert [trainer.model_value_at_construction for trainer in estimator.trainers] == [11, 13]
-    assert estimator._foundation_initial_trainer_states is None
+    assert estimator._tfm_initial_trainer_states is None
 
 
 def test_mitra_inference_context_refits_target_classes_and_both_preprocessors(
@@ -291,7 +291,7 @@ def test_mitra_inference_context_refits_target_classes_and_both_preprocessors(
         def __init__(self) -> None:
             self.trainers = [Trainer(), Trainer()]
             self.classes_ = np.array(["source_no", "source_yes"])
-            self._foundation_mitra_feature_preprocessor = {"source_width": 2}
+            self._tfm_mitra_feature_preprocessor = {"source_width": 2}
 
     created: list[RecordingPreprocessor] = []
 
@@ -315,7 +315,7 @@ def test_mitra_inference_context_refits_target_classes_and_both_preprocessors(
 
     assert estimator.classes_.tolist() == ["blue", "green", "red"]
     assert estimator.X.shape == (3, 3)
-    assert estimator._foundation_mitra_feature_preprocessor.numeric_columns == ("a", "b", "new_width")
+    assert estimator._tfm_mitra_feature_preprocessor.numeric_columns == ("a", "b", "new_width")
     assert created[0].fit_shape == (3, 3)
     assert sorted(created[0].fit_y.tolist()) == [0, 1, 2]
     assert estimator.trainers[0].preprocessor is created[0]

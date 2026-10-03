@@ -7,7 +7,7 @@ import sys
 from pathlib import Path
 
 
-def test_foundation_mainline_dry_run_emits_expanded_plan_without_results(tmp_path: Path) -> None:
+def test_tfm_mainline_dry_run_emits_expanded_plan_without_results(tmp_path: Path) -> None:
     repo_root = Path(__file__).resolve().parents[2]
     results_root = tmp_path / "results"
     config_path = repo_root / "configs/experiments/overview_baseline.yaml"

@@ -242,7 +242,7 @@ class MitraTransferEvaluator:
                     return False
                 if hasattr(estimator, "classes_") or hasattr(
                     estimator,
-                    "_foundation_mitra_feature_preprocessor",
+                    "_tfm_mitra_feature_preprocessor",
                 ):
                     raise RuntimeError(
                         "Mitra portable checkpoint retained source-bound "

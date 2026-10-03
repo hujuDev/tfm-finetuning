@@ -3,23 +3,23 @@ title: 'Distribution Shift: Feature Order and inference alignment'
 category: transformations
 models:
 - name: tabpfnv25
-  config: configs/finetuning/default_tabpfnv2_5_foundation.toml
+  config: configs/finetuning/default_tabpfnv2_5.toml
   settings:
-    foundation_model.model_id: tabpfn_v2_5
-    foundation_model.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
-    foundation_model.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+    finetune.model_id: tabpfn_v2_5
+    finetune.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+    finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
 - name: tabiclv2
   config: configs/finetuning/default_tabicl_v2.toml
   settings:
-    foundation_model.model_id: tabicl_v2
-    foundation_model.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
-    foundation_model.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
+    finetune.model_id: tabicl_v2
+    finetune.classifier_checkpoint: tabicl-classifier-v2-20260212.ckpt
+    finetune.regressor_checkpoint: tabicl-regressor-v2-20260212.ckpt
 - name: mitra
   config: configs/finetuning/default_mitra.toml
   settings:
-    foundation_model.model_id: mitra
-    foundation_model.classifier_checkpoint: autogluon/mitra-classifier
-    foundation_model.regressor_checkpoint: autogluon/mitra-regressor
+    finetune.model_id: mitra
+    finetune.classifier_checkpoint: autogluon/mitra-classifier
+    finetune.regressor_checkpoint: autogluon/mitra-regressor
 axes:
   featureOrderFitState:
   - value: canonical
@@ -35,27 +35,27 @@ settings:
   preprocess.clamp_train_pool.max_size: 200000
   data.backend: tabarena_openml_task_wrapper
   evaluation.backend: tabarena_aligned
-  foundation_model.preprocessing_protocol: shared
-  foundation_model.n_estimators_finetune: 2
-  foundation_model.n_estimators_validation: 2
-  foundation_model.n_estimators_final_inference: 2
-  foundation_model.baseline_only: false
-  foundation_model.epochs: 100
-  foundation_model.early_stopping: true
-  foundation_model.patience: 16
-  foundation_model.min_delta: 0.0001
-  foundation_model.keep_intermediate_checkpoints: false
-  foundation_model.test_eval_interval_epochs: 0
-  foundation_model.final_eval_checkpoint: best
-  foundation_model.test_context_includes_validation_data: true
-  foundation_model.test_context_comparison.enabled: false
-  foundation_model.validation_split_ratio: 0.1
-  foundation_model.validation_split_seed: 0
-  foundation_model.train_max_rows: 200000
-  foundation_model.inference_context_max_rows: 50000
-  foundation_model.ignore_pretraining_limits: true
-  foundation_model.resource_fallback_policy: oom_context_retry
-  foundation_model.oom_retry_context_sizes:
+  finetune.preprocessing_protocol: shared
+  finetune.n_estimators_finetune: 2
+  finetune.n_estimators_validation: 2
+  finetune.n_estimators_final_inference: 2
+  finetune.baseline_only: false
+  finetune.epochs: 100
+  finetune.early_stopping: true
+  finetune.patience: 16
+  finetune.min_delta: 0.0001
+  finetune.keep_intermediate_checkpoints: false
+  finetune.test_eval_interval_epochs: 0
+  finetune.final_eval_checkpoint: best
+  finetune.test_context_includes_validation_data: true
+  finetune.test_context_comparison.enabled: false
+  finetune.validation_split_ratio: 0.1
+  finetune.validation_split_seed: 0
+  finetune.train_max_rows: 200000
+  finetune.inference_context_max_rows: 50000
+  finetune.ignore_pretraining_limits: true
+  finetune.resource_fallback_policy: oom_context_retry
+  finetune.oom_retry_context_sizes:
   - 5000
   - 2500
   - 1000

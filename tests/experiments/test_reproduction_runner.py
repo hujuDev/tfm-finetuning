@@ -27,7 +27,7 @@ def test_label_noise_exact_protocol():
     assert {r["fold"] for r in runs} == {0}
     assert {r["config"]["preprocess"]["label_noise"]["rate"] for r in runs} == {0, 0.05, 0.15, 0.3}
     for run in runs:
-        settings = run["config"]["foundation_model"]
+        settings = run["config"]["finetune"]
         assert settings["final_eval_checkpoint"] == "best"
         assert settings["validation_split_seed"] == 0
         assert settings["test_context_includes_validation_data"] is True
@@ -48,11 +48,11 @@ def test_hpo_removes_only_saturated_context_duplicates():
         recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["anneal"], models=["mitra"]
     )
     assert len(runs) == 81  # 3 folds * 3 seeds * 3 learning rates * 3 weight decays
-    assert {r["config"]["foundation_model"]["context_size"] for r in runs} == {5000}
+    assert {r["config"]["finetune"]["context_size"] for r in runs} == {5000}
     large = expand_runs(
         recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["covertype"], models=["mitra"]
     )
-    assert {r["config"]["foundation_model"]["context_size"] for r in large} == {5000, 10000, 20000}
+    assert {r["config"]["finetune"]["context_size"] for r in large} == {5000, 10000, 20000}
 
 
 def test_alignment_and_update_only_are_separate_experiments():

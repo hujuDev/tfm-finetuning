@@ -137,21 +137,21 @@ def target_from_config(config: Mapping[str, Any]) -> str:
 
 
 def model_id(config: Mapping[str, Any]) -> str:
-    """Resolve the maintained foundation-model identifier."""
-    value = str(mapping(config.get("foundation_model")).get("model_id") or "").strip()
+    """Resolve the maintained identifier."""
+    value = str(mapping(config.get("finetune")).get("model_id") or "").strip()
     if not value:
-        raise ValueError("foundation_model.model_id is required for transfer routes.")
+        raise ValueError("finetune.model_id is required for transfer routes.")
     return value
 
 
 def base_checkpoint(config: Mapping[str, Any], *, task_family: str) -> str:
     """Resolve the configured base-checkpoint identifier."""
-    foundation = mapping(config.get("foundation_model"))
+    finetune = mapping(config.get("finetune"))
     key = "regressor_checkpoint" if task_family == "regression" else "classifier_checkpoint"
-    value = foundation.get(key)
+    value = finetune.get(key)
     text = str(value or "").strip()
     if not text:
-        raise ValueError(f"foundation_model.{key} is required for {task_family} transfer routes.")
+        raise ValueError(f"finetune.{key} is required for {task_family} transfer routes.")
     return text
 
 
@@ -165,7 +165,7 @@ def task_family(transfer: Mapping[str, Any]) -> str:
 
 def preprocessing(config: Mapping[str, Any]) -> str:
     """Resolve the shared or native preprocessing protocol."""
-    value = str(mapping(config.get("foundation_model")).get("preprocessing_protocol") or "").strip()
+    value = str(mapping(config.get("finetune")).get("preprocessing_protocol") or "").strip()
     return normalize_preprocessing_protocol(value) or "shared"
 
 
@@ -261,14 +261,14 @@ def required_context_policy(
             "route_matched_train_plus_validation is restricted to the "
             "same-schema natural-domain checkpoint-evaluation family."
         )
-    foundation = mapping(config.get("foundation_model"))
-    raw_flag = foundation.get("test_context_includes_validation_data")
+    finetune = mapping(config.get("finetune"))
+    raw_flag = finetune.get("test_context_includes_validation_data")
     if raw_flag is None:
-        raw_flag = foundation.get("test_context_includes_explicit_validation_data")
+        raw_flag = finetune.get("test_context_includes_explicit_validation_data")
     if not strict_bool(raw_flag):
         raise ValueError(
             "Transfer requires "
-            "foundation_model.test_context_includes_validation_data=true "
+            "finetune.test_context_includes_validation_data=true "
             "so each declared train-plus-validation context policy matches "
             "runtime evaluation."
         )
@@ -300,7 +300,7 @@ def transfer_data_recipe(
     config: Mapping[str, Any],
 ) -> TransferDataRecipe:
     """Resolve exact path-independent producer data preparation."""
-    foundation = mapping(config.get("foundation_model"))
+    finetune = mapping(config.get("finetune"))
     evaluation = mapping(config.get("evaluation"))
     data = mapping(config.get("data"))
     preprocess = mapping(config.get("preprocess"))
@@ -330,7 +330,7 @@ def transfer_data_recipe(
     if clamp_max is not None and "clamp_train_pool" not in steps:
         raise ValueError("A configured clamp_train_pool max_size must be declared in preprocess.steps.")
 
-    raw_fraction = foundation.get(
+    raw_fraction = finetune.get(
         "validation_split_ratio",
         evaluation.get("val_fraction", 0.2),
     )
@@ -338,7 +338,7 @@ def transfer_data_recipe(
         validation_fraction = float(raw_fraction)
     except (TypeError, ValueError) as exc:
         raise ValueError("Transfer validation split ratio must be numeric.") from exc
-    raw_validation_seed = foundation.get(
+    raw_validation_seed = finetune.get(
         "validation_split_seed",
         evaluation.get(
             "val_seed",
@@ -358,15 +358,15 @@ def transfer_data_recipe(
         clamp_train_pool_max_size=clamp_max,
         clamp_train_pool_seed=clamp_seed,
         train_max_rows=first_optional_recipe_int(
-            foundation,
+            finetune,
             ("train_max_rows", "fit_train_max_rows", "max_train_rows"),
         ),
         inference_context_max_rows=first_optional_recipe_int(
-            foundation,
+            finetune,
             ("inference_context_max_rows", "eval_context_max_rows"),
         ),
         eval_query_max_rows=first_optional_recipe_int(
-            foundation,
+            finetune,
             ("eval_query_max_rows", "inference_query_max_rows"),
         ),
     )
@@ -395,7 +395,7 @@ def first_optional_recipe_int(
         if config.get(key) is not None:
             return optional_recipe_int(
                 config[key],
-                field=f"foundation_model.{key}",
+                field=f"finetune.{key}",
             )
     return None
 

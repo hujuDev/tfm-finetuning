@@ -9,7 +9,7 @@ def _config(*, family: str, route_id: str, target: str) -> dict[str, object]:
     return {
         "seed": 0,
         "data": {"path": f"data/tabarena/{target}", "split": "fold0_repeat0_sample0"},
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabpfn_v2_5",
             "classifier_checkpoint": "models/tabpfn-v2.5-classifier.ckpt",
             "use_lr_scheduler": False,

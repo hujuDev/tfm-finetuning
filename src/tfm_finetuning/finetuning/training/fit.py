@@ -1,4 +1,4 @@
-"""Fit, fallback, and split-evaluation helpers for foundation-model fine-tuning."""
+"""Fit, fallback, and split-evaluation helpers for fine-tuning."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ from tfm_finetuning.finetuning.models.base import (
     InMemoryFinetuneLogger,
     TaskKind,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.training.in_memory import InMemoryFitController
 from tfm_finetuning.finetuning.training.resource_policy import (
     _resolve_oom_retry_context_sizes,
@@ -51,7 +51,7 @@ def _configure_periodic_checkpoint_saving(estimator: Any, *, test_eval_interval:
 
 
 def _resolve_device(config: Mapping[str, Any]) -> str | None:
-    value = get_nested(config, "foundation_model.device")
+    value = get_nested(config, "finetune.device")
     if value is None:
         value = get_nested(config, "evaluation.device")
     if value is None:
@@ -162,7 +162,7 @@ def _record_runtime_phase(
     payload = {"phase": phase, "seconds": seconds, **fields}
     rows.append(payload)
     logger.info(
-        "Foundation-model runtime phase: phase={} seconds={:.3f}{}",
+        "runtime phase: phase={} seconds={:.3f}{}",
         phase,
         seconds,
         _runtime_fields_text(fields),
@@ -173,7 +173,7 @@ def _record_runtime_phase(
 def _log_eval_timing(row: Mapping[str, Any]) -> None:
     logger.debug(
         (
-            "Foundation-model eval timing: phase={phase} split={split} "
+            "eval timing: phase={phase} split={split} "
             "epoch={epoch} n_estimators={n_estimators} context_rows={context_rows} "
             "query_rows={query_rows} estimator_init={estimator_init_seconds:.3f}s "
             "context_fit={context_fit_seconds:.3f}s predict={predict_seconds:.3f}s "
@@ -226,7 +226,7 @@ def _fit_with_oom_retry(
     *,
     adapter: FoundationModelAdapter,
     data: SplitEvaluationData,
-    spec: FoundationModelSpec,
+    spec: ModelSpec,
     config: Mapping[str, Any],
     common_config: CommonFineTuneConfig,
     resolved_seed: int,
@@ -267,7 +267,7 @@ def _fit_with_oom_retry(
         attempts.append(int(context_size))
         logger.info(
             (
-                "Foundation-model finetune fit start: model_id={} train_rows={} "
+                "Finetune fit start: model_id={} train_rows={} "
                 "val_rows={} epochs={} context_size={} configured_context_size={} "
                 "attempt={}/{} save_interval={} n_estimators_finetune={} "
                 "n_estimators_validation={} n_estimators_inference={} output_dir={}"
@@ -313,7 +313,7 @@ def _fit_with_oom_retry(
             next_context_size = context_sizes[index + 1]
             logger.warning(
                 (
-                    "Foundation-model CUDA OOM during fit; retrying with smaller context: "
+                    "CUDA OOM during fit; retrying with smaller context: "
                     "model_id={} failed_context_size={} next_context_size={} attempt={}/{} error={}"
                 ),
                 spec.model_id,
@@ -349,4 +349,4 @@ def _fit_with_oom_retry(
             fit_diagnostics=_consume_adapter_finetune_diagnostics(adapter),
         )
 
-    raise RuntimeError("Foundation-model fit did not run any context-size attempts.")
+    raise RuntimeError("fit did not run any context-size attempts.")

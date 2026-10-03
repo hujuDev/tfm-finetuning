@@ -345,7 +345,7 @@ class MitraDatasetTransferStageTrainer:
             "early_stopped": realized < stage.update_budget,
             "ensemble_size": ensemble_size,
             "score_metric": score_metric,
-            "score_metric_source": "foundation_model.metric",
+            "score_metric_source": "finetune.metric",
             "metrics": dict(terminal_metrics),
             "zero-shot-metrics": dict(target_baseline or {}),
             "train_history": train_history,

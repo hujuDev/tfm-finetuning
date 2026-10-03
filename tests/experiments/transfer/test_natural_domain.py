@@ -22,7 +22,7 @@ def _config(target: str, route: str) -> dict[str, object]:
             "backend": "local_exported_arrays",
         },
         "evaluation": {"backend": "official"},
-        "foundation_model": {
+        "finetune": {
             "model_id": "tabpfn_v2_5",
             "classifier_checkpoint": "base.ckpt",
             "test_context_includes_validation_data": True,

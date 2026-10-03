@@ -72,7 +72,7 @@ def _parameter_values(group: dict, dataset: str, facts: dict) -> dict[str, list]
         outer_rows = facts.get(dataset_key(dataset), {}).get('outer_train_rows')
         if outer_rows is None:
             raise ValueError(f'Missing outer_train_rows for context-size deduplication: {dataset}')
-        fraction = group.get('settings', {}).get('foundation_model.validation_split_ratio', 0.1)
+        fraction = group.get('settings', {}).get('finetune.validation_split_ratio', 0.1)
         effective = int(outer_rows * (1 - float(fraction)))
         sizes = sorted(set(int(v) for v in values['context_size']))
         saturating = next((v for v in sizes if v >= effective), None)
@@ -137,7 +137,7 @@ def expand_runs(
                             paths = group['parameters'][key]['path']
                             for path in paths if isinstance(paths, list) else [paths]:
                                 set_nested(config, path, value)
-                        protocol = config['foundation_model'].get('preprocessing_protocol', 'native')
+                        protocol = config['finetune'].get('preprocessing_protocol', 'native')
                         if preprocessing and protocol not in preprocessing:
                             continue
                         for fold, repeat, sample, seed in splits:
@@ -146,13 +146,13 @@ def expand_runs(
                             resolved['data'].update(seed=seed, path=f':data/tabarena/{dataset_key(dataset)}',
                                                     split=f'fold{fold}_repeat{repeat}_sample{sample}')
                             resolved['split'] = {'policy': 'tabarena', 'seed_mode': 'constant'}
-                            resolved['foundation_model']['validation_split_seed'] = group.get('split', {}).get('validation_seed', 0)
+                            resolved['finetune']['validation_split_seed'] = group.get('split', {}).get('validation_seed', 0)
                             resolved['experiment'] = {'study': study, 'key_param': {**varied, 'model': model['name']}}
                             # W&B records the same run metadata as local reports; environment variables may override it.
                             resolved['wandb'] = {'project': 'tfm-finetuning', **group.get('wandb', {})}
                             if smoke and not resolved.get('dataset_transfer', {}).get('enabled'):
-                                resolved['foundation_model']['epochs'] = 2
-                                resolved['foundation_model']['test_eval_interval_epochs'] = 1
+                                resolved['finetune']['epochs'] = 2
+                                resolved['finetune']['test_eval_interval_epochs'] = 1
                             identity = {'dataset': dataset_key(dataset), 'model': model['name'], 'config': resolved}
                             digest = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()[:12]
                             run_id = f'{dataset_key(dataset)}-{model["name"]}-{digest}'

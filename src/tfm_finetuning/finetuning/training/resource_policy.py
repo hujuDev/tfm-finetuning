@@ -1,4 +1,4 @@
-"""Estimator and memory fallback policy for foundation-model runs."""
+"""Estimator and memory fallback policy for runs."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ from tfm_finetuning.finetuning.models.base import (
     EstimatorMinimumAdapter,
     FoundationModelAdapter,
 )
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.utils.config import get_nested
 
 _RESOURCE_FALLBACK_STRICT = "strict"
@@ -36,18 +36,18 @@ def _normalize_resource_fallback_policy(value: Any) -> str:
     if text in {"oom_context_retry", "context_retry", "retry", "auto", "true", "1", "yes", "on"}:
         return _RESOURCE_FALLBACK_OOM_CONTEXT_RETRY
     raise SystemExit(
-        "foundation_model.resource_fallback_policy must be 'strict' or 'oom_context_retry', "
+        "finetune.resource_fallback_policy must be 'strict' or 'oom_context_retry', "
         f"got {value!r}."
     )
 
 
 def _resolve_resource_fallback_policy(config: Mapping[str, Any], *, model_id: str) -> str:
-    raw_policy = get_nested(config, "foundation_model.resource_fallback_policy")
+    raw_policy = get_nested(config, "finetune.resource_fallback_policy")
     if raw_policy is not None:
         return _normalize_resource_fallback_policy(raw_policy)
-    raw_sizes = get_nested(config, "foundation_model.oom_retry_context_sizes")
+    raw_sizes = get_nested(config, "finetune.oom_retry_context_sizes")
     if raw_sizes is None:
-        raw_sizes = get_nested(config, "foundation_model.oom_retry_context_size")
+        raw_sizes = get_nested(config, "finetune.oom_retry_context_size")
     if raw_sizes is not None:
         parsed = _coerce_context_sizes(raw_sizes)
         return _RESOURCE_FALLBACK_STRICT if parsed == () else _RESOURCE_FALLBACK_OOM_CONTEXT_RETRY
@@ -61,13 +61,13 @@ def _normalize_estimator_fallback_policy(value: Any) -> str:
     if text in {"estimator_retry", "retry", "auto", "true", "1", "yes", "on"}:
         return _ESTIMATOR_FALLBACK_RETRY
     raise SystemExit(
-        "foundation_model.estimator_fallback_policy must be 'strict' or 'estimator_retry', "
+        "finetune.estimator_fallback_policy must be 'strict' or 'estimator_retry', "
         f"got {value!r}."
     )
 
 
 def _resolve_estimator_fallback_policy(config: Mapping[str, Any], *, model_id: str) -> str:
-    raw_policy = get_nested(config, "foundation_model.estimator_fallback_policy")
+    raw_policy = get_nested(config, "finetune.estimator_fallback_policy")
     if raw_policy is not None:
         return _normalize_estimator_fallback_policy(raw_policy)
     return _ESTIMATOR_FALLBACK_RETRY if model_id.startswith("tabpfn_v2") else _ESTIMATOR_FALLBACK_STRICT
@@ -94,10 +94,10 @@ def _coerce_context_sizes(value: Any) -> tuple[int, ...] | None:
         try:
             size = int(raw_value)
         except Exception as exc:
-            message = f"foundation_model.oom_retry_context_sizes must contain integers, got {raw_value!r}."
+            message = f"finetune.oom_retry_context_sizes must contain integers, got {raw_value!r}."
             raise SystemExit(message) from exc
         if size <= 0:
-            raise SystemExit("foundation_model.oom_retry_context_sizes must contain positive integers.")
+            raise SystemExit("finetune.oom_retry_context_sizes must contain positive integers.")
         sizes.append(size)
     return tuple(sizes)
 
@@ -124,9 +124,9 @@ def _resolve_oom_retry_context_sizes(
     configured = int(common_config.context_size)
     if _resolve_resource_fallback_policy(config, model_id=model_id) == _RESOURCE_FALLBACK_STRICT:
         return (configured,)
-    raw_value = get_nested(config, "foundation_model.oom_retry_context_sizes")
+    raw_value = get_nested(config, "finetune.oom_retry_context_sizes")
     if raw_value is None:
-        raw_value = get_nested(config, "foundation_model.oom_retry_context_size")
+        raw_value = get_nested(config, "finetune.oom_retry_context_size")
     if raw_value is None:
         return _default_oom_retry_context_sizes(configured)
 
@@ -157,7 +157,7 @@ def _apply_estimator_fallback_policy(
     *,
     adapter: FoundationModelAdapter,
     data: SplitEvaluationData,
-    spec: FoundationModelSpec,
+    spec: ModelSpec,
     config: Mapping[str, Any],
     common_config: CommonFineTuneConfig,
 ) -> tuple[CommonFineTuneConfig, dict[str, Any]]:
@@ -172,7 +172,7 @@ def _apply_estimator_fallback_policy(
         raise SystemExit(
             f"{spec.model_id} requires at least {required_minimum} estimator(s) for {feature_count} features, "
             f"but strict estimator fallback policy received {details}. Set "
-            "foundation_model.estimator_fallback_policy='estimator_retry' or configure larger estimator counts."
+            "finetune.estimator_fallback_policy='estimator_retry' or configure larger estimator counts."
         )
 
     effective_config = common_config

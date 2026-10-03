@@ -14,8 +14,8 @@ from tfm_finetuning.finetuning.config import (
     _resolve_keep_intermediate_checkpoints,
     _resolve_save_best_val_checkpoint,
     resolve_common_finetune_config,
-    resolve_configured_foundation_model_spec,
-    resolve_foundation_model_id,
+    resolve_configured_model_spec,
+    resolve_model_id,
     resolve_test_eval_interval_epochs,
 )
 from tfm_finetuning.finetuning.datasets.preprocessing import (
@@ -23,7 +23,7 @@ from tfm_finetuning.finetuning.datasets.preprocessing import (
     _resolve_preprocessing_protocol,
 )
 from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig, FoundationModelAdapter
-from tfm_finetuning.finetuning.models.registry import FoundationModelSpec, get_foundation_model_spec
+from tfm_finetuning.finetuning.models.registry import ModelSpec, get_model_spec
 from tfm_finetuning.finetuning.reporting.report import _init_wandb_run
 from tfm_finetuning.finetuning.run.runtime import prepare_output
 from tfm_finetuning.finetuning.training.fit import _resolve_device
@@ -31,8 +31,8 @@ from tfm_finetuning.utils.paths import RepoPaths, get_paths
 
 
 @dataclass
-class FoundationRunSetup:
-    """Shared training state; ``initialize_foundation_run`` constructs it."""
+class RunSetup:
+    """Shared training state; ``initialize_run`` constructs it."""
 
     config: dict[str, Any]
     base_seed: int
@@ -40,7 +40,7 @@ class FoundationRunSetup:
     seed_delta: int
     split_name: str | None
     paths: RepoPaths
-    spec: FoundationModelSpec
+    spec: ModelSpec
     adapter: FoundationModelAdapter
     common_config: CommonFineTuneConfig
     test_eval_interval: int
@@ -53,19 +53,19 @@ class FoundationRunSetup:
     wandb_run: Any
 
 
-def initialize_foundation_run(
+def initialize_run(
     config: dict[str, Any],
     output_path: Path,
     *,
     force: bool,
-    model_spec_resolver: Callable[..., FoundationModelSpec] = get_foundation_model_spec,
-) -> FoundationRunSetup:
+    model_spec_resolver: Callable[..., ModelSpec] = get_model_spec,
+) -> RunSetup:
     """Create fresh state; ``output_path`` is used directly and never redirected to a cache."""
     config = copy.deepcopy(config)
     base_seed, resolved_seed, seed_delta, split_name = _prepare_config(config)
     paths = get_paths(config)
-    spec = resolve_configured_foundation_model_spec(
-        model_spec_resolver(resolve_foundation_model_id(config), repo_root=paths.repo_root),
+    spec = resolve_configured_model_spec(
+        model_spec_resolver(resolve_model_id(config), repo_root=paths.repo_root),
         config,
     )
     spec.ensure_source_available()
@@ -73,7 +73,7 @@ def initialize_foundation_run(
     preprocessing_protocol = _resolve_preprocessing_protocol(config)
     _configure_adapter_preprocessing_protocol(adapter, preprocessing_protocol)
     output = prepare_output(config, Path(output_path), force=force)
-    return FoundationRunSetup(
+    return RunSetup(
         config=config,
         base_seed=base_seed,
         resolved_seed=resolved_seed,

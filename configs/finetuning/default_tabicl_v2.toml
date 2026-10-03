@@ -1,7 +1,7 @@
-# TabICLv2 default finetuning config template for the generic foundation-model runner.
+# TabICLv2 default finetuning config template for the generic runner.
 seed = 0
 
-[foundation_model]
+[finetune]
 model_id = "tabicl_v2"
 epochs = 100
 learning_rate = 1e-5

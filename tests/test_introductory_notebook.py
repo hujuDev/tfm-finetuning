@@ -67,9 +67,9 @@ def test_example_expands_tabpfn_preprocessing_comparison_for_each_seed(seeds):
     assert {run["model"] for run in runs} == {"tabpfnv2_5"}
     for run in runs:
         assert run["fold"] == run["repeat"] == run["sample"] == 0
-        assert run["config"]["foundation_model"]["model_id"] == "tabpfn_v2_5"
-        assert run["config"]["foundation_model"]["epochs"] == 1
-        assert run["config"]["foundation_model"]["context_size"] == 1024
+        assert run["config"]["finetune"]["model_id"] == "tabpfn_v2_5"
+        assert run["config"]["finetune"]["epochs"] == 1
+        assert run["config"]["finetune"]["context_size"] == 1024
 
 
 @pytest.mark.parametrize("mode", ["online", "offline", "disabled"])

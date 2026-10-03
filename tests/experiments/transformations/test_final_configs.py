@@ -9,13 +9,13 @@ CONFIG_ROOT = ROOT / 'configs/experiments'
 
 
 def _load(name):
-    payload = yaml.safe_load((CONFIG_ROOT / name.removeprefix('foundation_models_')).read_text())
+    payload = yaml.safe_load((CONFIG_ROOT / name).read_text())
     # Scientific assertions below inspect the first fully resolved resource group.
     return recipe_groups(payload)[0]
 
 
 def test_contextual_scale_config_uses_original_and_matched_full_role_conditions() -> None:
-    payload = _load("foundation_models_distribution_shift_contextual_scale.yaml")
+    payload = _load("distribution_shift_contextual_scale.yaml")
     conditions = payload["axes"]["contextualScaleCondition"]
 
     assert [entry["value"] for entry in conditions] == [
@@ -34,11 +34,11 @@ def test_contextual_scale_config_uses_original_and_matched_full_role_conditions(
         "houses": 1,
         "sdss17": 1,
     }
-    assert payload["settings"]["foundation_model.test_eval_interval_epochs"] == 0
+    assert payload["settings"]["finetune.test_eval_interval_epochs"] == 0
 
 
 def test_heavy_tail_config_crosses_fit_side_contamination_with_mitigation() -> None:
-    payload = _load("foundation_models_distribution_shift_heavy_tail.yaml")
+    payload = _load("distribution_shift_heavy_tail.yaml")
     contamination = payload["axes"]["heavyTailContamination"]
 
     assert [entry["value"] for entry in contamination] == ["original", "fit_side_contaminated"]
@@ -52,15 +52,15 @@ def test_heavy_tail_config_crosses_fit_side_contamination_with_mitigation() -> N
         "houses": {"rate": 0.01, "magnitude_iqr": 10},
         "miami_housing": {"rate": 0.05, "magnitude_iqr": 10},
     }
-    assert payload["settings"]["foundation_model.test_context_comparison.enabled"] is False
-    assert payload["settings"]["foundation_model.test_eval_interval_epochs"] == 0
-    assert payload["settings"]["foundation_model.epochs"] == 50
-    assert payload["settings"]["foundation_model.early_stopping"] is False
+    assert payload["settings"]["finetune.test_context_comparison.enabled"] is False
+    assert payload["settings"]["finetune.test_eval_interval_epochs"] == 0
+    assert payload["settings"]["finetune.epochs"] == 50
+    assert payload["settings"]["finetune.early_stopping"] is False
 
 
 def test_representation_configs_change_only_finetune_update_states() -> None:
-    feature_order = _load("foundation_models_distribution_shift_feature_order.yaml")
-    numeric_scale = _load("foundation_models_distribution_shift_numeric_scale.yaml")
+    feature_order = _load("distribution_shift_feature_order.yaml")
+    numeric_scale = _load("distribution_shift_numeric_scale.yaml")
 
     assert [entry["value"] for entry in feature_order["axes"]["featureOrderUpdateState"]] == [
         "canonical",
@@ -70,8 +70,8 @@ def test_representation_configs_change_only_finetune_update_states() -> None:
         "raw",
         "standardized",
     ]
-    assert feature_order["settings"]["foundation_model.test_eval_interval_epochs"] == 0
-    assert numeric_scale["settings"]["foundation_model.test_eval_interval_epochs"] == 0
+    assert feature_order["settings"]["finetune.test_eval_interval_epochs"] == 0
+    assert numeric_scale["settings"]["finetune.test_eval_interval_epochs"] == 0
 
 
 
@@ -80,19 +80,19 @@ def test_representation_configs_change_only_finetune_update_states() -> None:
 
 def test_calibration_configs_are_validation_only_tabpfn_runs() -> None:
     for name in (
-        "foundation_models_distribution_shift_contextual_scale_calibration.yaml",
-        "foundation_models_distribution_shift_contextual_scale_feature_count_calibration.yaml",
-        "foundation_models_distribution_shift_contextual_scale_coil_screen.yaml",
-        "foundation_models_distribution_shift_heavy_tail_calibration.yaml",
+        "distribution_shift_contextual_scale_calibration.yaml",
+        "distribution_shift_contextual_scale_feature_count_calibration.yaml",
+        "distribution_shift_contextual_scale_coil_screen.yaml",
+        "distribution_shift_heavy_tail_calibration.yaml",
     ):
         payload = _load(name)
         assert [model["name"] for model in payload["models"]] == ["tabpfnv25"]
-        assert payload["settings"]["foundation_model.baseline_only"] is True
-        assert payload["settings"]["foundation_model.evaluation_splits"] == ["val"]
+        assert payload["settings"]["finetune.baseline_only"] is True
+        assert payload["settings"]["finetune.evaluation_splits"] == ["val"]
 
 
 def test_contextual_feature_count_followup_reuses_reference_and_runs_staged_feature_counts() -> None:
-    payload = _load("foundation_models_distribution_shift_contextual_scale_feature_count_calibration.yaml")
+    payload = _load("distribution_shift_contextual_scale_feature_count_calibration.yaml")
 
     assert [entry["value"] for entry in payload["axes"]["contextualFeatureCount"]] == [
         "3",
@@ -108,7 +108,7 @@ def test_contextual_feature_count_followup_reuses_reference_and_runs_staged_feat
 
 
 def test_contextual_coil_screen_uses_aggressive_validation_only_pair() -> None:
-    payload = _load("foundation_models_distribution_shift_contextual_scale_coil_screen.yaml")
+    payload = _load("distribution_shift_contextual_scale_coil_screen.yaml")
 
     assert [entry["value"] for entry in payload["axes"]["contextualFeatureCount"]] == ["8"]
     assert [entry["value"] for entry in payload["axes"]["contextualScaleSpread"]] == [
@@ -124,7 +124,7 @@ def test_contextual_coil_screen_uses_aggressive_validation_only_pair() -> None:
 
 
 def test_majority_downsampling_followup_retains_minority_and_has_two_conditions() -> None:
-    payload = _load("foundation_models_distribution_shift_class_prior_majority_downsampling.yaml")
+    payload = _load("distribution_shift_class_prior_majority_downsampling.yaml")
     override = payload["settings"]
     conditions = payload["axes"]["classPriorMajorityRate"]
 
@@ -141,15 +141,15 @@ def test_majority_downsampling_followup_retains_minority_and_has_two_conditions(
 
 
 def test_context_only_downsampling_finetunes_full_data_and_pairs_icl_contexts() -> None:
-    payload = _load("foundation_models_distribution_shift_class_prior_context_only_downsampling.yaml")
+    payload = _load("distribution_shift_class_prior_context_only_downsampling.yaml")
     override = payload["settings"]
     conditions = payload["axes"]["testContextComparison"]
 
     assert [entry["value"] for entry in conditions] == ["full_vs_balanced_icl"]
     assert override["preprocess.steps"] == []
-    assert override["foundation_model.test_context_comparison.enabled"] is True
-    assert override["foundation_model.test_context_comparison.mode"] == "original_majority_downsampling"
-    assert override["foundation_model.test_context_comparison.target_focal_rate"] == 0.5
+    assert override["finetune.test_context_comparison.enabled"] is True
+    assert override["finetune.test_context_comparison.mode"] == "original_majority_downsampling"
+    assert override["finetune.test_context_comparison.target_focal_rate"] == 0.5
     assert "preprocess.rebalance_train" not in str(override)
 
 

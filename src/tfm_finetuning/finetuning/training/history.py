@@ -1,4 +1,4 @@
-"""Epoch-history row construction for foundation-model fine-tuning."""
+"""Epoch-history row construction for fine-tuning."""
 
 from __future__ import annotations
 

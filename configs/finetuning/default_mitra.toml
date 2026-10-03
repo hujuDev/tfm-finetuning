@@ -1,6 +1,6 @@
 seed = 0
 
-[foundation_model]
+[finetune]
 model_id = "mitra"
 epochs = 100
 learning_rate = 1e-5
