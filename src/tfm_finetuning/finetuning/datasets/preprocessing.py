@@ -55,10 +55,7 @@ def _resolve_test_context_comparison_mode(config: Mapping[str, Any]) -> str:
         TEST_CONTEXT_COMPARISON_MAJORITY_DOWNSAMPLING,
     }
     if mode not in supported:
-        raise ValueError(
-            "finetune.test_context_comparison.mode must be one of "
-            f"{sorted(supported)}, got {raw_mode!r}"
-        )
+        raise ValueError(f"finetune.test_context_comparison.mode must be one of {sorted(supported)}, got {raw_mode!r}")
     return mode
 
 
@@ -74,7 +71,6 @@ def _mark_primary_test_context_comparison_data(
     metadata = dict(data.metadata)
     metadata["test_context_comparison_policy"] = TEST_CONTEXT_POLICY_FULL_ORIGINAL
     return replace(data, metadata=metadata)
-
 
 
 def _resolve_preprocessing_protocol(config: Mapping[str, Any]) -> str:
@@ -96,8 +92,6 @@ def _resolve_preprocessing_protocol(config: Mapping[str, Any]) -> str:
             f"finetune.preprocessing_protocol={raw_protocol!r} is unsupported; expected one of {supported}."
         )
     return protocol
-
-
 
 
 def _configure_adapter_preprocessing_protocol(adapter: FoundationModelAdapter, protocol: str) -> None:
@@ -201,7 +195,9 @@ def _fit_preprocessing_protocol(
     if protocol == PREPROCESSING_SHARED:
         return FiniteFeaturePreprocessor.fit(data.train_X)
     supported = ", ".join(sorted(SUPPORTED_PREPROCESSING_PROTOCOLS))
-    raise ValueError(f"Unsupported preprocessing protocol for model_id={model_id}: {protocol!r}; expected {supported}.")
+    raise ValueError(
+        f"Unsupported preprocessing protocol for model_id={model_id}: {protocol!r}; expected {supported}."
+    )
 
 
 def _preprocessing_metadata(
@@ -278,8 +274,6 @@ def _apply_preprocessing_protocol(
             "preprocessing": metadata,
         },
     )
-
-
 
 
 def _prepare_alternate_test_context_data(

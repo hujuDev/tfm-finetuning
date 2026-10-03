@@ -60,6 +60,7 @@ def test_tabicl_finite_feature_preprocessor_returns_finite_float32_frames() -> N
     assert transformed_query.loc[1, "cat"] == 0.0
     assert preprocessor.metadata()["method"] == SHARED_FEATURE_PREPROCESSING
 
+
 def test_tabicl_finite_feature_preprocessor_handles_wide_frames_without_fragmentation_warning() -> None:
     train = pd.DataFrame({f"feature_{index}": [float(index), np.nan, np.inf] for index in range(150)})
     preprocessor = FiniteFeaturePreprocessor.fit(train)
@@ -92,7 +93,9 @@ def test_apply_feature_preprocessing_records_tabicl_metadata() -> None:
         metadata={"data_backend": "test"},
     )
 
-    transformed = preprocessing_runner._apply_preprocessing_protocol(data, protocol="shared", model_id="tabicl_v2", seed=0)
+    transformed = preprocessing_runner._apply_preprocessing_protocol(
+        data, protocol="shared", model_id="tabicl_v2", seed=0
+    )
 
     assert transformed.metadata["feature_preprocessing"]["method"] == SHARED_FEATURE_PREPROCESSING
     assert transformed.metadata["feature_preprocessing"]["protocol"] == PREPROCESSING_SHARED
@@ -103,6 +106,7 @@ def test_apply_feature_preprocessing_records_tabicl_metadata() -> None:
     assert transformed.metadata["feature_preprocessing"]["source_feature_schema"]["categorical_columns"] == ["cat"]
     assert transformed.metadata["feature_preprocessing"]["adapter_feature_schema"]["categorical_feature_indices"] == []
     assert "adapter_validation_encoding" not in transformed.metadata["feature_preprocessing"]
+
 
 def test_fit_with_oom_retry_reduces_tabicl_context_and_cleans_partial_checkpoints(
     tmp_path: Path,
@@ -173,6 +177,7 @@ def test_fit_with_oom_retry_reduces_tabicl_context_and_cleans_partial_checkpoint
     assert result.oom_retry["retry_count"] == 1
     assert not (output / "partial.ckpt").exists()
 
+
 def test_tabicl_native_finetune_converts_categorical_features_before_fit(tmp_path: Path) -> None:
     class FakeTabICLEstimator:
         def fit(self, X, y, *, X_val, y_val, output_dir: Path):
@@ -213,6 +218,7 @@ def test_tabicl_native_finetune_converts_categorical_features_before_fit(tmp_pat
     assert np.isfinite(fitted.X).all()
     assert np.isfinite(fitted.X_val).all()
     assert diagnostics["tabicl_native_finetune_input_preprocessing"]["method"] == "tabicl_transform_to_numerical"
+
 
 def test_tabicl_shared_finetune_keeps_shared_numeric_inputs(tmp_path: Path) -> None:
     class FakeTabICLEstimator:
@@ -255,6 +261,4 @@ def test_tabicl_shared_finetune_keeps_shared_numeric_inputs(tmp_path: Path) -> N
     assert diagnostics["tabicl_native_finetune_input_preprocessing"]["method"] == (
         "shared_preprocessed_numeric_passthrough"
     )
-    assert diagnostics["tabicl_native_finetune_input_preprocessing"]["protocol"] == (
-        PREPROCESSING_SHARED
-    )
+    assert diagnostics["tabicl_native_finetune_input_preprocessing"]["protocol"] == (PREPROCESSING_SHARED)

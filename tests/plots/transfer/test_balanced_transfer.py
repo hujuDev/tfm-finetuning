@@ -99,8 +99,6 @@ def _complete_source_only() -> tuple[BalancedSourceOnlyResult, ...]:
         for model_index, model in enumerate(MODEL_ORDER)
         for seed in range(3)
         for source_index, source in enumerate(
-            ("houses",)
-            if DATASET_TASK[dataset] == "regression"
-            else ("satimage", "bank_heloc")
+            ("houses",) if DATASET_TASK[dataset] == "regression" else ("satimage", "bank_heloc")
         )
     )

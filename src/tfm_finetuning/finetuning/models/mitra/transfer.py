@@ -108,9 +108,7 @@ class MitraDatasetTransferStageTrainer:
         task_types = {str(data.task_type) for data in raw_datasets.values()}
         allowed = {"regression"} if stage.task_family == "regression" else {"binary", "multiclass"}
         if not task_types or not task_types.issubset(allowed):
-            raise ValueError(
-                f"Mitra transfer requires {stage.task_family} datasets, got {sorted(task_types)}."
-            )
+            raise ValueError(f"Mitra transfer requires {stage.task_family} datasets, got {sorted(task_types)}.")
         representative_task = str(next(iter(raw_datasets.values())).task_type)
         estimator = initialize_stage_estimator(
             self.adapter,
@@ -409,6 +407,7 @@ class MitraDatasetTransferStageTrainer:
             dataset_update_index=dataset_update_index,
         )
         return result, time.monotonic() - started, "training_wall_time_proxy_excluding_validation"
+
 
 def _dataset_token(name: str) -> int:
     return int.from_bytes(hashlib.sha256(name.encode("utf-8")).digest()[:4], "big")

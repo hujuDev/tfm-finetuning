@@ -132,10 +132,7 @@ def _periodic_epoch_metrics(
     epoch_checkpoints = _epoch_checkpoint_candidates(output_dir)
     selected = [(epoch, path) for epoch, path in epoch_checkpoints if epoch % interval == 0]
     logger.info(
-        (
-            "periodic checkpoint eval start: interval={} "
-            "selected_checkpoints={} available_checkpoints={} output_dir={}"
-        ),
+        ("periodic checkpoint eval start: interval={} selected_checkpoints={} available_checkpoints={} output_dir={}"),
         interval,
         len(selected),
         len(epoch_checkpoints),

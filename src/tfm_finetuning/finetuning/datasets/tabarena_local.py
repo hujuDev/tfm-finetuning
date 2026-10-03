@@ -246,5 +246,3 @@ def build_dataset_from_local_path(
         if value is not None:
             metadata[key] = value
     return dataset, metadata
-
-

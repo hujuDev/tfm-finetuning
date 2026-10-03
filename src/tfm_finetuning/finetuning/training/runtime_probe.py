@@ -71,10 +71,7 @@ class _FitRuntimeProbe:
             self._validation_context = {"stage": stage, "epoch": epoch}
             started_at = time.monotonic()
             logger.debug(
-                (
-                    "fit validation start: stage={} epoch={} "
-                    "train_rows={} val_rows={}"
-                ),
+                ("fit validation start: stage={} epoch={} train_rows={} val_rows={}"),
                 stage,
                 epoch,
                 train_rows,
@@ -131,10 +128,7 @@ class _FitRuntimeProbe:
                 primary=primary,
             )
             logger.debug(
-                (
-                    "fit validation finished: stage={} epoch={} "
-                    "seconds={:.3f} primary={}"
-                ),
+                ("fit validation finished: stage={} epoch={} seconds={:.3f} primary={}"),
                 stage,
                 epoch,
                 time.monotonic() - started_at,
@@ -177,10 +171,7 @@ class _FitRuntimeProbe:
                 )
                 return None
             logger.debug(
-                (
-                    "fit checkpoint save start: epoch={} "
-                    "is_best={} save_interval={} output_dir={}"
-                ),
+                ("fit checkpoint save start: epoch={} is_best={} save_interval={} output_dir={}"),
                 epoch,
                 is_best,
                 save_interval,
@@ -221,10 +212,7 @@ class _FitRuntimeProbe:
                 epoch_checkpoint_mib=epoch_mib,
             )
             logger.debug(
-                (
-                    "fit checkpoint save finished: epoch={} seconds={:.3f} "
-                    "best_mib={} epoch_mib={}"
-                ),
+                ("fit checkpoint save finished: epoch={} seconds={:.3f} best_mib={} epoch_mib={}"),
                 epoch,
                 time.monotonic() - started_at,
                 best_mib,
@@ -253,10 +241,7 @@ class _FitRuntimeProbe:
                 status="finished",
             )
             logger.debug(
-                (
-                    "fit inner estimator built: stage={} epoch={} "
-                    "n_estimators={} seconds={:.3f}"
-                ),
+                ("fit inner estimator built: stage={} epoch={} n_estimators={} seconds={:.3f}"),
                 context.get("stage"),
                 context.get("epoch"),
                 n_estimators,
@@ -284,10 +269,7 @@ class _FitRuntimeProbe:
             input_rows = _safe_len(args[0]) if args else None
             started_at = time.monotonic()
             logger.debug(
-                (
-                    "fit inner method start: method={} stage={} "
-                    "epoch={} n_estimators={} input_rows={}"
-                ),
+                ("fit inner method start: method={} stage={} epoch={} n_estimators={} input_rows={}"),
                 method_name,
                 context.get("stage"),
                 context.get("epoch"),
@@ -308,10 +290,7 @@ class _FitRuntimeProbe:
                     error=repr(exc),
                 )
                 logger.warning(
-                    (
-                        "fit inner method failed: method={} stage={} "
-                        "epoch={} seconds={:.3f} error={}"
-                    ),
+                    ("fit inner method failed: method={} stage={} epoch={} seconds={:.3f} error={}"),
                     method_name,
                     context.get("stage"),
                     context.get("epoch"),
@@ -329,10 +308,7 @@ class _FitRuntimeProbe:
                 status="finished",
             )
             logger.debug(
-                (
-                    "fit inner method finished: method={} stage={} "
-                    "epoch={} seconds={:.3f}"
-                ),
+                ("fit inner method finished: method={} stage={} epoch={} seconds={:.3f}"),
                 method_name,
                 context.get("stage"),
                 context.get("epoch"),

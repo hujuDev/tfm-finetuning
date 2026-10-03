@@ -321,9 +321,7 @@ class TabICLDatasetTransferStageTrainer:
             "realized_training_examples": int(sum(dataset_examples.values())),
             "dataset_training_examples": {name: int(dataset_examples.get(name, 0)) for name in stage.datasets},
             "gpu_time_seconds": float(engine.gpu_time_seconds),
-            "step_dependent_time_seconds": float(
-                engine.gpu_time_seconds + validation_seconds
-            ),
+            "step_dependent_time_seconds": float(engine.gpu_time_seconds + validation_seconds),
             "step_dependent_time_method": "training_plus_validation",
             "peak_gpu_memory_gib": peak_gpu_memory_gib(self.device),
             "validation_time_seconds": float(validation_seconds),

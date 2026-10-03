@@ -72,7 +72,13 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
             task = registry.get(key, {}).get("task_id")
             output = repo_root / "data" / ("openml" if task else "tabarena") / key
             # The exporter uses official OpenML folds, and creates validation only from training rows.
-            command = [sys.executable, "-m", "tfm_finetuning.data.download.tabarena_dataset", "--output-dir", str(output)]
+            command = [
+                sys.executable,
+                "-m",
+                "tfm_finetuning.data.download.tabarena_dataset",
+                "--output-dir",
+                str(output),
+            ]
             command += ["--source", "openml", "--task-id", str(task)] if task else ["--dataset-name", dataset]
             if output.exists():
                 command.append("--overwrite")  # Repair a partial export; the exporter otherwise skips existing files.

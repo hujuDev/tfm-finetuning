@@ -94,10 +94,7 @@ def _parse_args() -> argparse.Namespace:
         "--subset",
         type=str,
         default="TabPFNv2",
-        help=(
-            "Limit datasets to a TabArena subset (default: TabPFNv2). "
-            "Examples: TabPFNv2, TabICL, TabPFNv2+binary."
-        ),
+        help=("Limit datasets to a TabArena subset (default: TabPFNv2). Examples: TabPFNv2, TabICL, TabPFNv2+binary."),
     )
     parser.add_argument("--fold", type=int, default=None, help="Fold index to export.")
     parser.add_argument("--repeat", type=int, default=None, help="Repeat index to export.")
@@ -146,10 +143,7 @@ def _parse_args() -> argparse.Namespace:
         "--output-dir",
         type=str,
         default=None,
-        help=(
-            "Output directory for the dataset. Defaults to "
-            "$REPO_ROOT/data/<source>/<dataset_slug>."
-        ),
+        help=("Output directory for the dataset. Defaults to $REPO_ROOT/data/<source>/<dataset_slug>."),
     )
     parser.add_argument(
         "--metadata-path",
@@ -235,9 +229,7 @@ def _resolve_task(
 
 
 def _infer_openml_problem_type(task: object, y: pd.Series) -> str:
-    task_type_text = (
-        f"{getattr(task, 'task_type_id', '')} {getattr(task, 'task_type', '')}".strip().lower()
-    )
+    task_type_text = f"{getattr(task, 'task_type_id', '')} {getattr(task, 'task_type', '')}".strip().lower()
     if "regression" in task_type_text:
         return "regression"
     if "classification" in task_type_text:
@@ -409,9 +401,7 @@ def _resolve_split_grid(
                 folds, repeats, samples = [0, 1, 2], [0], [0]
             else:
                 folds, repeats, samples = [0], [0], [0]
-        elif protocol in {"legacy_tabarena", "legacy"} and (
-            source == "tabarena" or openml_split_policy == "tabarena"
-        ):
+        elif protocol in {"legacy_tabarena", "legacy"} and (source == "tabarena" or openml_split_policy == "tabarena"):
             default_repeats = 10 if n_instances < 2500 else 3
             folds, repeats, samples = list(range(3)), list(range(default_repeats)), [0]
         elif protocol in {"legacy_tabarena", "legacy"}:
@@ -625,7 +615,10 @@ def main() -> None:
                     override=args.split_name,
                 )
                 split_dir = output_dir / f"split-{split_name}"
-                if all((split_dir / f"{part}_idx.npy").is_file() for part in ("train", "val", "test")) and not args.overwrite:
+                if (
+                    all((split_dir / f"{part}_idx.npy").is_file() for part in ("train", "val", "test"))
+                    and not args.overwrite
+                ):
                     logger.info("Split %s already exists at %s; skipping.", split_name, split_dir)
                     continue
                 split_dir.mkdir(parents=True, exist_ok=True)

@@ -33,8 +33,11 @@ def test_select_checkpoint_path_prefers_latest_epoch_for_final_mode(tmp_path: Pa
     (tmp_path / "checkpoint_2K_5.pth").write_text("tabpfn-epoch5", encoding="utf-8")
     (tmp_path / "checkpoint_2K_best.pth").write_text("tabpfn-best", encoding="utf-8")
 
-    assert checkpoint_runner.select_checkpoint_path(tmp_path, checkpoint_mode="final") == tmp_path / "checkpoint_2K_5.pth"
+    assert (
+        checkpoint_runner.select_checkpoint_path(tmp_path, checkpoint_mode="final") == tmp_path / "checkpoint_2K_5.pth"
+    )
     assert checkpoint_runner.select_checkpoint_path(tmp_path, checkpoint_mode="best") == tmp_path / "best.ckpt"
+
 
 def test_finetune_main_validation_only_in_memory_exports_best_checkpoint(
     tmp_path: Path,
@@ -218,6 +221,7 @@ def test_finetune_main_validation_only_in_memory_exports_best_checkpoint(
     assert (1, "test", "in_memory_best") in epoch_rows
     assert (2, "test", "in_memory_final") in epoch_rows
 
+
 @pytest.mark.parametrize(
     (
         "capture_best_state",
@@ -391,6 +395,7 @@ def test_finetune_main_uses_adapter_captured_in_memory_states_without_best_check
     assert (2, "test", "in_memory_final") in epoch_rows
     assert (2, "test", "final_checkpoint") not in epoch_rows
 
+
 def test_finetune_main_allows_zero_shot_initial_best_with_saved_checkpoint(
     tmp_path: Path,
     monkeypatch,
@@ -505,6 +510,7 @@ def test_finetune_main_allows_zero_shot_initial_best_with_saved_checkpoint(
     assert (0, "test", "zero_shot_initial") in epoch_rows
     assert (report_payload["evaluation"]["final_epoch"], "test", "final_checkpoint") in epoch_rows
 
+
 def test_fallback_periodic_rows_alias_final_checkpoint_timing() -> None:
     timing_rows = [
         {"phase": "final_checkpoint", "split": "val", "seconds": 0.4, "score": 0.8},
@@ -541,6 +547,7 @@ def test_fallback_periodic_rows_alias_final_checkpoint_timing() -> None:
     assert all(row["epoch"] == 2 for row in aliases)
     assert all(row["alias_of"] == "final_checkpoint" for row in aliases)
 
+
 def test_canonical_epoch_rows_preserve_selected_and_final_sources_at_same_epoch() -> None:
     rows = history_runner._canonical_epoch_evaluation_rows(
         train_history=[],
@@ -572,6 +579,7 @@ def test_canonical_epoch_rows_preserve_selected_and_final_sources_at_same_epoch(
         (2, "val", "in_memory_final"),
         (2, "test", "in_memory_final"),
     }
+
 
 def test_canonical_epoch_rows_prefer_runner_owned_validation_rows() -> None:
     rows = history_runner._canonical_epoch_evaluation_rows(
@@ -618,6 +626,7 @@ def test_canonical_epoch_rows_prefer_runner_owned_validation_rows() -> None:
             "roc_auc": 0.8,
         }
     ]
+
 
 def test_log_wandb_summary_merges_periodic_rows_into_epoch_steps(tmp_path: Path) -> None:
     class FakeRun:

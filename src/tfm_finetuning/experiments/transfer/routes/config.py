@@ -314,8 +314,7 @@ def transfer_data_recipe(
     unsupported = sorted(set(steps).difference({"clamp_train_pool"}))
     if unsupported:
         raise ValueError(
-            "Transfer routes only support clamp_train_pool data "
-            f"preprocessing; unsupported: {', '.join(unsupported)}."
+            f"Transfer routes only support clamp_train_pool data preprocessing; unsupported: {', '.join(unsupported)}."
         )
     clamp = mapping(preprocess.get("clamp_train_pool"))
     clamp_max = optional_recipe_int(

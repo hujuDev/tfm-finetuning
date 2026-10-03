@@ -174,9 +174,7 @@ def run_finetuned_training_phases(
         eval_timing_rows=eval_timing_rows,
         runtime_phases=runtime_phases,
     )
-    configured_checkpoint = (
-        final_checkpoint if setup.checkpoint_mode == "final" else selected_checkpoint_for_report
-    )
+    configured_checkpoint = final_checkpoint if setup.checkpoint_mode == "final" else selected_checkpoint_for_report
     if fit_controller is None and configured_checkpoint is not None:
         model_checkpoint = _materialize_model_checkpoint(source=configured_checkpoint, output_dir=setup.output)
     configured_metrics = final_metrics if setup.checkpoint_mode == "final" else selected_checkpoint_metrics

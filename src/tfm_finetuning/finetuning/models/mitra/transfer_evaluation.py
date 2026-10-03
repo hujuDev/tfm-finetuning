@@ -117,10 +117,7 @@ class MitraTransferEvaluator:
             tuple(candidate.validation for candidate in candidates),
         )
         return next(
-            candidate
-            for candidate in candidates
-            if candidate.validation.checkpoint_id
-            == selection.checkpoint_id
+            candidate for candidate in candidates if candidate.validation.checkpoint_id == selection.checkpoint_id
         )
 
     @staticmethod
@@ -134,18 +131,12 @@ class MitraTransferEvaluator:
                 candidates,
                 target_dataset=stage.selector.datasets[0],
             )
-        if (
-            stage.selector.kind
-            == "equal_mean_validation_improvement"
-        ):
+        if stage.selector.kind == "equal_mean_validation_improvement":
             return select_source_mean_checkpoint(
                 candidates,
                 source_datasets=stage.selector.datasets,
             )
-        raise ValueError(
-            f"Unsupported Mitra transfer selector: "
-            f"{stage.selector.kind!r}."
-        )
+        raise ValueError(f"Unsupported Mitra transfer selector: {stage.selector.kind!r}.")
 
     def evaluate_baseline(
         self,
@@ -156,9 +147,7 @@ class MitraTransferEvaluator:
         stage: TransferStageSpec,
     ) -> Mapping[str, Any]:
         """Evaluate pure ICL on the same target-only context."""
-        with isolated_random_seed(
-            evaluation_seed(stage.seed, dataset_name)
-        ):
+        with isolated_random_seed(evaluation_seed(stage.seed, dataset_name)):
             return _evaluate_zero_shot(
                 adapter=self.adapter,
                 data=data,
@@ -225,9 +214,7 @@ class MitraTransferEvaluator:
         """Return the durable checkpoint reload-and-predict audit."""
 
         def validate(path: Path) -> bool:
-            with isolated_random_seed(
-                evaluation_seed(seed, "reload-validation")
-            ):
+            with isolated_random_seed(evaluation_seed(seed, "reload-validation")):
                 estimator = self.adapter.load_checkpoint_for_inference(
                     path,
                     data.task_type,
@@ -235,19 +222,13 @@ class MitraTransferEvaluator:
                     ensemble_size,
                     seed=int(seed),
                 )
-                if (
-                    len(getattr(estimator, "trainers", ()))
-                    != ensemble_size
-                ):
+                if len(getattr(estimator, "trainers", ())) != ensemble_size:
                     return False
                 if hasattr(estimator, "classes_") or hasattr(
                     estimator,
                     "_tfm_mitra_feature_preprocessor",
                 ):
-                    raise RuntimeError(
-                        "Mitra portable checkpoint retained source-bound "
-                        "state before target fitting."
-                    )
+                    raise RuntimeError("Mitra portable checkpoint retained source-bound state before target fitting.")
                 context_X = getattr(
                     data,
                     "val_context_X",
@@ -275,14 +256,8 @@ class MitraTransferEvaluator:
                         data.task_type,
                     )
                 )
-                if (
-                    prediction.shape[0] != 1
-                    or not np.isfinite(prediction).all()
-                ):
-                    raise RuntimeError(
-                        "Mitra reloaded checkpoint failed target-context "
-                        "prediction smoke."
-                    )
+                if prediction.shape[0] != 1 or not np.isfinite(prediction).all():
+                    raise RuntimeError("Mitra reloaded checkpoint failed target-context prediction smoke.")
                 return True
 
         return validate
@@ -305,11 +280,7 @@ def evaluation_seed(seed: int, dataset_name: str) -> int:
         hashlib.sha256(dataset_name.encode("utf-8")).digest()[:4],
         "big",
     )
-    return int(
-        np.random.SeedSequence(
-            [int(seed), token, 0xE1A1]
-        ).generate_state(1)[0]
-    )
+    return int(np.random.SeedSequence([int(seed), token, 0xE1A1]).generate_state(1)[0])
 
 
 def _score(
@@ -319,18 +290,7 @@ def _score(
     dataset: str,
 ) -> float:
     split_payload = metrics.get(split)
-    value = (
-        split_payload.get("score")
-        if isinstance(split_payload, Mapping)
-        else None
-    )
-    if (
-        isinstance(value, bool)
-        or not isinstance(value, int | float)
-        or not np.isfinite(value)
-    ):
-        raise RuntimeError(
-            f"Mitra transfer evaluation for {dataset!r} lacks finite "
-            f"{split}/score."
-        )
+    value = split_payload.get("score") if isinstance(split_payload, Mapping) else None
+    if isinstance(value, bool) or not isinstance(value, int | float) or not np.isfinite(value):
+        raise RuntimeError(f"Mitra transfer evaluation for {dataset!r} lacks finite {split}/score.")
     return float(value)

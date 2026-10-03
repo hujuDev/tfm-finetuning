@@ -23,6 +23,7 @@ from tfm_finetuning.finetuning.models.base import (
 if TYPE_CHECKING:
     from pathlib import Path
 
+
 class InMemoryFitController:
     """Keep TabICL fine-tune eval/checkpoint state in memory instead of epoch files.
 
@@ -397,10 +398,7 @@ class InMemoryFitController:
         self.export_source = source
         self.exported_checkpoint_path = checkpoint_path
         logger.info(
-            (
-                "in-memory checkpoint exported: mode={} source={} "
-                "epoch={} seconds={:.3f} checkpoint={}"
-            ),
+            ("in-memory checkpoint exported: mode={} source={} epoch={} seconds={:.3f} checkpoint={}"),
             checkpoint_mode,
             source,
             epoch,

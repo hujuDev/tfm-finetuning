@@ -86,11 +86,24 @@ def _write_run(
     path = root / "results" / experiment_id / run_id
     path.mkdir(parents=True, exist_ok=True)
     (path / "finetune_report.json").write_text(json.dumps(report))
-    (path / "run.json").write_text(json.dumps({
-        "status": "complete", "study": experiment_id, "run_id": run_id, "dataset": dataset,
-        "model": "tabpfnv25", "preprocessing": "shared", "seed": report["split"]["resolved_seed"],
-        "fold": 0, "repeat": 0, "sample": 0, "parameters": report["data_task"]["distribution_shift"], "config": {},
-    }))
+    (path / "run.json").write_text(
+        json.dumps(
+            {
+                "status": "complete",
+                "study": experiment_id,
+                "run_id": run_id,
+                "dataset": dataset,
+                "model": "tabpfnv25",
+                "preprocessing": "shared",
+                "seed": report["split"]["resolved_seed"],
+                "fold": 0,
+                "repeat": 0,
+                "sample": 0,
+                "parameters": report["data_task"]["distribution_shift"],
+                "config": {},
+            }
+        )
+    )
     return {}
 
 
@@ -266,18 +279,16 @@ def test_loader_pairs_selected_metrics_and_reports_missing_cells_without_zero_fi
     )
     assert score_summary.loc[("0", "sft"), "score_mean"] == pytest.approx(0.5)
     assert score_summary.loc[("0.3", "icl"), "score_mean"] == pytest.approx(0.8)
-    normalized = tables.normalized_score_summary[
-        tables.normalized_score_summary["metric"] == "log_loss"
-    ].set_index(["condition", "method"])
+    normalized = tables.normalized_score_summary[tables.normalized_score_summary["metric"] == "log_loss"].set_index(
+        ["condition", "method"]
+    )
     assert normalized.loc[("0", "sft"), "normalized_score_mean"] == pytest.approx(1.0)
     assert normalized.loc[("0.3", "sft"), "normalized_score_mean"] == pytest.approx(0.5 / 0.9)
-    normalized_runs = tables.normalized_run_scores[
-        tables.normalized_run_scores["metric"] == "log_loss"
-    ].set_index(["condition", "method"])
+    normalized_runs = tables.normalized_run_scores[tables.normalized_run_scores["metric"] == "log_loss"].set_index(
+        ["condition", "method"]
+    )
     assert normalized_runs.loc[("0", "sft"), "value"] == pytest.approx(1.0)
     assert normalized_runs.loc[("0.3", "sft"), "value"] == pytest.approx(0.5 / 0.9)
-
-
 
 
 def test_class_prior_displacement_is_the_change_in_fit_test_prior_gap() -> None:

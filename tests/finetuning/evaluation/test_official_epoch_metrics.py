@@ -126,9 +126,7 @@ def test_compute_full_official_epoch_eval_result_adds_regression_core_metrics() 
         y_train=np.array([1.0, 2.0, 3.0]),
         X_val=np.array([[0.0], [1.0], [2.0]]),
         y_val=np.array([1.0, 2.0, 3.0]),
-        clone_model_for_evaluation_fn=lambda *args, **kwargs: _RegressorEvalEstimator(
-            np.array([1.5, 2.5, 2.0])
-        ),
+        clone_model_for_evaluation_fn=lambda *args, **kwargs: _RegressorEvalEstimator(np.array([1.5, 2.5, 2.0])),
         eval_result_type=_EvalResult,
     )
 

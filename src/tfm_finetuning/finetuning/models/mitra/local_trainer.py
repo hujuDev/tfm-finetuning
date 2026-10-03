@@ -269,9 +269,7 @@ class LocalMitraTrainer(TrainerFinetune):
             max_samples_support=int(self.cfg.hyperparams["max_samples_support"]),
             max_samples_query=int(self.cfg.hyperparams["max_samples_query"]),
             use_lr_scheduler=bool(self.cfg.hyperparams.get("lr_scheduler", False)),
-            scheduler_policy=str(
-                self.cfg.hyperparams.get("tfm_scheduler_policy", MITRA_SCHEDULER_COSINE_WARMUP)
-            ),
+            scheduler_policy=str(self.cfg.hyperparams.get("tfm_scheduler_policy", MITRA_SCHEDULER_COSINE_WARMUP)),
             warmup_proportion=float(self.cfg.hyperparams.get("tfm_warmup_proportion", 0.1)),
             chunks_per_epoch=chunks_per_epoch,
             epochs_configured=max_epochs,

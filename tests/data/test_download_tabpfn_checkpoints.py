@@ -45,7 +45,10 @@ def test_download_uses_pinned_filename_and_native_auth_then_skips_verified_file(
     assert downloader.download_checkpoint(spec, models) == "downloaded"
     assert (models / spec.filename).read_bytes() == cached.read_bytes()
     fetch.assert_called_once_with(
-        repo_id=spec.repo_id, filename=spec.filename, revision=spec.revision, force_download=False,
+        repo_id=spec.repo_id,
+        filename=spec.filename,
+        revision=spec.revision,
+        force_download=False,
     )
     assert downloader.download_checkpoint(spec, models).startswith("skipped")
     assert fetch.call_count == 1

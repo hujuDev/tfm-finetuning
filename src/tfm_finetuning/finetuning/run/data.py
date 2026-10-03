@@ -59,11 +59,7 @@ def _prepare_run_data(
     phase_started = time.monotonic()
     data = apply_pre_finite_distribution_shift(data, config, seed=int(resolved_seed))
     pre_finite_shift = data.metadata.get("distribution_shift")
-    pre_finite_reports = (
-        pre_finite_shift.get("pre_finite")
-        if isinstance(pre_finite_shift, Mapping)
-        else None
-    )
+    pre_finite_reports = pre_finite_shift.get("pre_finite") if isinstance(pre_finite_shift, Mapping) else None
     _record_runtime_phase(
         runtime_phases,
         phase="distribution_shift_pre_finite",
@@ -118,7 +114,9 @@ def _prepare_run_data(
             feature_preprocessing.get("raw_feature_count") if isinstance(feature_preprocessing, Mapping) else None
         ),
         effective_feature_count=(
-            feature_preprocessing.get("effective_feature_count") if isinstance(feature_preprocessing, Mapping) else None
+            feature_preprocessing.get("effective_feature_count")
+            if isinstance(feature_preprocessing, Mapping)
+            else None
         ),
     )
     phase_started = time.monotonic()
@@ -132,11 +130,7 @@ def _prepare_run_data(
         shift_comparison_data = _refresh_adapter_feature_schema_metadata(shift_comparison_data)
     _configure_adapter_feature_schema(adapter, data)
     post_finite_shift = data.metadata.get("distribution_shift")
-    post_finite_reports = (
-        post_finite_shift.get("post_finite")
-        if isinstance(post_finite_shift, Mapping)
-        else None
-    )
+    post_finite_reports = post_finite_shift.get("post_finite") if isinstance(post_finite_shift, Mapping) else None
     _record_runtime_phase(
         runtime_phases,
         phase="distribution_shift_post_finite",
@@ -159,8 +153,7 @@ def _prepare_run_data(
     )
     if shift_comparison_data is not None and context_comparison_data is not None:
         raise ValueError(
-            "A run cannot combine a distribution-shift test-view comparison with "
-            "finetune.test_context_comparison"
+            "A run cannot combine a distribution-shift test-view comparison with finetune.test_context_comparison"
         )
     comparison_data = shift_comparison_data or context_comparison_data
     if context_comparison_data is not None:

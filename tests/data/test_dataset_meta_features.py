@@ -231,6 +231,4 @@ def test_categorical_cooccurrence_sparsity_requires_joint_patterns() -> None:
 
     assert common_value == pytest.approx(0.0)
     assert sparse_value == pytest.approx(0.2)
-    assert compute_distribution_structure_features(common[["left"]])[
-        "categoricalCooccurrenceSparsity"
-    ] is None
+    assert compute_distribution_structure_features(common[["left"]])["categoricalCooccurrenceSparsity"] is None

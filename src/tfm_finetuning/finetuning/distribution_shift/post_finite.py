@@ -37,10 +37,7 @@ def apply_shuffle_feature_order(
         return _apply_finetune_only_feature_order(data, cfg, rng, seed, update_state=update_state)
     fit_state = str(cfg.get("fit_state") or "").strip().lower().replace("-", "_")
     if fit_state not in {"canonical", "permuted"}:
-        raise ValueError(
-            "shuffle_feature_order.fit_state must be canonical or permuted, "
-            f"got {fit_state!r}"
-        )
+        raise ValueError(f"shuffle_feature_order.fit_state must be canonical or permuted, got {fit_state!r}")
     permutation = rng.permutation(data.train_X.shape[1])
     canonical = {
         role: _canonical_feature_frame(getattr(data, f"{role}_X"))
@@ -66,17 +63,21 @@ def apply_shuffle_feature_order(
         primary_view="canonical",
         alternate_view="permuted",
     )
-    return primary, alternate, {
-        "stage": "post_finite",
-        "seed": seed,
-        "fit_state": fit_state,
-        "primary_test_view": "canonical",
-        "alternate_test_view": "permuted",
-        "feature_count": int(data.train_X.shape[1]),
-        "permutation_hash": hash_array(permutation.astype(int)),
-        "permutation": permutation.astype(int).tolist() if bool(cfg.get("record_permutation", False)) else None,
-        "same_checkpoint_test_views": True,
-    }
+    return (
+        primary,
+        alternate,
+        {
+            "stage": "post_finite",
+            "seed": seed,
+            "fit_state": fit_state,
+            "primary_test_view": "canonical",
+            "alternate_test_view": "permuted",
+            "feature_count": int(data.train_X.shape[1]),
+            "permutation_hash": hash_array(permutation.astype(int)),
+            "permutation": permutation.astype(int).tolist() if bool(cfg.get("record_permutation", False)) else None,
+            "same_checkpoint_test_views": True,
+        },
+    )
 
 
 def apply_numeric_scale(
@@ -117,18 +118,22 @@ def apply_numeric_scale(
         primary_view="raw",
         alternate_view="standardized",
     )
-    return primary, alternate, {
-        "stage": "post_finite",
-        "seed": seed,
-        "fit_state": fit_state,
-        "primary_test_view": "raw",
-        "alternate_test_view": "standardized",
-        "transform_fit_scope": "effective_training_numeric_columns",
-        "transformed_columns": [str(column) for column in columns],
-        "transformed_feature_count": len(columns),
-        "binary_and_categorical_columns_preserved": True,
-        "same_checkpoint_test_views": True,
-    }
+    return (
+        primary,
+        alternate,
+        {
+            "stage": "post_finite",
+            "seed": seed,
+            "fit_state": fit_state,
+            "primary_test_view": "raw",
+            "alternate_test_view": "standardized",
+            "transform_fit_scope": "effective_training_numeric_columns",
+            "transformed_columns": [str(column) for column in columns],
+            "transformed_feature_count": len(columns),
+            "binary_and_categorical_columns_preserved": True,
+            "same_checkpoint_test_views": True,
+        },
+    )
 
 
 def _apply_finetune_only_feature_order(
@@ -141,8 +146,7 @@ def _apply_finetune_only_feature_order(
 ) -> tuple[Any, None, dict[str, Any]]:
     if update_state not in {"canonical", "fixed_permutation"}:
         raise ValueError(
-            "shuffle_feature_order.update_state must be canonical or fixed_permutation, "
-            f"got {update_state!r}"
+            f"shuffle_feature_order.update_state must be canonical or fixed_permutation, got {update_state!r}"
         )
     permutation = rng.permutation(data.train_X.shape[1])
     canonical = {
@@ -153,18 +157,22 @@ def _apply_finetune_only_feature_order(
     if update_state == "fixed_permutation":
         updates["train_X"] = _positional_permute_frame(data.train_X, permutation)
     transformed = replace(data, **updates)
-    return transformed, None, {
-        "stage": "post_finite",
-        "seed": seed,
-        "update_state": update_state,
-        "gradient_update_roles": ["train"],
-        "canonical_evaluation_roles": ["val_context", "val", "test_context", "test"],
-        "feature_count": int(data.train_X.shape[1]),
-        "permutation_hash": hash_array(permutation.astype(int)),
-        "permutation": permutation.astype(int).tolist() if bool(cfg.get("record_permutation", False)) else None,
-        "same_icl_data_across_conditions": True,
-        "paired_test_views": False,
-    }
+    return (
+        transformed,
+        None,
+        {
+            "stage": "post_finite",
+            "seed": seed,
+            "update_state": update_state,
+            "gradient_update_roles": ["train"],
+            "canonical_evaluation_roles": ["val_context", "val", "test_context", "test"],
+            "feature_count": int(data.train_X.shape[1]),
+            "permutation_hash": hash_array(permutation.astype(int)),
+            "permutation": permutation.astype(int).tolist() if bool(cfg.get("record_permutation", False)) else None,
+            "same_icl_data_across_conditions": True,
+            "paired_test_views": False,
+        },
+    )
 
 
 def _apply_finetune_only_numeric_scale(
@@ -175,10 +183,7 @@ def _apply_finetune_only_numeric_scale(
     update_state: str,
 ) -> tuple[Any, None, dict[str, Any]]:
     if update_state not in {"raw", "standardized"}:
-        raise ValueError(
-            "numeric_scale.update_state must be raw or standardized, "
-            f"got {update_state!r}"
-        )
+        raise ValueError(f"numeric_scale.update_state must be raw or standardized, got {update_state!r}")
     columns = _continuous_numeric_columns(data)
     scaler = StandardScaler().fit(data.train_X.loc[:, columns]) if columns else None
     updates = {
@@ -188,19 +193,23 @@ def _apply_finetune_only_numeric_scale(
     if update_state == "standardized":
         updates["train_X"] = _standardized_frame(data.train_X, columns=columns, scaler=scaler)
     transformed = replace(data, **updates)
-    return transformed, None, {
-        "stage": "post_finite",
-        "seed": seed,
-        "update_state": update_state,
-        "gradient_update_roles": ["train"],
-        "canonical_evaluation_roles": ["val_context", "val", "test_context", "test"],
-        "transform_fit_scope": "effective_training_numeric_columns",
-        "transformed_columns": [str(column) for column in columns],
-        "transformed_feature_count": len(columns),
-        "binary_and_categorical_columns_preserved": True,
-        "same_icl_data_across_conditions": True,
-        "paired_test_views": False,
-    }
+    return (
+        transformed,
+        None,
+        {
+            "stage": "post_finite",
+            "seed": seed,
+            "update_state": update_state,
+            "gradient_update_roles": ["train"],
+            "canonical_evaluation_roles": ["val_context", "val", "test_context", "test"],
+            "transform_fit_scope": "effective_training_numeric_columns",
+            "transformed_columns": [str(column) for column in columns],
+            "transformed_feature_count": len(columns),
+            "binary_and_categorical_columns_preserved": True,
+            "same_icl_data_across_conditions": True,
+            "paired_test_views": False,
+        },
+    )
 
 
 def _continuous_numeric_columns(data: Any) -> list[Any]:
@@ -211,8 +220,7 @@ def _continuous_numeric_columns(data: Any) -> list[Any]:
     return [
         column
         for column in candidates
-        if pd.api.types.is_numeric_dtype(data.train_X[column])
-        and data.train_X[column].nunique(dropna=True) > 2
+        if pd.api.types.is_numeric_dtype(data.train_X[column]) and data.train_X[column].nunique(dropna=True) > 2
     ]
 
 

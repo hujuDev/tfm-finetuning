@@ -43,6 +43,7 @@ def test_feature_schema_metadata_marks_native_categorical_columns() -> None:
     assert schema["categorical_feature_indices"] == [0, 2]
     assert schema["numeric_columns"] == ["visits"]
 
+
 @pytest.mark.parametrize("protocol", ["native"])
 def test_native_preprocessing_records_adapter_feature_schema(protocol: str) -> None:
     data = SplitEvaluationData(
@@ -82,6 +83,7 @@ def test_native_preprocessing_records_adapter_feature_schema(protocol: str) -> N
     assert refreshed_metadata["adapter_feature_schema"]["categorical_feature_indices"] == [0]
     assert refreshed_metadata["categorical_feature_indices"] == [0]
 
+
 def test_densify_sparse_feature_frames_materializes_pandas_sparse_columns() -> None:
     data = SplitEvaluationData(
         task_type="binary",
@@ -118,6 +120,7 @@ def test_densify_sparse_feature_frames_materializes_pandas_sparse_columns() -> N
             "test_query": ["x"],
         },
     }
+
 
 def test_load_split_evaluation_data_defaults_test_context_to_inner_train(
     tmp_path: Path,
@@ -171,6 +174,7 @@ def test_load_split_evaluation_data_defaults_test_context_to_inner_train(
     assert len(data.test_context_X) == 9
     assert data.metadata["test_context_includes_validation_data"] is False
     assert data.metadata["test_context_source"] == "inner_train"
+
 
 @pytest.mark.parametrize(
     "context_flag_config",
@@ -228,11 +232,9 @@ def test_load_split_evaluation_data_validation_context_flag_selects_outer_train(
     assert data.metadata["test_context_includes_validation_data"] is True
     assert data.metadata["test_context_source"] == "outer_train"
 
+
 def test_resolve_preprocessing_protocol_defaults_to_model_native() -> None:
     assert preprocessing_runner._resolve_preprocessing_protocol({}) == PREPROCESSING_NATIVE
-
-
-
 
 
 def test_resolve_configured_model_spec_honors_checkpoint_metadata(tmp_path: Path) -> None:

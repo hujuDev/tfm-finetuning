@@ -40,11 +40,7 @@ def select_contextual_scale(rows: list[CalibrationRow]) -> dict[str, Any]:
     for dataset, dataset_rows in _by_dataset(rows).items():
         reference = {row.cell: row for row in dataset_rows if row.spread == 1.0}
         count_tiers = sorted(
-            {
-                int(row.feature_count or 1)
-                for row in dataset_rows
-                if row.spread is not None and row.spread != 1.0
-            }
+            {int(row.feature_count or 1) for row in dataset_rows if row.spread is not None and row.spread != 1.0}
         )
         selected = None
         diagnostics = []

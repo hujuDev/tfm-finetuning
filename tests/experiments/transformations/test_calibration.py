@@ -73,7 +73,6 @@ def test_heavy_tail_selector_escalates_magnitude_before_selecting_rate() -> None
     assert payload["status"] == {"demo": "selected"}
 
 
-
 def test_fresh_calibration_uses_validation_only_and_rejects_failed_runs(tmp_path):
     import json
 
@@ -85,20 +84,27 @@ def test_fresh_calibration_uses_validation_only_and_rejects_failed_runs(tmp_path
     run.mkdir()
     marker = run / "run.json"
     marker.write_text(json.dumps({"status": "complete"}))
-    (run / "finetune_report.json").write_text(json.dumps({
-        "score_metric": "rmse",
-        "data_task": {
-            "dataset_name": "diamonds", "fold": 1,
-            "distribution_shift": {"pre_finite": {"heavy_tail_contamination": {"rate": .05, "magnitude_iqr": 25}}},
-        },
-        "split": {"resolved_seed": 2},
-        "zero_shot_metrics": {"val": {"rmse": 11.2}, "test": {"rmse": 999}},
-    }))
+    (run / "finetune_report.json").write_text(
+        json.dumps(
+            {
+                "score_metric": "rmse",
+                "data_task": {
+                    "dataset_name": "diamonds",
+                    "fold": 1,
+                    "distribution_shift": {
+                        "pre_finite": {"heavy_tail_contamination": {"rate": 0.05, "magnitude_iqr": 25}}
+                    },
+                },
+                "split": {"resolved_seed": 2},
+                "zero_shot_metrics": {"val": {"rmse": 11.2}, "test": {"rmse": 999}},
+            }
+        )
+    )
     rows = load_calibration_rows(tmp_path)
     assert len(rows) == 1
     assert rows[0].value == 11.2
     assert rows[0].cell == "2:1:0:0"
-    assert (rows[0].rate, rows[0].magnitude_iqr) == (.05, 25)
+    assert (rows[0].rate, rows[0].magnitude_iqr) == (0.05, 25)
     marker.write_text(json.dumps({"status": "failed"}))
     with pytest.raises(ValueError, match="requires completed runs"):
         load_calibration_rows(tmp_path)

@@ -34,7 +34,9 @@ def apply_contextual_scale(
     scale_spread, unit_column_present, transformation_setting = _parse_condition(condition, cfg=cfg, data=data)
     if transformation_setting == "no_transformation":
         return data, _original_condition_report(seed=seed, condition=condition)
-    numeric_columns = [column for column in data.train_X.columns if pd.api.types.is_numeric_dtype(data.train_X[column])]
+    numeric_columns = [
+        column for column in data.train_X.columns if pd.api.types.is_numeric_dtype(data.train_X[column])
+    ]
     if not numeric_columns:
         return data, {
             "stage": "pre_finite",
@@ -123,7 +125,9 @@ def _parse_condition(condition: str, *, cfg: Mapping[str, Any], data: Any) -> tu
         try:
             scale_spread = float(raw_spread)
         except (TypeError, ValueError) as exc:
-            raise ValueError(f"contextual_scale.scale_spread must be a finite number >= 1, got {raw_spread!r}") from exc
+            raise ValueError(
+                f"contextual_scale.scale_spread must be a finite number >= 1, got {raw_spread!r}"
+            ) from exc
         if not math.isfinite(scale_spread) or scale_spread < 1.0:
             raise ValueError(f"contextual_scale.scale_spread must be a finite number >= 1, got {raw_spread!r}")
         return scale_spread, condition.endswith("with_unit_column"), "matched_transformation"

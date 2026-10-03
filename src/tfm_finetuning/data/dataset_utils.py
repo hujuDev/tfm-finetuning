@@ -58,7 +58,6 @@ def parse_subset_spec(subset: str | None) -> tuple[str | None, str | None]:
     return base_subset, problem_filter
 
 
-
 def find_dataset_matches(metadata: pd.DataFrame, dataset: str) -> pd.DataFrame:
     """Match a dataset by official TabArena name or slugified export directory name."""
     dataset_name = str(dataset).strip()
@@ -73,13 +72,11 @@ def find_dataset_matches(metadata: pd.DataFrame, dataset: str) -> pd.DataFrame:
     return metadata[slug_lookup == dataset_slug]
 
 
-
 def slugify_dataset_name(name: str) -> str:
     """Normalize public dataset labels into export directory names."""
     cleaned = re.sub(r"[^A-Za-z0-9]+", "_", name.strip())
     cleaned = cleaned.strip("_")
     return cleaned.lower() if cleaned else "dataset"
-
 
 
 def map_tabarena_metric_to_score(metric: str | None) -> str | None:

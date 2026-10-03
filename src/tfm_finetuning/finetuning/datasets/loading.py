@@ -133,11 +133,7 @@ def _resolve_test_context_comparison_enabled(config: Mapping[str, Any]) -> bool:
 
 
 def _test_context_policy_name(*, includes_validation_data: bool) -> str:
-    return (
-        TEST_CONTEXT_POLICY_TRAIN_PLUS_VALIDATION
-        if includes_validation_data
-        else TEST_CONTEXT_POLICY_TRAIN_ONLY
-    )
+    return TEST_CONTEXT_POLICY_TRAIN_PLUS_VALIDATION if includes_validation_data else TEST_CONTEXT_POLICY_TRAIN_ONLY
 
 
 def _test_context_flag_config(config: Mapping[str, Any], *, includes_validation_data: bool) -> dict[str, Any]:
@@ -214,11 +210,7 @@ def _dense_feature_frame(frame: pd.DataFrame) -> pd.DataFrame:
         >>> isinstance(_dense_feature_frame(sparse)["x"].dtype, pd.SparseDtype)
         False
     """
-    sparse_columns = [
-        column
-        for column in frame.columns
-        if isinstance(frame[column].dtype, pd.SparseDtype)
-    ]
+    sparse_columns = [column for column in frame.columns if isinstance(frame[column].dtype, pd.SparseDtype)]
     if not sparse_columns:
         return frame
     dense = frame.copy()
@@ -256,11 +248,7 @@ def _densify_sparse_feature_frames(data: SplitEvaluationData) -> SplitEvaluation
         "test_query": data.test_X,
     }
     sparse_columns_by_split = {
-        split: [
-            str(column)
-            for column in frame.columns
-            if isinstance(frame[column].dtype, pd.SparseDtype)
-        ]
+        split: [str(column) for column in frame.columns if isinstance(frame[column].dtype, pd.SparseDtype)]
         for split, frame in frames.items()
     }
     if not any(sparse_columns_by_split.values()):
@@ -498,14 +486,8 @@ def load_split_evaluation_data(
                 "sample": split_tuple[2],
                 "validation_fraction": val_fraction,
                 "validation_seed": val_seed,
-                "test_context_includes_validation_data": bool(
-                    test_context_includes_validation_data
-                ),
-                "test_context_source": (
-                    "outer_train"
-                    if test_context_includes_validation_data
-                    else "inner_train"
-                ),
+                "test_context_includes_validation_data": bool(test_context_includes_validation_data),
+                "test_context_source": ("outer_train" if test_context_includes_validation_data else "inner_train"),
             },
             train_ids=train_ids,
             val_context_ids=train_ids,
@@ -530,15 +512,9 @@ def load_split_evaluation_data(
     )
     problem_type = str(hpo_split.task_type)
     metric_name = _pipeline_eval_shared.benchmark_metric_for_problem_type(problem_type)
-    test_context_X = (
-        hpo_split.context_X if test_context_includes_validation_data else hpo_split.train_X
-    )
-    test_context_y = (
-        hpo_split.context_y if test_context_includes_validation_data else hpo_split.train_y
-    )
-    test_context_ids = (
-        hpo_split.context_ids if test_context_includes_validation_data else hpo_split.train_ids
-    )
+    test_context_X = hpo_split.context_X if test_context_includes_validation_data else hpo_split.train_X
+    test_context_y = hpo_split.context_y if test_context_includes_validation_data else hpo_split.train_y
+    test_context_ids = hpo_split.context_ids if test_context_includes_validation_data else hpo_split.train_ids
     test_context_components = (
         hpo_split.context_components
         if test_context_includes_validation_data
@@ -567,14 +543,8 @@ def load_split_evaluation_data(
             "sample": split_tuple[2],
             "validation_fraction": val_fraction,
             "validation_seed": val_seed,
-            "test_context_includes_validation_data": bool(
-                test_context_includes_validation_data
-            ),
-            "test_context_source": (
-                "outer_train"
-                if test_context_includes_validation_data
-                else "inner_train"
-            ),
+            "test_context_includes_validation_data": bool(test_context_includes_validation_data),
+            "test_context_source": ("outer_train" if test_context_includes_validation_data else "inner_train"),
         },
         train_ids=hpo_split.train_ids,
         val_context_ids=hpo_split.train_ids,

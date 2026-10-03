@@ -13,9 +13,8 @@ from tfm_finetuning.finetuning.models.registry import ModelSpec
 
 run_data_runner = importlib.import_module(runner._prepare_run_data.__module__)
 
-preprocessing_runner = importlib.import_module(
-    run_data_runner._prepare_alternate_test_context_data.__module__
-)
+preprocessing_runner = importlib.import_module(run_data_runner._prepare_alternate_test_context_data.__module__)
+
 
 class FakeMitraClassifier:
     def __init__(self, **kwargs) -> None:
@@ -37,6 +36,7 @@ class FakeMitraClassifier:
         self.predict_X = np.asarray(X)
         return np.tile(np.array([[0.25, 0.75]]), (len(X), 1))
 
+
 class FakeMitraRegressor:
     def __init__(self, **kwargs) -> None:
         self.kwargs = dict(kwargs)
@@ -57,8 +57,10 @@ class FakeMitraRegressor:
         self.predict_X = np.asarray(X)
         return np.zeros(len(X), dtype=np.float32)
 
+
 def _fake_mitra_bindings() -> MitraBindings:
     return MitraBindings(classifier=FakeMitraClassifier, regressor=FakeMitraRegressor)
+
 
 class FakeTorchTensor:
     def __init__(self, value: int) -> None:
@@ -73,6 +75,7 @@ class FakeTorchTensor:
     def clone(self):
         return FakeTorchTensor(self.value)
 
+
 class FakeStatefulMitraModel:
     def __init__(self, value: int) -> None:
         self.value = int(value)
@@ -83,9 +86,11 @@ class FakeStatefulMitraModel:
     def load_state_dict(self, state: dict[str, FakeTorchTensor]) -> None:
         self.value = int(state["weight"].value)
 
+
 class FakeStatefulMitraTrainer:
     def __init__(self, value: int) -> None:
         self.model = FakeStatefulMitraModel(value)
+
 
 class FakeStatefulMitraClassifier:
     def __init__(self, value: int) -> None:
@@ -94,6 +99,7 @@ class FakeStatefulMitraClassifier:
         self.n_estimators = 1
         self.n_estimators_inference = 1
         self.device = "cpu"
+
 
 def _tabpfn_test_spec(tmp_path: Path) -> ModelSpec:
     return ModelSpec(

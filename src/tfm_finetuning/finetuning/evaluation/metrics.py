@@ -141,9 +141,7 @@ def _classification_core_payload(
         "f1_weighted": float(metrics.f1_score(y_true, pred_labels, average="weighted", zero_division=0)),
         "precision": float(metrics.precision_score(y_true, pred_labels, zero_division=0, **binary_kwargs)),
         "precision_macro": float(metrics.precision_score(y_true, pred_labels, average="macro", zero_division=0)),
-        "precision_weighted": float(
-            metrics.precision_score(y_true, pred_labels, average="weighted", zero_division=0)
-        ),
+        "precision_weighted": float(metrics.precision_score(y_true, pred_labels, average="weighted", zero_division=0)),
         "recall": float(metrics.recall_score(y_true, pred_labels, zero_division=0, **binary_kwargs)),
         "recall_macro": float(metrics.recall_score(y_true, pred_labels, average="macro", zero_division=0)),
         "recall_weighted": float(metrics.recall_score(y_true, pred_labels, average="weighted", zero_division=0)),

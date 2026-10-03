@@ -323,11 +323,7 @@ def _requires_unstratified_episode_split(
     _, class_counts = np.unique(np.asarray(labels).reshape(-1), return_counts=True)
     class_count = len(class_counts)
     context_rows = int(episode_rows) - int(query_rows)
-    return bool(
-        class_counts.min() < 2
-        or int(query_rows) < class_count
-        or context_rows < class_count
-    )
+    return bool(class_counts.min() < 2 or int(query_rows) < class_count or context_rows < class_count)
 
 
 def dataset_episode_rng(seed: int, dataset_name: str, dataset_update: int) -> np.random.Generator:

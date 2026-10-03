@@ -189,9 +189,7 @@ def apply_estimator_state(estimator: Any, state: dict[str, Any]) -> None:
         classes = state["classes_"]
         estimator.classes_ = None if classes is None else np.asarray(classes).copy()
     if "_tfm_mitra_feature_preprocessor" in state:
-        estimator._tfm_mitra_feature_preprocessor = copy.deepcopy(
-            state["_tfm_mitra_feature_preprocessor"]
-        )
+        estimator._tfm_mitra_feature_preprocessor = copy.deepcopy(state["_tfm_mitra_feature_preprocessor"])
     for attr in ("n_estimators", "n_estimators_inference"):
         if attr in state and state[attr] is not None:
             setattr(estimator, attr, int(state[attr]))

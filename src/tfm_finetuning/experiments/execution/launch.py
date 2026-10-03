@@ -39,9 +39,7 @@ def parse_args(argv=None) -> argparse.Namespace:
     action.add_argument("--dry-run", action="store_true", help="Preview only (the default)")
     action.add_argument("--write", action="store_true", help="Write the launch bundle without launching")
     action.add_argument("--run", action="store_true", help="Run sequential local jobs through Submitit")
-    action.add_argument(
-        "--submit", action="store_true", help="Submit SLURM arrays through Submitit"
-    )
+    action.add_argument("--submit", action="store_true", help="Submit SLURM arrays through Submitit")
     args = parser.parse_args(argv)
     if not args.list and not args.experiment:
         parser.error("provide an experiment or --list")

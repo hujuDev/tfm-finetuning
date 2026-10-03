@@ -41,8 +41,6 @@ def test_natural_domain_grid_has_243_seed_results() -> None:
     assert target_count * len(MODEL_ORDER) * len(ROUTE_ORDER) * 3 == 243
 
 
-
-
 def test_natural_domain_panels_use_task_primary_metrics() -> None:
     assert PANEL_METRICS == {"heart": "roc_auc", "wids": "roc_auc", "covertype": "log_loss"}
     assert ROUTE_ORDER == (
@@ -56,8 +54,6 @@ def test_natural_domain_panels_use_task_primary_metrics() -> None:
         "source_only_pooled": "Sources\n$(S^{A} + S^{B})_{200}$",
         "target_inclusive_pooled": "Mixed\n$(T + S^{A} + S^{B})_{300}$",
     }
-
-
 
 
 def test_target_wise_normalized_scores_preserve_route_specific_baselines() -> None:
@@ -94,9 +90,9 @@ def test_normalized_score_summary_respects_metric_orientation() -> None:
         0.5 / 0.51
     )
     assert lookup[("heart", "tabpfnv25", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(1.0)
-    assert lookup[("covertype", "tabpfnv25", "target_only_100_steps_icl")][
-        "mean_normalized_score"
-    ] == pytest.approx(1.0)
+    assert lookup[("covertype", "tabpfnv25", "target_only_100_steps_icl")]["mean_normalized_score"] == pytest.approx(
+        1.0
+    )
     assert lookup[("covertype", "tabpfnv25", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(
         0.5 / 0.51
     )

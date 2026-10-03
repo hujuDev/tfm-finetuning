@@ -13,7 +13,6 @@ if TYPE_CHECKING:
 SHARED_FEATURE_PREPROCESSING = "shared"
 
 
-
 def feature_schema_metadata(
     frame: pd.DataFrame,
     *,
@@ -166,12 +165,6 @@ class FiniteFeaturePreprocessor:
             "unknown_category_code": 1,
             "output_dtype": "float32",
         }
-
-
-
-
-
-
 
 
 def _is_numeric_feature(series: pd.Series) -> bool:

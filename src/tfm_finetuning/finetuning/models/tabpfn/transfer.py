@@ -326,9 +326,7 @@ class TabPFNDatasetTransferStageTrainer:
         task_types = {data.task_type for data in datasets.values()}
         allowed = {"regression"} if stage.task_family == "regression" else {"binary", "multiclass"}
         if not task_types or not task_types.issubset(allowed):
-            raise ValueError(
-                f"Stage {stage.name!r} requires {stage.task_family} datasets, got {sorted(task_types)}."
-            )
+            raise ValueError(f"Stage {stage.name!r} requires {stage.task_family} datasets, got {sorted(task_types)}.")
 
     @staticmethod
     def _schedule(stage: TransferStageSpec) -> tuple[str, ...]:

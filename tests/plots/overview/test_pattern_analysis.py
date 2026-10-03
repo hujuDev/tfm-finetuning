@@ -49,12 +49,6 @@ def test_effect_uses_auc_difference_and_log_error_ratio() -> None:
     assert fine_tuning_gain(0.0, 0.0, "rmse") is None
 
 
-
-
-
-
-
-
 def test_r2_metric_title_uses_full_size_unicode_superscript() -> None:
     """The exported R² title must not shrink its exponent through MathText."""
     frame = pd.DataFrame(
@@ -165,8 +159,6 @@ def test_preprocessing_difference_visible_text_meets_final_print_floor(
     assert min(effective_sizes) >= 8.0
 
 
-
-
 def test_default_analysis_subset_uses_only_configured_preprocessing() -> None:
     """Main thesis analyses should not count both preprocessing paths as dataset evidence."""
     frame = pd.DataFrame(
@@ -182,10 +174,6 @@ def test_default_analysis_subset_uses_only_configured_preprocessing() -> None:
     assert result[["dataset", "preprocessing", "effect"]].to_dict(orient="records") == [
         {"dataset": "dataset", "preprocessing": "shared", "effect": 0.2}
     ]
-
-
-
-
 
 
 def test_dataset_result_table_uses_current_models_metrics_and_missing_cells() -> None:
@@ -244,11 +232,14 @@ def test_dataset_result_table_uses_current_models_metrics_and_missing_cells() ->
     assert "Fine-tuning results for individual datasets" in result
     # Auxiliary metrics cannot replace the task's primary metric in this table.
     auxiliary = frame.iloc[[0]].assign(metric="accuracy", baseline=0.999, selected=0.999)
-    assert dataset_result_table_latex(
-        pd.concat([frame, auxiliary]),
-        model_order=["tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"],
-        model_labels={"tabpfnv2": "TabPFNv2", "tabpfnv25": "TabPFN-2.5", "tabiclv2": "TabICLv2", "mitra": "Mitra"},
-    ) == result
+    assert (
+        dataset_result_table_latex(
+            pd.concat([frame, auxiliary]),
+            model_order=["tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"],
+            model_labels={"tabpfnv2": "TabPFNv2", "tabpfnv25": "TabPFN-2.5", "tabiclv2": "TabICLv2", "mitra": "Mitra"},
+        )
+        == result
+    )
 
 
 def test_dataset_result_table_uses_overview_filename(tmp_path: Path) -> None:

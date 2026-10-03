@@ -77,8 +77,6 @@ def _effect_frame() -> pd.DataFrame:
     )
 
 
-
-
 def _preprocessing_frame() -> pd.DataFrame:
     return pd.DataFrame(
         [
@@ -192,10 +190,10 @@ def test_sft_dataset_win_plot_uses_five_equal_length_method_bars(
             if dataset_index == 0 and model == "tabiclv2":
                 selected = 0.95
             rows.append(
-                    {
-                        "dataset": f"dataset-{dataset_index}",
-                        "task_family": "binary",
-                        "model": model,
+                {
+                    "dataset": f"dataset-{dataset_index}",
+                    "task_family": "binary",
+                    "model": model,
                     "effect": selected - baseline,
                     "normalized_baseline": baseline,
                     "normalized_selected": selected,
@@ -351,9 +349,7 @@ def test_combined_association_heatmap_groups_tasks_and_descriptor_families(
                 "task_family": task,
                 "preprocessing": "shared",
                 "model": model,
-                "feature": (
-                    "localTargetVariationIqr" if task == "regression" else "localClassDisagreementRate"
-                ),
+                "feature": ("localTargetVariationIqr" if task == "regression" else "localClassDisagreementRate"),
                 "spearman_rho": -0.2,
                 "bootstrap_ci_low": -0.5,
                 "bootstrap_ci_high": 0.2,
@@ -398,9 +394,7 @@ def test_combined_association_heatmap_groups_tasks_and_descriptor_families(
     assert figure.axes[0].collections
     assert any(text.get_visible() and text.get_text() == "Binary" for text in figure.findobj(match=mpl.text.Text))
     header_axis = figure.axes[3]
-    assert [text.get_text() for text in header_axis.texts[:3]] == [
-        TASK_LABELS[task] for task in TASK_ORDER
-    ]
+    assert [text.get_text() for text in header_axis.texts[:3]] == [TASK_LABELS[task] for task in TASK_ORDER]
     assert len(header_axis.texts) == len(TASK_ORDER)
     assert all(axis.lines for axis in figure.axes[:3])
     assert [to_hex(label.get_color()) for label in figure.axes[2].get_xticklabels()] == [
@@ -408,9 +402,7 @@ def test_combined_association_heatmap_groups_tasks_and_descriptor_families(
     ]
     assert all(tick.tick1line.get_markersize() > 0 for tick in figure.axes[2].xaxis.get_major_ticks())
     assert all(
-        label._linespacing == pytest.approx(0.85)
-        for axis in figure.axes[:3]
-        for label in axis.get_yticklabels()
+        label._linespacing == pytest.approx(0.85) for axis in figure.axes[:3] for label in axis.get_yticklabels()
     )
     assert _minimum_visible_text_size(figure) >= 7.5
     _assert_visible_text_inside_canvas(figure)
@@ -454,9 +446,7 @@ def test_combined_association_heatmap_can_label_epoch100_estimand(
     figure = captured["figure"]
     assert isinstance(figure, plt.Figure)
     assert captured["path"] == tmp_path / "association_heatmap_epoch100_combined.pdf"
-    assert figure.axes[-1].get_ylabel() == (
-        "Spearman correlation with epoch-100 SFT gain over ICL"
-    )
+    assert figure.axes[-1].get_ylabel() == ("Spearman correlation with epoch-100 SFT gain over ICL")
     plt.close(figure)
 
 

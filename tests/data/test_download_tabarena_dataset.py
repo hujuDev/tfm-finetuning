@@ -252,6 +252,7 @@ def test_resolve_default_output_dir_for_openml(monkeypatch: pytest.MonkeyPatch, 
 
 def test_resolve_task_openml_by_task_id(monkeypatch: pytest.MonkeyPatch) -> None:
     """OpenML source resolution pulls dataset name from the task."""
+
     class _DummyDataset:
         name = "My OpenML Dataset"
 

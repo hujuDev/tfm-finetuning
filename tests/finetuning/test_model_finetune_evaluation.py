@@ -37,14 +37,10 @@ from tfm_finetuning.utils.config import get_nested
 
 def test_evaluation_splits_default_to_test_and_allow_validation_only_calibration() -> None:
     assert runner._resolve_evaluation_splits({}) == ("val", "test")
-    assert runner._resolve_evaluation_splits(
-        {"finetune": {"evaluation_splits": ["val"]}}
-    ) == ("val",)
+    assert runner._resolve_evaluation_splits({"finetune": {"evaluation_splits": ["val"]}}) == ("val",)
 
     with pytest.raises(ValueError, match="may contain only val and test"):
-        runner._resolve_evaluation_splits(
-            {"finetune": {"evaluation_splits": ["train"]}}
-        )
+        runner._resolve_evaluation_splits({"finetune": {"evaluation_splits": ["train"]}})
 
 
 def test_evaluate_estimator_uses_fitted_classes_for_sparse_multiclass_query() -> None:
@@ -125,6 +121,7 @@ def test_resolve_oom_retry_context_sizes_can_disable_retry() -> None:
         common_config=common_config,
     ) == (10000,)
 
+
 def test_apply_model_row_limits_caps_train_and_context_rows() -> None:
     data = SplitEvaluationData(
         task_type="binary",
@@ -181,6 +178,7 @@ def test_apply_model_row_limits_caps_train_and_context_rows() -> None:
         "test_query": 7,
     }
 
+
 def test_finetune_baseline_only_runs_test_context_comparison_once_per_policy(
     tmp_path: Path,
     monkeypatch,
@@ -212,9 +210,7 @@ def test_finetune_baseline_only_runs_test_context_comparison_once_per_policy(
 
     def fake_load_split_evaluation_data(*, config, repo_root):
         _ = repo_root
-        includes_validation = bool(
-            get_nested(config, "finetune.test_context_includes_validation_data")
-        )
+        includes_validation = bool(get_nested(config, "finetune.test_context_includes_validation_data"))
         test_context_len = 3 if includes_validation else 2
         return SplitEvaluationData(
             task_type="binary",
@@ -282,6 +278,7 @@ def test_finetune_baseline_only_runs_test_context_comparison_once_per_policy(
     assert len(comparison_rows) == 1
     assert comparison_rows[0]["split"] == "test"
     assert comparison_rows[0]["context_rows"] == 3
+
 
 def test_in_memory_controller_evaluates_test_only_after_fit_when_periodic_off() -> None:
     """Checkpoint search stays validation-only before one post-fit selected-state test."""
@@ -375,6 +372,7 @@ def test_in_memory_controller_evaluates_test_only_after_fit_when_periodic_off() 
         ("selected_checkpoint", "test"),
     }
 
+
 def test_in_memory_controller_streams_periodic_eval_during_validation() -> None:
     class FakeInnerEstimator:
         classes_ = np.array([0, 1])
@@ -453,6 +451,7 @@ def test_in_memory_controller_streams_periodic_eval_during_validation() -> None:
         (2, "val"),
         (2, "test"),
     }
+
 
 @pytest.mark.parametrize("model_id", ["tabpfn_v2_5", "mitra"])
 def test_finetune_main_writes_disk_checkpoint_history_contract(
@@ -566,6 +565,7 @@ def test_finetune_main_writes_disk_checkpoint_history_contract(
         "final_checkpoint_eval",
     }.issubset(phase_names)
 
+
 def test_epoch_evaluation_rows_require_regression_score_to_be_negative_rmse() -> None:
     rows = history_runner._epoch_evaluation_rows(
         periodic_rows=[
@@ -603,6 +603,7 @@ def test_epoch_evaluation_rows_require_regression_score_to_be_negative_rmse() ->
     ]
     assert rows[0]["n_estimators"] == 2
     assert rows[0]["context_rows"] == 10
+
 
 def test_epoch_evaluation_rows_reject_regression_score_logged_as_negative_mse() -> None:
     with pytest.raises(ValueError, match="inconsistent RMSE score"):

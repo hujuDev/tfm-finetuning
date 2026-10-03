@@ -180,7 +180,19 @@ def _log_eval_timing(row: Mapping[str, Any]) -> None:
             "metrics={metric_seconds:.3f}s total={seconds:.3f}s source={eval_source} "
             "checkpoint={checkpoint_path}"
         ),
-        phase=row.get("phase"), split=row.get("split"), epoch=row.get("epoch"), n_estimators=row.get("n_estimators"), context_rows=row.get("context_rows"), query_rows=row.get("query_rows"), estimator_init_seconds=float(row.get("estimator_init_seconds") or 0.0), context_fit_seconds=float(row.get("context_fit_seconds") or 0.0), predict_seconds=float(row.get("predict_seconds") or 0.0), metric_seconds=float(row.get("metric_seconds") or 0.0), seconds=float(row.get("seconds") or 0.0), eval_source=row.get("eval_source") or ("checkpoint" if row.get("checkpoint_path") else "direct"), checkpoint_path=row.get("checkpoint_path"),
+        phase=row.get("phase"),
+        split=row.get("split"),
+        epoch=row.get("epoch"),
+        n_estimators=row.get("n_estimators"),
+        context_rows=row.get("context_rows"),
+        query_rows=row.get("query_rows"),
+        estimator_init_seconds=float(row.get("estimator_init_seconds") or 0.0),
+        context_fit_seconds=float(row.get("context_fit_seconds") or 0.0),
+        predict_seconds=float(row.get("predict_seconds") or 0.0),
+        metric_seconds=float(row.get("metric_seconds") or 0.0),
+        seconds=float(row.get("seconds") or 0.0),
+        eval_source=row.get("eval_source") or ("checkpoint" if row.get("checkpoint_path") else "direct"),
+        checkpoint_path=row.get("checkpoint_path"),
     )
 
 

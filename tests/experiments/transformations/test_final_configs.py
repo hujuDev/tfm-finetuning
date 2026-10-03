@@ -5,7 +5,7 @@ import yaml
 from tfm_finetuning.experiments.configuration import expand_runs, recipe_groups
 
 ROOT = Path(__file__).resolve().parents[3]
-CONFIG_ROOT = ROOT / 'configs/experiments'
+CONFIG_ROOT = ROOT / "configs/experiments"
 
 
 def _load(name):
@@ -74,10 +74,6 @@ def test_representation_configs_change_only_finetune_update_states() -> None:
     assert numeric_scale["settings"]["finetune.test_eval_interval_epochs"] == 0
 
 
-
-
-
-
 def test_calibration_configs_are_validation_only_tabpfn_runs() -> None:
     for name in (
         "distribution_shift_contextual_scale_calibration.yaml",
@@ -119,10 +115,6 @@ def test_contextual_coil_screen_uses_aggressive_validation_only_pair() -> None:
     assert payload["settings"]["preprocess.contextual_scale.condition"] == "scale_sx_no_unit_column"
 
 
-
-
-
-
 def test_majority_downsampling_followup_retains_minority_and_has_two_conditions() -> None:
     payload = _load("distribution_shift_class_prior_majority_downsampling.yaml")
     override = payload["settings"]
@@ -138,8 +130,6 @@ def test_majority_downsampling_followup_retains_minority_and_has_two_conditions(
     assert "target_rates" not in str(override)
 
 
-
-
 def test_context_only_downsampling_finetunes_full_data_and_pairs_icl_contexts() -> None:
     payload = _load("distribution_shift_class_prior_context_only_downsampling.yaml")
     override = payload["settings"]
@@ -153,11 +143,15 @@ def test_context_only_downsampling_finetunes_full_data_and_pairs_icl_contexts() 
     assert "preprocess.rebalance_train" not in str(override)
 
 
-
-
 def test_final_rebalancing_scopes_and_folds():
-    for name, count in [('majority_downsampling',162), ('context_only_downsampling',81)]:
-        recipe = yaml.safe_load((CONFIG_ROOT / f'distribution_shift_class_prior_{name}.yaml').read_text())
+    for name, count in [("majority_downsampling", 162), ("context_only_downsampling", 81)]:
+        recipe = yaml.safe_load((CONFIG_ROOT / f"distribution_shift_class_prior_{name}.yaml").read_text())
         runs = expand_runs(recipe, repo_root=ROOT)
         assert len(runs) == count
-        assert {r['dataset'] for r in runs} == {'Amazon_employee_access','bank-marketing','blood-transfusion-service-center','credit-g','jm1'}
+        assert {r["dataset"] for r in runs} == {
+            "Amazon_employee_access",
+            "bank-marketing",
+            "blood-transfusion-service-center",
+            "credit-g",
+            "jm1",
+        }

@@ -17,9 +17,7 @@ os.environ.setdefault("REPO_ROOT", str(REPO_ROOT))
 logger = logging.getLogger(__name__)
 
 
-def _write_dummy_dataset(
-    root: Path, *, splits: dict[str, dict[str, list[int]]]
-) -> tuple[np.ndarray, np.ndarray]:
+def _write_dummy_dataset(root: Path, *, splits: dict[str, dict[str, list[int]]]) -> tuple[np.ndarray, np.ndarray]:
     all_indices = []
     for split in splits.values():
         all_indices.extend(split["train"])

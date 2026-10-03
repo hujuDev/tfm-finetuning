@@ -220,14 +220,9 @@ def compute_base_meta_features(
     features["baseTrainRows"] = base_train_rows
     features["nFeaturesTotal"] = int(X_train.shape[1])
     features["trainingTableCells"] = base_train_rows * int(X_train.shape[1])
-    features["featureToRowRatio"] = (
-        float(X_train.shape[1]) / float(base_train_rows)
-        if base_train_rows > 0
-        else None
-    )
+    features["featureToRowRatio"] = float(X_train.shape[1]) / float(base_train_rows) if base_train_rows > 0 else None
     features["numericFeatureShare"] = (
-        sum(is_numeric_dtype(dtype) and not is_bool_dtype(dtype) for dtype in X_train.dtypes)
-        / float(X_train.shape[1])
+        sum(is_numeric_dtype(dtype) and not is_bool_dtype(dtype) for dtype in X_train.dtypes) / float(X_train.shape[1])
         if X_train.shape[1] > 0
         else None
     )
@@ -239,13 +234,9 @@ def compute_base_meta_features(
     features["numHighCardinalityCategoricalFeatures"] = sum(
         cardinality > 50 for cardinality in categorical_cardinalities
     )
-    features["maxCategoricalCardinality"] = (
-        max(categorical_cardinalities) if categorical_cardinalities else None
-    )
+    features["maxCategoricalCardinality"] = max(categorical_cardinalities) if categorical_cardinalities else None
     features["missingValueShare"] = (
-        float(X_train.isna().to_numpy().mean())
-        if X_train.shape[0] > 0 and X_train.shape[1] > 0
-        else None
+        float(X_train.isna().to_numpy().mean()) if X_train.shape[0] > 0 and X_train.shape[1] > 0 else None
     )
     features.update(
         compute_distribution_structure_features(
@@ -343,9 +334,7 @@ def _schema_type_entropy(frame: pd.DataFrame) -> float | None:
     """
     if frame.shape[1] == 0:
         return None
-    numeric_count = sum(
-        is_numeric_dtype(dtype) and not is_bool_dtype(dtype) for dtype in frame.dtypes
-    )
+    numeric_count = sum(is_numeric_dtype(dtype) and not is_bool_dtype(dtype) for dtype in frame.dtypes)
     probabilities = np.asarray(
         [numeric_count / frame.shape[1], (frame.shape[1] - numeric_count) / frame.shape[1]],
         dtype=float,
@@ -465,11 +454,15 @@ def _sparse_region_outlier_mass(
     matrix = _mixed_local_distance_matrix(sampled)
     if matrix.shape[1] == 0:
         return None
-    distances, indices = NearestNeighbors(
-        n_neighbors=min(4, len(sampled)),
-        metric="euclidean",
-        algorithm="brute",
-    ).fit(matrix).kneighbors(matrix, return_distance=True)
+    distances, indices = (
+        NearestNeighbors(
+            n_neighbors=min(4, len(sampled)),
+            metric="euclidean",
+            algorithm="brute",
+        )
+        .fit(matrix)
+        .kneighbors(matrix, return_distance=True)
+    )
     nearest_distances = []
     for row_index, (row_distances, row_indices) in enumerate(zip(distances, indices, strict=True)):
         non_self = row_distances[row_indices != row_index]

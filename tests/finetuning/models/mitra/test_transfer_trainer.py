@@ -479,8 +479,7 @@ def test_mitra_stage_early_stopping_waits_for_checkpoint_view_boundary(monkeypat
         path.write_text(update, encoding="utf-8")
 
     monkeypatch.setattr(
-        "tfm_finetuning.finetuning.models.mitra.transfer_evaluation."
-        "write_checkpoint_package",
+        "tfm_finetuning.finetuning.models.mitra.transfer_evaluation.write_checkpoint_package",
         fake_write,
     )
 

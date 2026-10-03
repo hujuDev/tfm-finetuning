@@ -34,6 +34,8 @@ CLASSIFICATION_CORE_METRICS = (
 )
 REGRESSION_CORE_METRICS = ("rmse", "mse", "mae", "r2")
 EPOCH_CORE_METRICS = (*CLASSIFICATION_CORE_METRICS, *REGRESSION_CORE_METRICS)
+
+
 def _as_finite_number(value: Any, *, field: str) -> float:
     try:
         numeric = float(value)
@@ -53,21 +55,27 @@ def _primary_score_from_metric_payload(
     score = _as_finite_number(metrics.get("score"), field=f"{context}.score")
     metric = score_metric.strip().lower().replace("-", "_")
     if metric == "rmse":
-        raw = _as_finite_number(metrics.get("raw_metric_value", metrics.get("rmse")), field=f"{context}.raw_metric_value")
+        raw = _as_finite_number(
+            metrics.get("raw_metric_value", metrics.get("rmse")), field=f"{context}.raw_metric_value"
+        )
         raw_name = str(metrics.get("raw_metric_name") or "rmse").strip().lower()
         if raw_name != "rmse":
             raise ValueError(f"{context} has score_metric=rmse but raw_metric_name={raw_name!r}.")
         if not np.isclose(score, -raw, rtol=1e-6, atol=1e-6):
             raise ValueError(f"{context} has inconsistent RMSE score: score={score} raw_metric_value={raw}.")
     elif metric == "log_loss":
-        raw = _as_finite_number(metrics.get("raw_metric_value", metrics.get("log_loss")), field=f"{context}.raw_metric_value")
+        raw = _as_finite_number(
+            metrics.get("raw_metric_value", metrics.get("log_loss")), field=f"{context}.raw_metric_value"
+        )
         raw_name = str(metrics.get("raw_metric_name") or "log_loss").strip().lower()
         if raw_name != "log_loss":
             raise ValueError(f"{context} has score_metric=log_loss but raw_metric_name={raw_name!r}.")
         if not np.isclose(score, -raw, rtol=1e-6, atol=1e-6):
             raise ValueError(f"{context} has inconsistent log-loss score: score={score} raw_metric_value={raw}.")
     elif metric == "roc_auc":
-        raw = _as_finite_number(metrics.get("raw_metric_value", metrics.get("roc_auc")), field=f"{context}.raw_metric_value")
+        raw = _as_finite_number(
+            metrics.get("raw_metric_value", metrics.get("roc_auc")), field=f"{context}.raw_metric_value"
+        )
         raw_name = str(metrics.get("raw_metric_name") or "roc_auc").strip().lower()
         if raw_name != "roc_auc":
             raise ValueError(f"{context} has score_metric=roc_auc but raw_metric_name={raw_name!r}.")
@@ -180,9 +188,7 @@ def _in_memory_validation_epoch_rows(
     timings = {
         int(row["epoch"]): row
         for row in timing_rows
-        if row.get("phase") == "validation_in_memory"
-        and row.get("split") == "val"
-        and row.get("epoch") is not None
+        if row.get("phase") == "validation_in_memory" and row.get("split") == "val" and row.get("epoch") is not None
     }
     rows: list[dict[str, Any]] = []
     for validation in validation_rows:
@@ -407,9 +413,7 @@ def _checkpoint_epoch_rows(
     phase: str,
 ) -> list[dict[str, Any]]:
     timings = {
-        str(row["split"]): row
-        for row in timing_rows
-        if row.get("phase") == phase and row.get("split") is not None
+        str(row["split"]): row for row in timing_rows if row.get("phase") == phase and row.get("split") is not None
     }
     rows: list[dict[str, Any]] = []
     for split in ("val", "test"):
@@ -528,7 +532,6 @@ def _best_epoch_from_epoch_rows(rows: list[dict[str, Any]]) -> int | None:
 
 def _score_metric_name(data: SplitEvaluationData) -> str:
     return _pipeline_eval_shared.benchmark_metric_for_problem_type(data.problem_type)
-
 
 
 def _canonical_metric_key(key: str) -> str:

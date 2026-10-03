@@ -87,9 +87,7 @@ class _ConfiguredMitraMixin:
             cfg.hyperparams["lr_scheduler"] = bool(self.tfm_use_lr_scheduler)
             cfg.hyperparams["tfm_warmup_proportion"] = float(self.tfm_warmup_proportion)
             cfg.hyperparams["early_stopping_delta"] = float(self.tfm_min_delta)
-            cfg.hyperparams["tfm_context_size"] = int(self.tfm_max_samples_support) + int(
-                self.tfm_max_samples_query
-            )
+            cfg.hyperparams["tfm_context_size"] = int(self.tfm_max_samples_support) + int(self.tfm_max_samples_query)
             cfg.hyperparams["tfm_query_ratio"] = float(self.tfm_query_ratio)
             cfg.hyperparams["tfm_scheduler_policy"] = str(self.tfm_mitra_scheduler_policy)
             cfg.hyperparams["tfm_mitra_chunk_min_rows"] = int(self.tfm_mitra_chunk_min_rows)

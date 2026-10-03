@@ -66,8 +66,7 @@ def assert_pdf_minimum_text_size(path: Path, *, minimum_pt: float = 8.0) -> tupl
     offenders = [span for span in spans if span.font_size_pt + 1e-9 < minimum_pt]
     if offenders:
         details = "\n".join(
-            f"- page {span.page_number} {span.text!r}: {span.font_size_pt:.2f} pt"
-            for span in offenders
+            f"- page {span.page_number} {span.text!r}: {span.font_size_pt:.2f} pt" for span in offenders
         )
         raise AssertionError(
             f"Exported PDF text is below the {minimum_pt:.2f} pt final-print minimum in {path}:\n{details}"

@@ -23,7 +23,12 @@ def test_tfm_mainline_dry_run_emits_expanded_plan_without_results(tmp_path: Path
             "--dry-run",
         ],
         cwd=repo_root,
-        env={**os.environ, "REPO_ROOT": str(repo_root), "PYTHONPATH": str(repo_root / "src"), "RESULTS_ROOT": str(results_root)},
+        env={
+            **os.environ,
+            "REPO_ROOT": str(repo_root),
+            "PYTHONPATH": str(repo_root / "src"),
+            "RESULTS_ROOT": str(results_root),
+        },
         check=True,
         capture_output=True,
         text=True,

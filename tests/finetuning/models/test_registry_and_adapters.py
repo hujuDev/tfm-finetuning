@@ -47,8 +47,6 @@ def test_registry_reports_pinned_sources() -> None:
     assert specs["mitra"].regressor_checkpoint == "autogluon/mitra-regressor"
 
 
-
-
 def test_tabpfn_version_catalog_separates_supported_and_vendor_only_models() -> None:
     assert [version.model_id for version in TABPFN_VERSIONS] == ["tabpfn_v2", "tabpfn_v2_5"]
     assert VENDOR_ONLY_TABPFN_ARCHITECTURES == ("tabpfn_v2_6", "tabpfn_v3")

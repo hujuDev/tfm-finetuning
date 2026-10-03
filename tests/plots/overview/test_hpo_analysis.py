@@ -62,10 +62,6 @@ def test_hpo_comparison_uses_matched_limits_and_equal_aspect(tmp_path, monkeypat
     plt.close(captured["figure"])
 
 
-
-
-
-
 def test_hpo_selection_uses_validation_then_joins_matching_test_cell() -> None:
     """Held-out test gain must not influence a lower-is-better validation choice."""
     rows = []

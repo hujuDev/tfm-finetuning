@@ -35,10 +35,7 @@ def _normalize_resource_fallback_policy(value: Any) -> str:
         return _RESOURCE_FALLBACK_STRICT
     if text in {"oom_context_retry", "context_retry", "retry", "auto", "true", "1", "yes", "on"}:
         return _RESOURCE_FALLBACK_OOM_CONTEXT_RETRY
-    raise SystemExit(
-        "finetune.resource_fallback_policy must be 'strict' or 'oom_context_retry', "
-        f"got {value!r}."
-    )
+    raise SystemExit(f"finetune.resource_fallback_policy must be 'strict' or 'oom_context_retry', got {value!r}.")
 
 
 def _resolve_resource_fallback_policy(config: Mapping[str, Any], *, model_id: str) -> str:
@@ -60,10 +57,7 @@ def _normalize_estimator_fallback_policy(value: Any) -> str:
         return _ESTIMATOR_FALLBACK_STRICT
     if text in {"estimator_retry", "retry", "auto", "true", "1", "yes", "on"}:
         return _ESTIMATOR_FALLBACK_RETRY
-    raise SystemExit(
-        "finetune.estimator_fallback_policy must be 'strict' or 'estimator_retry', "
-        f"got {value!r}."
-    )
+    raise SystemExit(f"finetune.estimator_fallback_policy must be 'strict' or 'estimator_retry', got {value!r}.")
 
 
 def _resolve_estimator_fallback_policy(config: Mapping[str, Any], *, model_id: str) -> str:

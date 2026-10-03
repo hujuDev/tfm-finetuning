@@ -167,9 +167,7 @@ def get_model_spec(
         spec = factories[normalized](root)
     except KeyError as exc:
         supported = ", ".join(sorted([*factories, *(version.model_id for version in TABPFN_VERSIONS)]))
-        raise ModelRegistryError(
-            f"Unknown model_id={model_id!r}; expected one of {supported}."
-        ) from exc
+        raise ModelRegistryError(f"Unknown model_id={model_id!r}; expected one of {supported}.") from exc
     return spec
 
 

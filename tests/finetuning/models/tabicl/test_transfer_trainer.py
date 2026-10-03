@@ -145,10 +145,7 @@ class _FakeEngine:
     ) -> dict[str, Any]:
         update = int(checkpoint_path.read_text(encoding="utf-8"))
         val_score = self.score_table[dataset_name][update]
-        return {
-            split: {"score": val_score if split == "val" else val_score - 0.01}
-            for split in splits
-        }
+        return {split: {"score": val_score if split == "val" else val_score - 0.01} for split in splits}
 
     def validate_reload(self, checkpoint_path: Path) -> bool:
         return checkpoint_path.is_file() and checkpoint_path.read_text(encoding="utf-8").isdigit()

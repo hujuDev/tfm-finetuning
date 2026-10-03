@@ -92,8 +92,6 @@ def resolve_test_eval_interval_epochs(config: Mapping[str, Any]) -> int:
     return interval
 
 
-
-
 def _resolve_checkpoint_mode(config: Mapping[str, Any]) -> str:
     value = get_nested(config, "finetune.final_eval_checkpoint")
     text = str(value or "best").strip().lower()

@@ -44,9 +44,7 @@ def test_small_datasets_have_three_folds_without_changing_training_seeds():
 
 
 def test_hpo_removes_only_saturated_context_duplicates():
-    runs = expand_runs(
-        recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["anneal"], models=["mitra"]
-    )
+    runs = expand_runs(recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["anneal"], models=["mitra"])
     assert len(runs) == 81  # 3 folds * 3 seeds * 3 learning rates * 3 weight decays
     assert {r["config"]["finetune"]["context_size"] for r in runs} == {5000}
     large = expand_runs(
@@ -101,9 +99,7 @@ def test_all_recipes_local_slurm_same_grid(tmp_path):
     for name in load_catalog(ROOT):
         local = build_plan(ROOT, name, None, tmp_path / name)
         remote = build_plan(ROOT, name, cluster, tmp_path / name)
-        assert [(j["id"], j["runs"]) for j in local["jobs"]] == [
-            (j["id"], j["runs"]) for j in remote["jobs"]
-        ]
+        assert [(j["id"], j["runs"]) for j in local["jobs"]] == [(j["id"], j["runs"]) for j in remote["jobs"]]
         actual = [run for group in local["jobs"] for run in group["runs"]]
         assert actual == expand_runs(recipe(name), repo_root=ROOT)
 

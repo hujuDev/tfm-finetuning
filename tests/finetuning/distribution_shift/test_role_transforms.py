@@ -121,9 +121,7 @@ def test_subsample_rebuilds_validation_and_context_roles_from_total_budget() -> 
 
     assert len(out.train_X) == 1
     assert len(out.val_X) == 1
-    assert set(out.test_context_ids[out.test_context_components == "val_ft"].tolist()) == set(
-        out.val_ids.tolist()
-    )
+    assert set(out.test_context_ids[out.test_context_components == "val_ft"].tolist()) == set(out.val_ids.tolist())
     report = out.metadata["distribution_shift"]["pre_finite"]["subsample_train"]
     assert report["strategy"] == "nested_stratified"
     assert report["fit_pool_size_before"] == 5
@@ -481,9 +479,7 @@ def test_feature_order_update_state_only_changes_gradient_update_rows() -> None:
     assert alternate is None
     assert transformed.train_X.to_numpy().tolist() != data.train_X.to_numpy().tolist()
     for role in ("val_context", "val", "test_context", "test"):
-        assert getattr(transformed, f"{role}_X").to_numpy().tolist() == getattr(
-            data, f"{role}_X"
-        ).to_numpy().tolist()
+        assert getattr(transformed, f"{role}_X").to_numpy().tolist() == getattr(data, f"{role}_X").to_numpy().tolist()
     report = transformed.metadata["distribution_shift"]["post_finite"]["shuffle_feature_order"]
     assert report["gradient_update_roles"] == ["train"]
     assert report["same_icl_data_across_conditions"] is True

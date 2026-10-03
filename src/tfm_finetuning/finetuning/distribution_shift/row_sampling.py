@@ -338,8 +338,7 @@ def _common_feasible_budget(*, pos_count: int, neg_count: int, target_rates: lis
     )
     while budget >= 2:
         if all(
-            (counts := _counts_for_prior(budget, rate))[0] <= pos_count
-            and counts[1] <= neg_count
+            (counts := _counts_for_prior(budget, rate))[0] <= pos_count and counts[1] <= neg_count
             for rate in target_rates
         ):
             return budget
@@ -408,7 +407,6 @@ def apply_test_context_majority_downsampling(
     return replace(data, **updates), report
 
 
-
 def _resolve_original_fit_majority_label(
     labels: np.ndarray,
     *,
@@ -437,7 +435,6 @@ def _resolve_original_fit_majority_label(
     }
 
 
-
 def _stable_label_sort_key(label: Any) -> tuple[str, float | str, str]:
     value = jsonable_label(label)
     if isinstance(value, bool):
@@ -448,7 +445,6 @@ def _stable_label_sort_key(label: Any) -> tuple[str, float | str, str]:
             raise ValueError("rebalance_train labels must be finite")
         return ("number", numeric, repr(value))
     return ("string", str(value), repr(value))
-
 
 
 def _focal_count_with_fixed_other(*, other_count: int, target_rate: float) -> int:

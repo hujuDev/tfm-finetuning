@@ -47,12 +47,14 @@ def test_resolve_common_finetune_config_accepts_mitra_local_trainer_options() ->
     assert cfg.mitra_scheduler_policy == "official_plateau"
     assert cfg.mitra_chunk_min_rows == 12
 
+
 def test_mitra_local_chunk_helpers_match_context_size_semantics() -> None:
     chunks = iter_mitra_epoch_chunks(25, context_size=10, epoch_seed=0, min_chunk_size=2)
 
     assert count_mitra_epoch_chunks(25, context_size=10, min_chunk_size=2) == 3
     assert [len(chunk) for chunk in chunks] == [10, 10, 5]
     assert dropped_mitra_tail_rows(23, context_size=10, min_chunk_size=5) == 3
+
 
 def test_mitra_local_split_keeps_query_classes_in_support_when_possible() -> None:
     y = np.array([0, 0, 1, 1, 2])
@@ -63,6 +65,7 @@ def test_mitra_local_split_keeps_query_classes_in_support_when_possible() -> Non
     assert split.singleton_chunk is True
     assert set(y[split.query_idx]).issubset(set(y[split.support_idx]))
 
+
 def test_mitra_local_split_falls_back_for_all_singleton_class_chunks() -> None:
     y = np.array([0, 1, 2])
 
@@ -71,6 +74,7 @@ def test_mitra_local_split_falls_back_for_all_singleton_class_chunks() -> None:
     assert split.rare_class_fallback is True
     assert split.singleton_chunk is True
     assert len(split.query_idx) == 2
+
 
 def test_mitra_local_trainer_marks_checkpoint_epoch_for_state_capture() -> None:
     checkpoint = SimpleNamespace()
@@ -139,6 +143,7 @@ def test_mitra_adapter_dense_labels_and_project_checkpoint_packages(tmp_path: Pa
     assert diagnostics["mitra_adapter_input_preprocessing"]["method"] == "mitra_adapter_finite_numeric_guard"
     assert diagnostics["mitra_adapter_input_preprocessing"]["input_already_shared_preprocessed"] is False
 
+
 def test_mitra_adapter_resolved_params_expose_local_and_legacy_interfaces(tmp_path: Path) -> None:
     spec = ModelSpec(
         model_id="mitra",
@@ -180,6 +185,7 @@ def test_mitra_adapter_resolved_params_expose_local_and_legacy_interfaces(tmp_pa
     assert official_params["mitra_finetune_interface"] == "official_sklearn"
     assert official_params["warmup_steps_scope"] == "official_epoch"
     assert estimator.tfm_mitra_finetune_interface == "official_sklearn"
+
 
 def test_mitra_local_chunked_oom_propagates_without_mutating_caps(monkeypatch) -> None:
     class FakeCudaOom(RuntimeError):
@@ -260,6 +266,7 @@ def test_mitra_local_chunked_oom_propagates_without_mutating_caps(monkeypatch) -
     assert estimator.tfm_max_samples_support == 8_000
     assert estimator.tfm_max_samples_query == 2_000
 
+
 def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: Path) -> None:
     spec = ModelSpec(
         model_id="mitra",
@@ -310,6 +317,7 @@ def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: 
     assert loaded._tfm_checkpoint_epoch == 1
     assert loaded._tfm_checkpoint_mode == "best"
 
+
 def test_mitra_adapter_captures_best_and_final_states_from_trainer_checkpoints(tmp_path: Path) -> None:
     spec = ModelSpec(
         model_id="mitra",
@@ -341,6 +349,7 @@ def test_mitra_adapter_captures_best_and_final_states_from_trainer_checkpoints(t
     assert captured["final"]["epoch"] == 1
     assert best_value == 1
     assert final_value == 2
+
 
 def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
     tmp_path: Path,
@@ -382,6 +391,7 @@ def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
 
     assert not (tmp_path / "best.ckpt").exists()
     assert not list(tmp_path.glob("epoch*.ckpt"))
+
 
 def test_mitra_zero_shot_context_fit_initializes_empty_ensemble(tmp_path: Path) -> None:
     spec = ModelSpec(

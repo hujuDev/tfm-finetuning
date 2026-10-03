@@ -33,9 +33,7 @@ class FitPool:
 def combine_fit_pool(data: Any) -> FitPool:
     """Combine the current training and validation roles without test rows."""
     val_fit_y = data.val_fit_y if getattr(data, "val_fit_y", None) is not None else data.val_y
-    ids = np.concatenate(
-        [np.asarray(data.train_ids, dtype=object), np.asarray(data.val_ids, dtype=object)]
-    )
+    ids = np.concatenate([np.asarray(data.train_ids, dtype=object), np.asarray(data.val_ids, dtype=object)])
     if len(set(ids.tolist())) != len(ids):
         raise ValueError("Fit-pool row IDs must be unique across training and validation roles")
     return FitPool(

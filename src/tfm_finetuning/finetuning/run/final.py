@@ -157,9 +157,7 @@ def complete_finetuned_run(
             if fit_controller is not None
             else {
                 "enabled": False,
-                "intermediate_checkpoints": (
-                    "kept" if setup.keep_intermediate_checkpoints else "adapter_default"
-                ),
+                "intermediate_checkpoints": ("kept" if setup.keep_intermediate_checkpoints else "adapter_default"),
                 "periodic_eval_source": "checkpoint" if setup.test_eval_interval > 0 else "disabled",
                 "save_best_val_checkpoint": bool(setup.save_best_val_checkpoint),
             }

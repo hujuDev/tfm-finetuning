@@ -23,6 +23,7 @@ def test_resolve_common_finetune_config_uses_finetune_settings() -> None:
     assert cfg.early_stopping is False
     assert cfg.patience == 17
 
+
 def test_resource_fallback_policy_can_enable_oom_retry_for_any_model() -> None:
     common_config = CommonFineTuneConfig(context_size=10000)
 

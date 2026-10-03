@@ -43,9 +43,7 @@ def apply_label_noise(
         }
     train_size = len(data.train_y)
     fit_labels = np.concatenate([np.asarray(data.train_y), np.asarray(data.val_y)])
-    fit_ids = np.concatenate(
-        [np.asarray(data.train_ids, dtype=object), np.asarray(data.val_ids, dtype=object)]
-    )
+    fit_ids = np.concatenate([np.asarray(data.train_ids, dtype=object), np.asarray(data.val_ids, dtype=object)])
     classes = np.unique(fit_labels)
     fit_noisy, changed_fit, mapping = _noise_labels_by_id(
         fit_labels,

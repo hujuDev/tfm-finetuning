@@ -1,4 +1,5 @@
 """Execute the notebook workflow with mocked training and no downloads."""
+
 from __future__ import annotations
 
 import json
@@ -97,14 +98,18 @@ def test_tracking_and_current_report_comparison(setup_notebook, monkeypatch, mod
             folder = namespace["results"] / run["study"] / run["run_id"]
             folder.mkdir(parents=True)
             (folder / "run.json").write_text(json.dumps({**run, "status": "complete"}))
-            (folder / "finetune_report.json").write_text(json.dumps({
-                "schema_version": 1,
-                "score_metric": "roc_auc",
-                "evaluation": {"selected_epoch": 0},
-                "zero_shot_metrics": {"val": {"roc_auc": .8}, "test": {"roc_auc": .81}},
-                "selected_checkpoint_metrics": {"val": {"roc_auc": .8}, "test": {"roc_auc": .81}},
-                "final_checkpoint_metrics": {"val": {"roc_auc": .7}, "test": {"roc_auc": .72}},
-            }))
+            (folder / "finetune_report.json").write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "score_metric": "roc_auc",
+                        "evaluation": {"selected_epoch": 0},
+                        "zero_shot_metrics": {"val": {"roc_auc": 0.8}, "test": {"roc_auc": 0.81}},
+                        "selected_checkpoint_metrics": {"val": {"roc_auc": 0.8}, "test": {"roc_auc": 0.81}},
+                        "final_checkpoint_metrics": {"val": {"roc_auc": 0.7}, "test": {"roc_auc": 0.72}},
+                    }
+                )
+            )
         # Unrelated earlier runs must not enter this notebook's comparison.
         stale = namespace["results"] / saved["study"] / "stale"
         stale.mkdir(parents=True)
@@ -140,5 +145,7 @@ def test_results_require_completed_runs(setup_notebook):
 def test_notebook_streams_cli_output_and_propagates_failure(setup_notebook, capsys):
     _, namespace = setup_notebook
     with pytest.raises(subprocess.CalledProcessError):
-        namespace["run_command"]([sys.executable, "-c", "from pathlib import Path; print(Path.cwd()); raise SystemExit(7)"])
+        namespace["run_command"](
+            [sys.executable, "-c", "from pathlib import Path; print(Path.cwd()); raise SystemExit(7)"]
+        )
     assert capsys.readouterr().out.strip() == str(ROOT)

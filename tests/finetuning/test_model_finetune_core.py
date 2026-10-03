@@ -61,6 +61,7 @@ def test_estimator_fallback_treats_none_minimum_as_no_requirement() -> None:
     assert metadata["required_min_n_estimators"] == 1
     assert metadata["estimator_fallback_triggered"] is False
 
+
 @pytest.mark.parametrize(
     "checkpoint_mode",
     ["final", "best"],
@@ -287,9 +288,7 @@ def test_finetune_main_writes_direct_run_artifacts(
     assert report_payload["checkpoint_retention"]["deleted_files"] == 0
     assert report_payload["finetune"]["model_id"] == "tabicl_v2"
     assert report_payload["finetune"]["preprocessing_protocol"] == PREPROCESSING_SHARED
-    assert report_payload["finetune"]["feature_preprocessing"]["method"] == (
-        SHARED_FEATURE_PREPROCESSING
-    )
+    assert report_payload["finetune"]["feature_preprocessing"]["method"] == (SHARED_FEATURE_PREPROCESSING)
     assert report_payload["finetune"]["feature_preprocessing"]["raw_feature_count"] == 1
     assert report_payload["finetune"]["feature_preprocessing"]["effective_feature_count"] == 1
     assert report_payload["finetune"]["fit_diagnostics"]["tabicl_meta_batch_split"]["fallback_count"] == 2

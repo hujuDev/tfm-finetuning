@@ -354,11 +354,7 @@ class DatasetTransferTrainerContract:
             "declared_validation_selector",
             "strict_resource_semantics",
         )
-        missing = [
-            name
-            for name in required_true
-            if getattr(self, name) is not True
-        ]
+        missing = [name for name in required_true if getattr(self, name) is not True]
         if any(stage.view_boundaries for stage in route.stages):
             if self.checkpoint_view_boundaries is not True:
                 missing.append("checkpoint_view_boundaries")
@@ -368,11 +364,7 @@ class DatasetTransferTrainerContract:
                 "persistent_optimizer_within_stage",
                 "exact_balanced_dataset_updates",
             )
-            missing.extend(
-                name
-                for name in pooled_required
-                if getattr(self, name) is not True
-            )
+            missing.extend(name for name in pooled_required if getattr(self, name) is not True)
             if self.raw_row_concatenation is not False:
                 missing.append("raw_row_concatenation")
         terminal = route.terminal_stage

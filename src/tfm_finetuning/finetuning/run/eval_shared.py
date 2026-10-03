@@ -1,4 +1,5 @@
 """Load the official OpenML partition and create the thesis validation split."""
+
 from __future__ import annotations
 
 import contextlib
@@ -21,7 +22,6 @@ def benchmark_metric_for_problem_type(problem_type: str) -> str:
     if metric is None:
         raise ValueError(f"Unsupported benchmark problem_type={problem_type!r}")
     return metric
-
 
 
 def split_train_for_synthetic_val(
@@ -59,7 +59,6 @@ def split_train_for_synthetic_val(
         fit_idx = X_train.index.take(fit_pos)
         val_idx = X_train.index.take(val_pos)
         return X_train.loc[fit_idx], X_train.loc[val_idx], y_train.loc[fit_idx], y_train.loc[val_idx]
-
 
 
 def load_tabarena_aligned_eval_bundle(

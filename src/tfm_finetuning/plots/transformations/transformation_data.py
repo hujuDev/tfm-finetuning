@@ -235,8 +235,6 @@ def _task_family(value: object, score_metric: str) -> str:
     return {"roc_auc": "binary", "log_loss": "multiclass", "rmse": "regression"}.get(score_metric, "unknown")
 
 
-
-
 def _condition(family: str, report: Mapping[str, Any]) -> _Condition:
     shift = (report.get("data_task") or {}).get("distribution_shift") or {}
     if family == "subsample":

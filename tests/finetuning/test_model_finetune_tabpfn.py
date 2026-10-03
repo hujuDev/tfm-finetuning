@@ -94,6 +94,7 @@ def test_fit_with_oom_retry_can_be_enabled_for_tabpfn_context(tmp_path: Path, mo
     assert result.oom_retry["retry_count"] == 1
     assert not (output / "partial.ckpt").exists()
 
+
 def test_estimator_fallback_retries_tabpfn_wide_feature_count() -> None:
     class FakeAdapter:
         def minimum_required_estimators(self, feature_count: int) -> int:
@@ -137,6 +138,7 @@ def test_estimator_fallback_retries_tabpfn_wide_feature_count() -> None:
     assert metadata["configured_n_estimators"]["n_estimators_finetune"] == 2
     assert metadata["effective_n_estimators"]["n_estimators_finetune"] == 4
 
+
 def test_estimator_fallback_strict_fails_loudly_for_tabpfn_wide_feature_count() -> None:
     class FakeAdapter:
         def minimum_required_estimators(self, feature_count: int) -> int:
@@ -167,6 +169,7 @@ def test_estimator_fallback_strict_fails_loudly_for_tabpfn_wide_feature_count() 
             config={"finetune": {"estimator_fallback_policy": "strict"}},
             common_config=CommonFineTuneConfig(n_estimators_finetune=2),
         )
+
 
 def test_tabpfn_adapter_passes_feature_schema_categorical_indices(tmp_path: Path) -> None:
     class FakeTabPFNEstimator:
@@ -202,6 +205,7 @@ def test_tabpfn_adapter_passes_feature_schema_categorical_indices(tmp_path: Path
     assert loaded.kwargs["categorical_features_indices"] == [0, 2]
     assert loaded.kwargs["ignore_pretraining_limits"] is True
 
+
 def test_tabpfn_native_validation_encodes_pandas_categories_for_fit_and_predict(tmp_path: Path) -> None:
     class FakeEstimator:
         def fit(self, X, y):
@@ -232,6 +236,7 @@ def test_tabpfn_native_validation_encodes_pandas_categories_for_fit_and_predict(
     assert np.isnan(estimator.predict_X.loc[1, "cat"])
     assert np.isnan(estimator.predict_X.loc[2, "cat"])
 
+
 def test_tabpfn_shared_finite_numeric_does_not_use_native_category_encoder(tmp_path: Path) -> None:
     class FakeEstimator:
         def fit(self, X, y):
@@ -258,6 +263,7 @@ def test_tabpfn_shared_finite_numeric_does_not_use_native_category_encoder(tmp_p
     assert estimator.predict_X is query_X
     assert isinstance(estimator.fit_X["cat"].dtype, pd.CategoricalDtype)
     assert isinstance(estimator.predict_X["cat"].dtype, pd.CategoricalDtype)
+
 
 def test_tabpfn_adapter_snapshots_evaluates_and_exports_in_memory_state(tmp_path: Path) -> None:
     class FakeTorchModel:
@@ -329,6 +335,7 @@ def test_tabpfn_adapter_snapshots_evaluates_and_exports_in_memory_state(tmp_path
     assert saved["additional_fields"]["checkpoint_export_mode"] == "best_in_memory_state"
     assert inner.models_[0].value == 3
 
+
 def test_tabpfn_export_requires_best_checkpoint_but_falls_back_for_final(tmp_path: Path) -> None:
     class FakeTabPFNFinetuner:
         def __init__(self) -> None:
@@ -389,6 +396,7 @@ def test_tabpfn_export_requires_best_checkpoint_but_falls_back_for_final(tmp_pat
     assert exported.read_text(encoding="utf-8") == "saved"
     assert saved["model"] is finetuner.finetuned_estimator_
     assert saved["additional_fields"]["checkpoint_export_mode"] == "final_in_memory_fallback"
+
 
 def test_fit_runtime_probe_streams_tabpfn_evaluate_model_callbacks() -> None:
     class FakeInnerEstimator:
@@ -490,6 +498,7 @@ def test_fit_runtime_probe_streams_tabpfn_evaluate_model_callbacks() -> None:
     assert controller.best_eval_count == 1
     assert controller.best_metrics is not None
     assert controller.best_metrics["test"]["score"] == 1.0
+
 
 def test_training_history_rows_accept_tabpfn_display_metric_keys() -> None:
     logger_obj = InMemoryFinetuneLogger()
