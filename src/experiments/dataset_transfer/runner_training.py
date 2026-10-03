@@ -11,7 +11,7 @@ from experiments.dataset_transfer.executor import StageProduction
 from experiments.dataset_transfer.runner_data import TransferDatasetLoader
 from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec, TransferTrainingRecipe
 from finetuning.models.base import DatasetTransferStageTrainerAdapter, DatasetTransferTrainerRequest
-from finetuning.run_setup import FoundationRunSetup
+from finetuning.run.setup import FoundationRunSetup
 
 
 class ValidatedStageTrainer:

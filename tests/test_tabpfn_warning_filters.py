@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import warnings
 
-from src.finetuning.tabpfn_warning_filters import suppress_tabpfn_user_warning_noise
+from finetuning.models.tabpfn.warning_filters import suppress_tabpfn_user_warning_noise
 
 
 def test_warning_filter_suppresses_missing_resume_checkpoint_warning() -> None:

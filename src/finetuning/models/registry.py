@@ -13,7 +13,7 @@ from finetuning.models.registry_sources import (
     mitra_version_payload,
 )
 from finetuning.models.source import installed_package_version_payload
-from finetuning.models.tabpfn_versions import TABPFN_VERSIONS, TabPFNVersion, get_tabpfn_version
+from finetuning.models.tabpfn.versions import TABPFN_VERSIONS, TabPFNVersion, get_tabpfn_version
 from utils.paths import get_repo_root
 from utils.tabpfn_official import ensure_official_tabpfn_on_path
 
@@ -84,7 +84,7 @@ def _tabpfn_spec(
     return FoundationModelSpec(
         model_id=version.model_id,
         display_name=version.display_name,
-        adapter_cls_path="finetuning.models.tabpfn.TabPFNAdapter",
+        adapter_cls_path="finetuning.models.tabpfn.model.TabPFNAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint=version.classifier_checkpoint,
@@ -103,7 +103,7 @@ def _mitra_spec(repo_root: Path) -> FoundationModelSpec:
     return FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint=MITRA_CLASSIFIER_CHECKPOINT,
@@ -128,7 +128,7 @@ def _tabicl_spec(repo_root: Path) -> FoundationModelSpec:
     return FoundationModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
-        adapter_cls_path="finetuning.models.tabicl.TabICLAdapter",
+        adapter_cls_path="finetuning.models.tabicl.model.TabICLAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint=TABICL_V2_CLASSIFIER_CHECKPOINT,

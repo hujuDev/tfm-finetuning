@@ -9,19 +9,19 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
-from src.finetuning import model_finetune as runner
-from src.finetuning import resource_policy as policy_runner
-from src.finetuning.data import (
+
+from finetuning import model_finetune as runner
+from finetuning.datasets.loading import (
     SplitEvaluationData,
 )
-from src.finetuning.models.base import CommonFineTuneConfig
-from src.finetuning.models.preprocessing import (
-    SHARED_FEATURE_PREPROCESSING,
-)
-from src.finetuning.preprocessing_protocol import (
+from finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_SHARED,
 )
-
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.models.preprocessing import (
+    SHARED_FEATURE_PREPROCESSING,
+)
+from finetuning.training import resource_policy as policy_runner
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     run_data_runner,
 )

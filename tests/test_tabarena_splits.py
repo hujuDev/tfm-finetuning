@@ -8,7 +8,8 @@ from pathlib import Path
 
 import numpy as np
 import pytest
-from src.finetuning.tabarena_data import Dataset, build_dataset_from_local_path
+
+from finetuning.datasets.tabarena import Dataset, build_dataset_from_local_path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 os.environ.setdefault("REPO_ROOT", str(REPO_ROOT))

@@ -6,9 +6,10 @@ import importlib
 from pathlib import Path
 
 import numpy as np
-from src.finetuning import model_finetune as runner
-from src.finetuning.models.mitra_vendor import MitraBindings
-from src.finetuning.models.registry import FoundationModelSpec
+
+from finetuning import model_finetune as runner
+from finetuning.models.mitra.vendor import MitraBindings
+from finetuning.models.registry import FoundationModelSpec
 
 run_data_runner = importlib.import_module(runner._prepare_foundation_run_data.__module__)
 
@@ -98,7 +99,7 @@ def _tabpfn_test_spec(tmp_path: Path) -> FoundationModelSpec:
     return FoundationModelSpec(
         model_id="tabpfn_v2_5",
         display_name="TabPFNv2.5",
-        adapter_cls_path="finetuning.models.tabpfn.TabPFNAdapter",
+        adapter_cls_path="finetuning.models.tabpfn.model.TabPFNAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="models/tabpfn-v2.5-classifier.ckpt",

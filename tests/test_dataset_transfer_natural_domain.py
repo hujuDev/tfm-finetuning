@@ -8,7 +8,7 @@ import pytest
 
 from experiments.dataset_transfer.natural_domain_context import build_route_matched_evaluation_data
 from experiments.dataset_transfer.routes import resolve_transfer_route
-from finetuning.data import SplitEvaluationData
+from finetuning.datasets.loading import SplitEvaluationData
 
 ROOT = Path(__file__).resolve().parents[1]
 

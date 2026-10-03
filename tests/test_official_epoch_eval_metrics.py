@@ -5,7 +5,8 @@ from typing import Never
 
 import numpy as np
 import pytest
-from src.finetuning.official_epoch_eval_metrics import (
+
+from finetuning.evaluation.official_epoch_metrics import (
     compute_full_official_epoch_eval_result,
     install_full_official_epoch_eval_metrics,
 )
@@ -145,7 +146,7 @@ def test_install_full_official_epoch_eval_metrics_falls_back_to_original(monkeyp
         raise ValueError("boom")
 
     monkeypatch.setattr(
-        "src.finetuning.official_epoch_eval_metrics.compute_full_official_epoch_eval_result",
+        "finetuning.evaluation.official_epoch_metrics.compute_full_official_epoch_eval_result",
         _raise,
     )
 

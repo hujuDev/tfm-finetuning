@@ -10,7 +10,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from finetuning.preprocessing_protocol import normalize_preprocessing_protocol
+from finetuning.datasets.preprocessing_protocol import normalize_preprocessing_protocol
 from plots.metrics import (
     best_relative_normalized_score,
     metric_is_lower_better,

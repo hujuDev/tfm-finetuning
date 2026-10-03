@@ -21,9 +21,9 @@ from finetuning.models.base import (
     CommonFineTuneConfig,
     DatasetTransferTrainerRequest,
 )
-from finetuning.models.tabicl import TabICLAdapter
-from finetuning.models.tabicl_transfer import TabICLDatasetTransferStageTrainer
-from finetuning.models.tabicl_transfer_engine import (
+from finetuning.models.tabicl.model import TabICLAdapter
+from finetuning.models.tabicl.transfer import TabICLDatasetTransferStageTrainer
+from finetuning.models.tabicl.transfer_engine import (
     TabICLTransferEngine,
     _PreparedDataset,
     _reload_context_indices,

@@ -9,18 +9,18 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
-from src.finetuning import checkpoints as checkpoint_runner
-from src.finetuning import history as history_runner
-from src.finetuning import model_finetune as runner
-from src.finetuning import reporting as reporting_runner
-from src.finetuning.data import (
+
+from finetuning import model_finetune as runner
+from finetuning.datasets.loading import (
     SplitEvaluationData,
 )
-from src.finetuning.models.base import CommonFineTuneConfig
-from src.finetuning.preprocessing_protocol import (
+from finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_NATIVE,
 )
-
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.reporting import report as reporting_runner
+from finetuning.training import checkpoints as checkpoint_runner
+from finetuning.training import history as history_runner
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     run_data_runner,
 )

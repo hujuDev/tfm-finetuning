@@ -4,17 +4,18 @@ import tomllib
 from pathlib import Path
 
 import pytest
-from src.finetuning import fit as fit_runner
-from src.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
-from src.finetuning.models.registry import (
+
+from finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
+from finetuning.models.registry import (
     FoundationModelRegistryError,
     get_foundation_model_spec,
     iter_foundation_model_specs,
 )
-from src.finetuning.models.tabpfn_versions import (
+from finetuning.models.tabpfn.versions import (
     TABPFN_VERSIONS,
     VENDOR_ONLY_TABPFN_ARCHITECTURES,
 )
+from finetuning.training import fit as fit_runner
 
 
 def test_foundation_model_dependencies_are_packaged_for_cluster_image() -> None:

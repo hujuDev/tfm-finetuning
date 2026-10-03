@@ -13,12 +13,13 @@ from experiments.dataset_transfer.spec import (
     TransferStageSpec,
     ValidationSelector,
 )
-from finetuning.models import tabpfn_transfer, tabpfn_transfer_runtime
 from finetuning.models.base import (
     CommonFineTuneConfig,
     DatasetTransferTrainerRequest,
 )
-from finetuning.models.tabpfn import TabPFNAdapter
+from finetuning.models.tabpfn import transfer as tabpfn_transfer
+from finetuning.models.tabpfn import transfer_runtime as tabpfn_transfer_runtime
+from finetuning.models.tabpfn.model import TabPFNAdapter
 
 
 def _data(name: str) -> SimpleNamespace:

@@ -16,8 +16,8 @@ from experiments.dataset_transfer.runner_checkpoint_reporting import run_checkpo
 from experiments.dataset_transfer.runner_data import TransferDatasetLoader
 from experiments.dataset_transfer.runner_reporting import training_report
 from experiments.dataset_transfer.runner_training import build_stage_trainer
-from finetuning.reporting import finish_run
-from finetuning.run_setup import initialize_foundation_run
+from finetuning.reporting.report import finish_run
+from finetuning.run.setup import initialize_foundation_run
 
 
 def run_dataset_transfer(config: dict[str, Any], output_path: Path, *, force: bool = False) -> dict[str, Any]:

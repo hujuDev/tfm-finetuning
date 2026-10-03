@@ -778,8 +778,8 @@ def load_local_dataset_base_meta_features(
     if dataset_path is None:
         return empty_base_meta_features()
     try:
-        from finetuning.runner.data import dataset_part_to_frame
-        from finetuning.tabarena_data import build_dataset_from_local_path
+        from finetuning.datasets.runner_data import dataset_part_to_frame
+        from finetuning.datasets.tabarena import build_dataset_from_local_path
 
         dataset, _metadata = build_dataset_from_local_path(
             dataset_path=dataset_path,

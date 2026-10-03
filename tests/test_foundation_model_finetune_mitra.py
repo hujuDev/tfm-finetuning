@@ -8,22 +8,22 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
-from src.finetuning import config as config_runner
-from src.finetuning.models import mitra_configured as mitra_module
-from src.finetuning.models.base import CommonFineTuneConfig
-from src.finetuning.models.mitra import MitraAdapter
-from src.finetuning.models.mitra_local_trainer import (
+
+from finetuning import config as config_runner
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.models.mitra import configured as mitra_module
+from finetuning.models.mitra.local_trainer import (
     LocalMitraTrainer,
     count_mitra_epoch_chunks,
     dropped_mitra_tail_rows,
     iter_mitra_epoch_chunks,
     split_mitra_support_query_indices,
 )
-from src.finetuning.models.preprocessing import (
+from finetuning.models.mitra.model import MitraAdapter
+from finetuning.models.preprocessing import (
     FiniteFeaturePreprocessor,
 )
-from src.finetuning.models.registry import FoundationModelSpec
-
+from finetuning.models.registry import FoundationModelSpec
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     FakeStatefulMitraClassifier,
     FakeTorchTensor,
@@ -85,7 +85,7 @@ def test_mitra_adapter_dense_labels_and_project_checkpoint_packages(tmp_path: Pa
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",
@@ -143,7 +143,7 @@ def test_mitra_adapter_resolved_params_expose_local_and_legacy_interfaces(tmp_pa
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",
@@ -223,7 +223,7 @@ def test_mitra_local_chunked_oom_propagates_without_mutating_caps(monkeypatch) -
         pass
 
     modules = {
-        "finetuning.models.mitra_local_trainer": SimpleNamespace(LocalMitraTrainer=FakeTrainer),
+        "finetuning.models.mitra.local_trainer": SimpleNamespace(LocalMitraTrainer=FakeTrainer),
         "autogluon.tabular.models.mitra.sklearn_interface": SimpleNamespace(USE_HF=True),
         "torch": SimpleNamespace(cuda=SimpleNamespace(OutOfMemoryError=FakeCudaOom)),
     }
@@ -264,7 +264,7 @@ def test_mitra_adapter_in_memory_state_export_round_trips_epoch_state(tmp_path: 
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",
@@ -314,7 +314,7 @@ def test_mitra_adapter_captures_best_and_final_states_from_trainer_checkpoints(t
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",
@@ -349,7 +349,7 @@ def test_mitra_adapter_suppresses_legacy_checkpoints_under_in_memory_policy(
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",
@@ -387,7 +387,7 @@ def test_mitra_zero_shot_context_fit_initializes_empty_ensemble(tmp_path: Path) 
     spec = FoundationModelSpec(
         model_id="mitra",
         display_name="Mitra",
-        adapter_cls_path="finetuning.models.mitra.MitraAdapter",
+        adapter_cls_path="finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="autogluon/mitra-classifier",

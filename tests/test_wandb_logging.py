@@ -6,9 +6,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from finetuning.pipeline_runtime import prepare_output
-from finetuning.reporting import _init_wandb_run, finish_run
-from finetuning.wandb_logging import flatten_report_metrics_for_wandb
+from finetuning.reporting.report import _init_wandb_run, finish_run
+from finetuning.reporting.wandb_logging import flatten_report_metrics_for_wandb
+from finetuning.run.runtime import prepare_output
 
 
 def test_report_metrics_keep_selected_and_final_separate():
@@ -103,7 +103,7 @@ def test_completed_report_is_saved_even_when_tracking_fails(tmp_path):
 
 def test_experiment_runner_and_training_setup_share_output_without_replacing_lock(tmp_path):
     from experiments.run_experiment import execute_run
-    from finetuning.run_setup import initialize_foundation_run
+    from finetuning.run.setup import initialize_foundation_run
 
     spec = SimpleNamespace(ensure_source_available=lambda: None, adapter_cls=lambda _: SimpleNamespace())
     run = {

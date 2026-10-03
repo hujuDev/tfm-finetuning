@@ -8,7 +8,7 @@ from typing import Any
 
 from experiments.dataset_transfer.executor import require_checkpoint
 from experiments.dataset_transfer.spec import TransferRouteSpec
-from finetuning.evaluation import _evaluate_checkpoint, _evaluate_zero_shot
+from finetuning.evaluation.core import _evaluate_checkpoint, _evaluate_zero_shot
 
 
 def evaluate_frozen_checkpoint_bundle(

@@ -11,8 +11,8 @@ from types import SimpleNamespace
 from typing import Any
 
 from experiments.dataset_transfer.rows import apply_train_subset_to_split, build_nested_train_subsets
-from finetuning.preprocessing import _configure_adapter_preprocessing_protocol
-from finetuning.run_data import _prepare_foundation_run_data
+from finetuning.datasets.preprocessing import _configure_adapter_preprocessing_protocol
+from finetuning.run.data import _prepare_foundation_run_data
 from utils.config_utils import set_nested
 
 _MODEL_DISTRIBUTIONS = {"tabpfn_v2_5": ("tabpfn",), "tabicl_v2": ("tabicl",), "mitra": ("autogluon.tabular",)}

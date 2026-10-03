@@ -9,23 +9,23 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pytest
-from src.finetuning import fit as fit_runner
-from src.finetuning import history as history_runner
-from src.finetuning import resource_policy as policy_runner
-from src.finetuning.data import (
+
+from finetuning.datasets.loading import (
     SplitEvaluationData,
 )
-from src.finetuning.model_in_memory import InMemoryFitController
-from src.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
-from src.finetuning.models.registry import FoundationModelSpec
-from src.finetuning.models.tabpfn import TabPFNAdapter
-from src.finetuning.models.tabpfn_vendor import TabPFNBindings
-from src.finetuning.preprocessing_protocol import (
+from finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_NATIVE,
     PREPROCESSING_SHARED,
 )
-from src.finetuning.runtime_probe import _FitRuntimeProbe
-
+from finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
+from finetuning.models.registry import FoundationModelSpec
+from finetuning.models.tabpfn.model import TabPFNAdapter
+from finetuning.models.tabpfn.vendor import TabPFNBindings
+from finetuning.training import fit as fit_runner
+from finetuning.training import history as history_runner
+from finetuning.training import resource_policy as policy_runner
+from finetuning.training.in_memory import InMemoryFitController
+from finetuning.training.runtime_probe import _FitRuntimeProbe
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     FakeTorchTensor,
     _tabpfn_test_spec,
@@ -352,7 +352,7 @@ def test_tabpfn_export_requires_best_checkpoint_but_falls_back_for_final(tmp_pat
     spec = FoundationModelSpec(
         model_id="tabpfn_v2_5",
         display_name="TabPFNv2.5",
-        adapter_cls_path="finetuning.models.tabpfn.TabPFNAdapter",
+        adapter_cls_path="finetuning.models.tabpfn.model.TabPFNAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="models/tabpfn-v2.5-classifier.ckpt",

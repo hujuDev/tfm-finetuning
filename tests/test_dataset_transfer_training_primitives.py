@@ -7,21 +7,22 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pytest
-from src.experiments.dataset_transfer.pooled import (
+
+from experiments.dataset_transfer.pooled import (
     build_balanced_episode_schedule,
     run_balanced_pooled_training,
 )
-from src.experiments.dataset_transfer.rows import (
+from experiments.dataset_transfer.rows import (
     apply_train_subset_to_split,
     build_nested_train_subsets,
 )
-from src.experiments.dataset_transfer.selection import (
+from experiments.dataset_transfer.selection import (
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,
     select_target_checkpoint,
 )
-from src.finetuning.data import SplitEvaluationData
+from finetuning.datasets.loading import SplitEvaluationData
 
 
 def _split_data() -> SplitEvaluationData:

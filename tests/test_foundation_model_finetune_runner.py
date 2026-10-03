@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from src.finetuning import config as config_runner
-from src.finetuning import resource_policy as policy_runner
-from src.finetuning.models.base import CommonFineTuneConfig
+from finetuning import config as config_runner
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.training import resource_policy as policy_runner
 
 
 def test_resolve_common_finetune_config_uses_foundation_model_settings() -> None:

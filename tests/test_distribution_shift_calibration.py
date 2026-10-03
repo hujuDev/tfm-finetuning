@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.experiments.distribution_shift_calibration import (
+from experiments.distribution_shift_calibration import (
     CalibrationRow,
     select_contextual_scale,
     select_heavy_tail,

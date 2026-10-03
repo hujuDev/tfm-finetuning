@@ -9,30 +9,30 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 import pytest
-from src.finetuning import data as data_runner
-from src.finetuning import evaluation as evaluation_runner
-from src.finetuning import fit as fit_runner
-from src.finetuning import history as history_runner
-from src.finetuning import model_finetune as runner
-from src.finetuning import resource_policy as policy_runner
-from src.finetuning.data import (
+
+from finetuning import model_finetune as runner
+from finetuning.datasets import loading as data_runner
+from finetuning.datasets.loading import (
     TEST_CONTEXT_POLICY_BALANCED_ORIGINAL_MAJORITY,
     TEST_CONTEXT_POLICY_FULL_ORIGINAL,
     TEST_CONTEXT_POLICY_TRAIN_ONLY,
     TEST_CONTEXT_POLICY_TRAIN_PLUS_VALIDATION,
     SplitEvaluationData,
 )
-from src.finetuning.model_in_memory import InMemoryFitController
-from src.finetuning.models.base import CommonFineTuneConfig
-from src.finetuning.preprocessing_protocol import (
+from finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_NATIVE,
 )
-from src.utils.config_utils import get_nested
-
+from finetuning.evaluation import core as evaluation_runner
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.training import fit as fit_runner
+from finetuning.training import history as history_runner
+from finetuning.training import resource_policy as policy_runner
+from finetuning.training.in_memory import InMemoryFitController
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     preprocessing_runner,
     run_data_runner,
 )
+from utils.config_utils import get_nested
 
 
 def test_evaluation_splits_default_to_test_and_allow_validation_only_calibration() -> None:

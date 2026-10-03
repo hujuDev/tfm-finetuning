@@ -8,21 +8,21 @@ from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
-from src.finetuning import fit as fit_runner
-from src.finetuning.data import (
+
+from finetuning.datasets.loading import (
     SplitEvaluationData,
 )
-from src.finetuning.models.base import CommonFineTuneConfig
-from src.finetuning.models.preprocessing import (
+from finetuning.datasets.preprocessing_protocol import (
+    PREPROCESSING_SHARED,
+)
+from finetuning.models.base import CommonFineTuneConfig
+from finetuning.models.preprocessing import (
     SHARED_FEATURE_PREPROCESSING,
     FiniteFeaturePreprocessor,
 )
-from src.finetuning.models.registry import FoundationModelSpec
-from src.finetuning.models.tabicl import TabICLAdapter
-from src.finetuning.preprocessing_protocol import (
-    PREPROCESSING_SHARED,
-)
-
+from finetuning.models.registry import FoundationModelSpec
+from finetuning.models.tabicl.model import TabICLAdapter
+from finetuning.training import fit as fit_runner
 from tests.support.split_suites.foundation_model_finetune_support_1 import (
     preprocessing_runner,
 )
@@ -188,7 +188,7 @@ def test_tabicl_native_finetune_converts_categorical_features_before_fit(tmp_pat
     spec = FoundationModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
-        adapter_cls_path="finetuning.models.tabicl.TabICLAdapter",
+        adapter_cls_path="finetuning.models.tabicl.model.TabICLAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="tabicl-classifier-v2-20260212.ckpt",
@@ -227,7 +227,7 @@ def test_tabicl_shared_finetune_keeps_shared_numeric_inputs(tmp_path: Path) -> N
     spec = FoundationModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
-        adapter_cls_path="finetuning.models.tabicl.TabICLAdapter",
+        adapter_cls_path="finetuning.models.tabicl.model.TabICLAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="tabicl-classifier-v2-20260212.ckpt",

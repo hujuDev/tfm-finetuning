@@ -6,7 +6,8 @@ from typing import TYPE_CHECKING
 import numpy as np
 import pandas as pd
 import pytest
-from src.data import download_tabarena_dataset_single as exporter
+
+from data import download_tabarena_dataset_single as exporter
 
 if TYPE_CHECKING:
     from pathlib import Path

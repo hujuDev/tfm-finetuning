@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 import numpy as np
-from src.finetuning.models.tabicl_finetune_compat import patch_tabicl_finetune_meta_batches
+
+from finetuning.models.tabicl.finetune_compat import patch_tabicl_finetune_meta_batches
 
 
 def test_tabicl_safe_split_keeps_singleton_classes_in_context() -> None:

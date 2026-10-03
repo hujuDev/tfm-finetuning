@@ -18,7 +18,7 @@ from experiments.dataset_transfer.spec import (
 from finetuning.config import (
     resolve_common_finetune_config,
 )
-from finetuning.preprocessing_protocol import normalize_preprocessing_protocol
+from finetuning.datasets.preprocessing_protocol import normalize_preprocessing_protocol
 
 _TARGET_PATH_ALIASES = {
     "bank_customer_churn": "Bank_Customer_Churn",

@@ -10,7 +10,7 @@ from unittest.mock import Mock
 import pytest
 
 from data import download_tabpfn_model_checkpoints as downloader
-from finetuning.models.tabpfn_versions import TABPFN_VERSIONS
+from finetuning.models.tabpfn.versions import TABPFN_VERSIONS
 
 
 def test_checkpoint_files_match_model_config_and_original_v2_weights():

@@ -9,12 +9,12 @@ from experiments.dataset_transfer.evaluation import evaluate_frozen_checkpoint_b
 from experiments.dataset_transfer.natural_domain_context import build_route_matched_evaluation_data
 from experiments.dataset_transfer.runner_data import TransferDatasetLoader
 from experiments.dataset_transfer.spec import TransferRouteSpec
-from finetuning.preprocessing import (
+from finetuning.datasets.preprocessing import (
     _configure_adapter_feature_schema,
     _configure_adapter_preprocessing_protocol,
 )
-from finetuning.resource_policy import _apply_estimator_fallback_policy, _configure_adapter_common_config
-from finetuning.run_setup import FoundationRunSetup
+from finetuning.run.setup import FoundationRunSetup
+from finetuning.training.resource_policy import _apply_estimator_fallback_policy, _configure_adapter_common_config
 
 
 def run_checkpoint_evaluation(

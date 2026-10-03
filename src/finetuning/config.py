@@ -6,10 +6,10 @@ from collections.abc import Mapping
 from dataclasses import replace
 from typing import Any
 
-from finetuning import pipeline_shared as _pipeline_shared
-from finetuning.data import _coerce_bool_config
+from finetuning.datasets.loading import _coerce_bool_config
 from finetuning.models.base import CommonFineTuneConfig
 from finetuning.models.registry import FoundationModelSpec
+from finetuning.run import shared as _pipeline_shared
 from utils.config_utils import get_nested
 
 

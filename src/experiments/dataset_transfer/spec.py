@@ -6,7 +6,7 @@ from collections.abc import Mapping
 from dataclasses import asdict, dataclass, field
 from typing import Any, Literal
 
-from finetuning.preprocessing_protocol import normalize_preprocessing_protocol
+from finetuning.datasets.preprocessing_protocol import normalize_preprocessing_protocol
 
 StageRole = Literal["intermediate", "reusable_boundary", "terminal"]
 StageTrainingMode = Literal["single_dataset", "pooled_episodic"]

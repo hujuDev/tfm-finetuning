@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from src.finetuning.context_utils import resolve_context_subsample
+from finetuning.datasets.context_utils import resolve_context_subsample
 
 
 def test_eval_context_defaults_to_train_context() -> None:
