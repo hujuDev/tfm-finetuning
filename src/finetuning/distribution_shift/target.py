@@ -8,8 +8,8 @@ from typing import Any
 
 import numpy as np
 
-from ._common import parse_rate, resolve_calibrated_value, safe_mean
-from .state import TargetTransformState
+from finetuning.distribution_shift._common import parse_rate, resolve_calibrated_value, safe_mean
+from finetuning.distribution_shift.state import TargetTransformState
 
 
 def apply_target_transform(data: Any, cfg: Mapping[str, Any], seed: int) -> tuple[Any, dict[str, Any]]:

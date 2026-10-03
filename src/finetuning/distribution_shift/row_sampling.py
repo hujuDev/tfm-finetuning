@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING, Any
 
 import numpy as np
 
-from ._common import is_noop_token, jsonable_label, parse_fraction
-from .fit_pool import combine_fit_pool, nested_selection_indices, rebuild_fit_roles
+from finetuning.distribution_shift._common import is_noop_token, jsonable_label, parse_fraction
+from finetuning.distribution_shift.fit_pool import combine_fit_pool, nested_selection_indices, rebuild_fit_roles
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

@@ -10,7 +10,7 @@ import numpy as np
 import pandas as pd
 from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
-from ._common import resolve_calibrated_value
+from finetuning.distribution_shift._common import resolve_calibrated_value
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

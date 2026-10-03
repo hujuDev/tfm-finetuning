@@ -1,7 +1,7 @@
 """Helpers owned by the unified foundation-model runner."""
 
-from .data import FoundationSplitData, load_foundation_split_data
-from .metrics import classification_probabilities, compute_metric_payload
+from finetuning.runner.data import FoundationSplitData, load_foundation_split_data
+from finetuning.runner.metrics import classification_probabilities, compute_metric_payload
 
 __all__ = [
     "FoundationSplitData",

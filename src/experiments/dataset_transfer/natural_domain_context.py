@@ -18,8 +18,7 @@ import numpy as np
 import pandas as pd
 
 from data.beyondarena_natural_domain_catalog import panel_for_dataset
-
-from .spec import TransferRouteSpec
+from experiments.dataset_transfer.spec import TransferRouteSpec
 
 ROUTE_MATCHED_CONTEXT_POLICY = "route_matched_train_plus_validation"
 

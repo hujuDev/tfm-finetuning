@@ -11,9 +11,13 @@ from collections.abc import Callable, Mapping
 from dataclasses import dataclass
 from typing import Any
 
-from .route_config import checkpoint_dependency, dependency_data_recipe, dependency_training_recipe
-from .route_invariants import validate_budget_row_seed_policy
-from .spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
+from experiments.dataset_transfer.route_config import (
+    checkpoint_dependency,
+    dependency_data_recipe,
+    dependency_training_recipe,
+)
+from experiments.dataset_transfer.route_invariants import validate_budget_row_seed_policy
+from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
 
 StageFactory = Callable[..., TransferStageSpec]
 TARGET_ONLY_ROUTE = "balanced_budget_target_only"

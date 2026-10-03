@@ -12,8 +12,7 @@ from collections.abc import Callable, Mapping
 from typing import Any
 
 from data.beyondarena_natural_domain_catalog import panel_for_dataset
-
-from .spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
+from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
 
 StageFactory = Callable[..., TransferStageSpec]
 NATURAL_DOMAIN_ROUTES = ("target_control_300_steps", "source_only_pooled", "target_inclusive_pooled")

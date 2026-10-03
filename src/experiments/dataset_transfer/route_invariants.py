@@ -5,8 +5,8 @@ from __future__ import annotations
 from collections.abc import Mapping
 from typing import Any
 
-from .route_config import row_seed_policy
-from .spec import TransferStageSpec
+from experiments.dataset_transfer.route_config import row_seed_policy
+from experiments.dataset_transfer.spec import TransferStageSpec
 
 
 def validate_checkpoint_boundaries(stages: tuple[TransferStageSpec, ...]) -> None:

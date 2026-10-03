@@ -17,7 +17,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from ._common import TRAIN_FT, VAL_FT, derive_seed, hash_array
+from finetuning.distribution_shift._common import TRAIN_FT, VAL_FT, derive_seed, hash_array
 
 
 @dataclass(frozen=True)

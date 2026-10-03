@@ -6,10 +6,9 @@ from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import Any
 
+from experiments.dataset_transfer.executor import require_checkpoint
+from experiments.dataset_transfer.spec import TransferRouteSpec
 from finetuning.evaluation import _evaluate_checkpoint, _evaluate_zero_shot
-
-from .executor import require_checkpoint
-from .spec import TransferRouteSpec
 
 
 def evaluate_frozen_checkpoint_bundle(

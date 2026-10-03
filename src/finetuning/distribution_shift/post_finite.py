@@ -19,7 +19,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-from ._common import hash_array
+from finetuning.distribution_shift._common import hash_array
 
 if TYPE_CHECKING:
     from collections.abc import Mapping

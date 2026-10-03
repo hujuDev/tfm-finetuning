@@ -42,28 +42,28 @@ from typing import Any
 
 import numpy as np
 
-from ._common import (
+from finetuning.distribution_shift._common import (
     derive_seed,
     ensure_role_metadata,
     get_nested,
     with_distribution_shift_reports,
 )
-from .contextual import apply_contextual_scale
-from .label_feature import (
+from finetuning.distribution_shift.contextual import apply_contextual_scale
+from finetuning.distribution_shift.label_feature import (
     apply_feature_mask,
     apply_label_noise,
     apply_spurious_feature,
 )
-from .post_finite import (
+from finetuning.distribution_shift.post_finite import (
     apply_numeric_scale,
     apply_shuffle_feature_order,
 )
-from .row_sampling import (
+from finetuning.distribution_shift.row_sampling import (
     apply_rebalance_train,
     apply_subsample_train,
 )
-from .state import TargetTransformState
-from .target import (
+from finetuning.distribution_shift.state import TargetTransformState
+from finetuning.distribution_shift.target import (
     apply_heavy_tail_contamination,
     apply_target_transform,
 )

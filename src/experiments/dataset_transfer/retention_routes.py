@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable, Mapping
 from typing import Any
 
-from .spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
+from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec, ValidationSelector
 
 StageFactory = Callable[..., TransferStageSpec]
 BANK = "Bank_Customer_Churn"

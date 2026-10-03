@@ -13,9 +13,9 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from .executor import require_checkpoint
-from .routes import resolve_transfer_route
-from .spec import TransferRouteSpec
+from experiments.dataset_transfer.executor import require_checkpoint
+from experiments.dataset_transfer.routes import resolve_transfer_route
+from experiments.dataset_transfer.spec import TransferRouteSpec
 
 
 def producer_config(config: Mapping[str, Any], route: TransferRouteSpec) -> dict[str, Any]:

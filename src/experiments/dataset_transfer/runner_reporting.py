@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
-from .executor import StageResult
-from .spec import TransferRouteSpec
+from experiments.dataset_transfer.executor import StageResult
+from experiments.dataset_transfer.spec import TransferRouteSpec
 
 
 def training_report(route: TransferRouteSpec, results: tuple[StageResult, ...]) -> dict[str, Any]:

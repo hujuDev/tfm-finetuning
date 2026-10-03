@@ -9,7 +9,7 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 from sklearn.feature_selection import mutual_info_classif, mutual_info_regression
 
-from ._common import (
+from finetuning.distribution_shift._common import (
     jsonable_label,
     label_signal,
     mixed_frame_to_numeric_matrix,

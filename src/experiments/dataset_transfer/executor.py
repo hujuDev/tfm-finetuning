@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Protocol
 
-from .spec import TransferRouteSpec, TransferStageSpec
+from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec
 
 
 @dataclass(frozen=True)
