@@ -29,4 +29,17 @@ uv run jupyter lab notebooks/introductory.ipynb
 - Then use the [experiments notebook](notebooks/hydra_experiments.ipynb) to select, preview and launch the thesis experiments directly through Submitit, either locally or on SLURM
     - The supplied HPC setup targets **HYDRA at TU Berlin**. It should also work on other SLURM clusters with some configuration
 
-The author’s code is available under the [MIT license](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for upstream software.
+## Repository layout
+
+- `src/tfm_finetuning/`
+    - `finetuning/`: fine-tuning pipeline, model adapters (TabPFN, TabICL, Mitra) and evaluation
+    - `experiments/`: experiment definitions, launching (local or SLURM) and cross-dataset transfer
+    - `data/`: dataset download and preprocessing
+    - `plots/`: thesis figures and tables
+    - `utils/`: paths and configuration helpers
+- `configs/`: experiment definitions, model defaults, SLURM settings and plot configurations
+- `scripts/`: Bash scripts for launching the experiments (`scripts/experiments/`)
+- `notebooks/`: introductory example and the experiments launcher
+- `tests/`: unit tests mirroring the source layout
+
+The code is available under the [MIT license](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for the licenses of the libraries it builds on, the model weights and the datasets.
