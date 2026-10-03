@@ -34,7 +34,7 @@ from tfm_finetuning.plots.common.report_labels import normalize_name
 from tfm_finetuning.plots.results import aggregate_metrics, metric_frame, read_runs
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CONFIG = REPO_ROOT / "configs/plots/section1_mitra_pipeline_analysis.toml"
+DEFAULT_CONFIG = REPO_ROOT / "configs/plots/overview/mitra_pipeline_analysis.toml"
 ORIGINAL_PIPELINE = "mitra_original_pipeline"
 CHUNKED_PIPELINE = "mitra_adapted_pipeline"
 PIPELINE_LABELS = {

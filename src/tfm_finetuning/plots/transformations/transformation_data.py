@@ -4,7 +4,7 @@ Completed runs supply conventional metrics, selected-checkpoint results, and
 same-checkpoint test views from their per-run fine-tuning reports.
 
 Example:
-    ``tables = build_transformation_tables(Path("configs/plots/section2_transformation_analysis.toml"))``
+    ``tables = build_transformation_tables(Path("configs/plots/transformations/transformation_analysis.toml"))``
 """
 
 from __future__ import annotations

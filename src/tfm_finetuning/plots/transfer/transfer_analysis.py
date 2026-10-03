@@ -24,7 +24,7 @@ from tfm_finetuning.plots.transfer.source_transfer_figure import plot_transfer_p
 from tfm_finetuning.plots.transfer.transfer_data import build_transfer_tables, write_transfer_tables
 from tfm_finetuning.plots.transfer.transfer_figures import render_transfer_figures
 
-DEFAULT_CONFIG = Path("configs/plots/section3_transfer_analysis.toml")
+DEFAULT_CONFIG = Path("configs/plots/transfer/transfer_analysis.toml")
 
 
 def generate(config_path: Path = DEFAULT_CONFIG) -> dict[str, Any]:

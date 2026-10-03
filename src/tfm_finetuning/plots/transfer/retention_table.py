@@ -1,6 +1,6 @@
 """Render the final retained-capability appendix table.
 
-Example: ``python -m tfm_finetuning.plots.transfer.retention_table --config configs/plots/retention.toml``.
+Example: ``python -m tfm_finetuning.plots.transfer.retention_table --config configs/plots/transfer/retention.toml``.
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from tfm_finetuning.plots.transfer.retention_data import (
 )
 from tfm_finetuning.plots.transfer.transfer_data import MODEL_ORDER
 
-DEFAULT_CONFIG = Path("configs/plots/retention.toml")
+DEFAULT_CONFIG = Path("configs/plots/transfer/retention.toml")
 ROUTE_LABELS = (r"Bank $\to$ Covertype", r"Covertype $\to$ Bank", "Alternating updates")
 
 

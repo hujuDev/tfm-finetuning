@@ -37,7 +37,7 @@ from tfm_finetuning.plots.transformations.transformation_overviews import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CONFIG = REPO_ROOT / "configs/plots/section2_transformation_analysis.toml"
+DEFAULT_CONFIG = REPO_ROOT / "configs/plots/transformations/transformation_analysis.toml"
 
 
 def generate_section2_transformation_findings(

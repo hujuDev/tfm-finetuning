@@ -22,7 +22,7 @@ from tfm_finetuning.plots.transfer.natural_domain_data import (
     write_natural_domain_tables,
 )
 
-DEFAULT_CONFIG = Path("configs/plots/section3_natural_domain_analysis.toml")
+DEFAULT_CONFIG = Path("configs/plots/transfer/natural_domain_analysis.toml")
 FIGURE_NAME = "natural_domain_route_matched_transfer.pdf"
 
 

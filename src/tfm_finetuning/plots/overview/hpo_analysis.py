@@ -38,7 +38,7 @@ from tfm_finetuning.plots.overview.pattern_data import _resource_frame
 from tfm_finetuning.plots.results import aggregate_metrics, metric_frame
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CONFIG = REPO_ROOT / "configs/plots/section1_hpo_analysis.toml"
+DEFAULT_CONFIG = REPO_ROOT / "configs/plots/overview/hpo_analysis.toml"
 TASK_LABELS = {"binary": "Binary", "multiclass": "Multiclass", "regression": "Regression"}
 TASK_MARKERS = {"binary": "o", "multiclass": "s", "regression": "^"}
 HPO_CHECKPOINT_POLICIES = {None, "", "best_val", "best_val_early_stopping"}

@@ -1,7 +1,7 @@
 """Generate reproducible current-evidence Section 1 tables and thesis plots.
 
 The input is the thesis-facing study detail directory configured in
-``configs/plots/section1_pattern_analysis.toml``. Missing runs remain missing,
+``configs/plots/overview/pattern_analysis.toml``. Missing runs remain missing,
 while every cell with at least one usable run contributes its measured value.
 
 Example:
@@ -58,7 +58,7 @@ from tfm_finetuning.plots.overview.pattern_statistics import (
 from tfm_finetuning.plots.overview.result_table import write_dataset_result_table
 
 REPO_ROOT = Path(__file__).resolve().parents[4]
-DEFAULT_CONFIG = REPO_ROOT / "configs/plots/section1_pattern_analysis.toml"
+DEFAULT_CONFIG = REPO_ROOT / "configs/plots/overview/pattern_analysis.toml"
 
 
 def generate_section1_pattern_analysis(
