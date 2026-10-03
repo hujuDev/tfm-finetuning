@@ -1,4 +1,4 @@
-"""Exact Section 3 stage trainer for the maintained Mitra configuration."""
+"""Exact transfer stage trainer for the maintained Mitra configuration."""
 
 from __future__ import annotations
 
@@ -74,16 +74,16 @@ class MitraDatasetTransferStageTrainer:
         if stage.model_id != "mitra":
             raise ValueError(f"Mitra transfer trainer received model_id={stage.model_id!r}.")
         if stage.task_family not in {"classification", "regression"}:
-            raise ValueError(f"Unsupported Mitra Section 3 task family: {stage.task_family!r}.")
+            raise ValueError(f"Unsupported Mitra transfer task family: {stage.task_family!r}.")
         if stage.preprocessing != "shared":
-            raise ValueError("Mitra Section 3 requires independently applied shared finite-numeric preprocessing.")
+            raise ValueError("Mitra transfer requires independently applied shared finite-numeric preprocessing.")
         if stage.optimizer_reset != "fresh":
-            raise ValueError("Mitra Section 3 stages must reconstruct a fresh optimizer at every stage boundary.")
+            raise ValueError("Mitra transfer stages must reconstruct a fresh optimizer at every stage boundary.")
         if stage.strict_resource_semantics is not True:
-            raise ValueError("Mitra Section 3 stages require strict_resource_semantics=true.")
+            raise ValueError("Mitra transfer stages require strict_resource_semantics=true.")
         sampling_weights = tuple(float(weight) for weight in stage.sampling_weights)
         if not all(np.isfinite(weight) for weight in sampling_weights) or len(set(sampling_weights)) != 1:
-            raise ValueError("Mitra Section 3 stages currently require uniform dataset sampling weights.")
+            raise ValueError("Mitra transfer stages currently require uniform dataset sampling weights.")
         if stage.update_budget % len(stage.datasets) != 0:
             raise ValueError("Mitra balanced stages require update_budget divisible by dataset count.")
         if any(boundary % len(stage.datasets) != 0 for boundary in stage.view_boundaries):
@@ -109,7 +109,7 @@ class MitraDatasetTransferStageTrainer:
         allowed = {"regression"} if stage.task_family == "regression" else {"binary", "multiclass"}
         if not task_types or not task_types.issubset(allowed):
             raise ValueError(
-                f"Mitra Section 3 requires {stage.task_family} datasets, got {sorted(task_types)}."
+                f"Mitra transfer requires {stage.task_family} datasets, got {sorted(task_types)}."
             )
         representative_task = str(next(iter(raw_datasets.values())).task_type)
         estimator = initialize_stage_estimator(

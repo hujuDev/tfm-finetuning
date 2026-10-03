@@ -1,6 +1,6 @@
 """Plot dataset-level validation-selected epochs from the canonical evidence.
 
-Example: ``plot_checkpoint_selection(frame, output_dir)`` in the Section 1
+Example: ``plot_checkpoint_selection(frame, output_dir)`` in the overview
 generator, where ``frame`` contains the default preprocessing route only.
 """
 
@@ -19,9 +19,9 @@ from tfm_finetuning.plots.common.model_display import (
 )
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    apply_section1_plot_style,
-    save_and_close_section1_figure,
-    style_section1_y_axes,
+    apply_plot_style,
+    save_and_close_figure,
+    style_y_axes,
 )
 
 
@@ -48,7 +48,7 @@ def plot_checkpoint_selection(frame: pd.DataFrame, output_dir: Path) -> Path | N
         return None
     output_dir.mkdir(parents=True, exist_ok=True)
     data.to_csv(output_dir / "checkpoint_selection_epochs.csv", index=False)
-    apply_section1_plot_style()
+    apply_plot_style()
     figure, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH_INCHES, 2.4), sharey=True, layout="constrained")
     rng = np.random.default_rng(42)
     for axis, task in zip(axes, TASK_ORDER, strict=True):
@@ -92,5 +92,5 @@ def plot_checkpoint_selection(frame: pd.DataFrame, output_dir: Path) -> Path | N
         axis.set_xlim(-0.45, len(MODEL_ORDER) - 0.4)
         axis.set_ylim(0, 100)
     axes[0].set_ylabel("Selected epoch\n(mean per dataset)")
-    style_section1_y_axes(axes, tick_interval=20)
-    return save_and_close_section1_figure(figure, output_dir / "checkpoint_selection_epochs.pdf", tight=False)
+    style_y_axes(axes, tick_interval=20)
+    return save_and_close_figure(figure, output_dir / "checkpoint_selection_epochs.pdf", tight=False)

@@ -1,4 +1,4 @@
-"""Load and pair the completed Section 3 E1 transfer schedule evidence.
+"""Load and pair the completed transfer E1 transfer schedule evidence.
 
 Run reports preserve seed pairing between every transfer route and its
 target-only checkpoint views.

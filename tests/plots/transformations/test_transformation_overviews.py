@@ -1,4 +1,4 @@
-"""Regression tests for the expanded Section 2 reporting suite."""
+"""Regression tests for the expanded transformation reporting suite."""
 
 import tomllib
 from itertools import pairwise
@@ -47,7 +47,7 @@ def test_subsampling_composite_has_one_asset_clean_terms_and_fixed_score_scale(
         captured["figure"] = figure
         figure.savefig(path)
 
-    monkeypatch.setattr(overviews, "save_section1_figure", capture)
+    monkeypatch.setattr(overviews, "save_figure", capture)
     normalized_rows = []
     gain_rows = []
     conditions = ("1/16", "1/8", "1/4", "1/2", "1")
@@ -155,7 +155,7 @@ def test_horizontal_alignment_labels_wrap_without_overlap(tmp_path: Path, monkey
         captured["figure"] = figure
         figure.savefig(path)
 
-    monkeypatch.setattr(overviews, "save_section1_figure", capture)
+    monkeypatch.setattr(overviews, "save_figure", capture)
     conditions = ("canonical/canonical", "permuted/canonical", "canonical/permuted", "permuted/permuted")
     labels = ("Original", "Fit only", "Test only", "Both")
     normalized_rows = []

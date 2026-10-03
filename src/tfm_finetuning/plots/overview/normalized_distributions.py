@@ -13,8 +13,8 @@ from tfm_finetuning.plots.common.distribution_style import draw_distribution
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER, TASK_LABELS, TASK_ORDER
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    save_and_close_section1_figure,
-    style_section1_y_axes,
+    save_and_close_figure,
+    style_y_axes,
 )
 
 
@@ -34,7 +34,7 @@ def plot_normalized_distributions(frame, output_dir: Path) -> Path:
         ax.set_xlim(-1.0, 2.6 * (len(MODEL_ORDER) - 1) + 1.1)
         ax.axhline(1, color="#8b96a8", linewidth=0.8, linestyle="--", zorder=0)
         ax.set_title(f"{TASK_LABELS[task]} · n={family.dataset.nunique()} · {metrics[task]}", fontsize=10)
-    style_section1_y_axes(axes)
+    style_y_axes(axes)
     for ax, limits in zip(axes, [(0.735, 1.02), (0.1, 1.02), (0.55, 1.02)], strict=True):
         ax.set_ylim(*limits)
     fig.supylabel("Best-relative normalized primary score", fontsize=9, x=0.015)
@@ -48,4 +48,4 @@ def plot_normalized_distributions(frame, output_dir: Path) -> Path:
         frameon=False,
     )
     fig.subplots_adjust(left=0.105, right=0.985, top=0.88, bottom=0.06, hspace=0.65)
-    return save_and_close_section1_figure(fig, output_dir / "normalized_score_distributions.pdf", tight=False)
+    return save_and_close_figure(fig, output_dir / "normalized_score_distributions.pdf", tight=False)

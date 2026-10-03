@@ -55,9 +55,9 @@ def build_schedule_route(
     """Build one explicit E1 route for the concrete target."""
     allowed = SCHEDULE_ROUTES.get(target)
     if allowed is None:
-        raise ValueError(f"No maintained Section 3 source panel for target {target!r}.")
+        raise ValueError(f"No maintained transfer source panel for target {target!r}.")
     if route_id not in allowed:
-        raise ValueError(f"Unsupported Section 3 schedule route {route_id!r} for {target!r}.")
+        raise ValueError(f"Unsupported transfer schedule route {route_id!r} for {target!r}.")
     if target == "covertype" and row_budget is None:
         raise ValueError("Covertype schedule routes require a numeric row cap.")
     if route_id == "target_compute_matched":

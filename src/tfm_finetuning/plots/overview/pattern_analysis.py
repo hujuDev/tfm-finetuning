@@ -1,4 +1,4 @@
-"""Generate reproducible current-evidence Section 1 tables and thesis plots.
+"""Generate reproducible current-evidence overview tables and thesis plots.
 
 The input is the thesis-facing study detail directory configured in
 ``configs/plots/overview/pattern_analysis.toml``. Missing runs remain missing,
@@ -6,7 +6,7 @@ while every cell with at least one usable run contributes its measured value.
 
 Example:
     ``python -m tfm_finetuning.plots.overview.pattern_analysis``
-    ``python -m tfm_finetuning.plots.overview.pattern_analysis --output-root /tmp/section1-analysis``
+    ``python -m tfm_finetuning.plots.overview.pattern_analysis --output-root /tmp/overview-analysis``
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ from tfm_finetuning.plots.common.model_display import (
     MODEL_LABELS,
     MODEL_ORDER,
 )
-from tfm_finetuning.plots.common.plot_style import apply_section1_plot_style
+from tfm_finetuning.plots.common.plot_style import apply_plot_style
 from tfm_finetuning.plots.overview.checkpoint_selection import plot_checkpoint_selection
 from tfm_finetuning.plots.overview.normalized_distributions import plot_normalized_distributions
 from tfm_finetuning.plots.overview.pattern_data import (
@@ -61,7 +61,7 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_CONFIG = REPO_ROOT / "configs/plots/overview/pattern_analysis.toml"
 
 
-def generate_section1_pattern_analysis(
+def generate_pattern_analysis(
     *,
     config_path: Path = DEFAULT_CONFIG,
     output_root: Path | None = None,
@@ -69,7 +69,7 @@ def generate_section1_pattern_analysis(
     meta_feature_cache: Path | None = None,
 ) -> dict[str, Any]:
     """Generate the final 55-dataset overview and its supporting statistics."""
-    apply_section1_plot_style()
+    apply_plot_style()
     config = tomllib.loads(config_path.read_text(encoding="utf-8"))
     results_root = REPO_ROOT / config["input"]["results_root"]
     output_dir = output_root or REPO_ROOT / config["output"]["root"]
@@ -167,7 +167,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     parser.add_argument("--thesis-assets", type=Path, help="Override the configured thesis-asset directory.")
     parser.add_argument("--meta-feature-cache", type=Path, help="Override the configured metadata cache.")
     args = parser.parse_args(argv)
-    summary = generate_section1_pattern_analysis(
+    summary = generate_pattern_analysis(
         config_path=args.config,
         output_root=args.output_root,
         thesis_assets=args.thesis_assets,

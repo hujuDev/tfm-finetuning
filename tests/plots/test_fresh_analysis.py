@@ -155,7 +155,7 @@ def test_resource_table_uses_fresh_measured_runtime_only(tmp_path):
 def test_overview_generates_all_final_outputs_from_fresh_reports(tmp_path):
     import tomllib
 
-    from tfm_finetuning.plots.overview.pattern_analysis import generate_section1_pattern_analysis
+    from tfm_finetuning.plots.overview.pattern_analysis import generate_pattern_analysis
 
     results = tmp_path / "results"
     metadata = {}
@@ -203,7 +203,7 @@ default_context_size = 10000
 excluded_datasets = []
 features = ["baseTrainRows", "nFeaturesTotal"]
 ''')
-    summary = generate_section1_pattern_analysis(config_path=config)
+    summary = generate_pattern_analysis(config_path=config)
     assert summary["datasetCount"] == 18
     manifest = tomllib.loads((Path(__file__).parents[2] / "configs/plots/final_figures.toml").read_text())
     for name in manifest["groups"]["overview"]["assets"]:

@@ -17,10 +17,10 @@ from matplotlib.lines import Line2D
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    apply_section1_plot_style,
-    save_and_close_section1_figure,
+    apply_plot_style,
+    save_and_close_figure,
     shared_y_tick_interval,
-    style_section1_y_axes,
+    style_y_axes,
 )
 from tfm_finetuning.plots.transfer.balanced_transfer_data import (
     BUDGET_ROWS,
@@ -59,7 +59,7 @@ def render_balanced_transfer_figures(
     thesis_asset_dir: Path,
 ) -> tuple[Path, ...]:
     """Render and mirror the two balanced six-target findings figures."""
-    apply_section1_plot_style()
+    apply_plot_style()
     output_dir.mkdir(parents=True, exist_ok=True)
     thesis_asset_dir.mkdir(parents=True, exist_ok=True)
     figures = (
@@ -120,7 +120,7 @@ def _render_source_initialization_advantage(
     )
     figure.supxlabel("Available target training rows", y=0.03, fontsize=9.5)
     figure.subplots_adjust(left=0.115, right=0.975, bottom=0.16, top=0.76, hspace=0.39, wspace=0.27)
-    return save_and_close_section1_figure(figure, output, tight=False)
+    return save_and_close_figure(figure, output, tight=False)
 
 
 def _six_target_canvas(*, height: float) -> tuple[plt.Figure, np.ndarray]:
@@ -175,7 +175,7 @@ def _style_panel(axis: Axes, dataset: str, *, emphasize_zero: bool = False) -> N
 def _style_task_columns(axes: np.ndarray) -> None:
     for column_index in range(len(TASK_ORDER)):
         column_axes = axes[:, column_index]
-        style_section1_y_axes(
+        style_y_axes(
             column_axes,
             tick_interval=shared_y_tick_interval(column_axes, max_guides=12),
         )

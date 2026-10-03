@@ -1,4 +1,4 @@
-"""Categorical and continuous metadata figures for the Section 1 overview.
+"""Categorical and continuous metadata figures for the overview overview.
 
 Example:
     ``plot_metadata_scatters(frame, features, output_dir, style)``

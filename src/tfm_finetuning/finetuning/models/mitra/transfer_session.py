@@ -1,4 +1,4 @@
-"""Persistent Mitra ensemble updates for Section 3 dataset transfer.
+"""Persistent Mitra ensemble updates for transfer dataset transfer.
 
 One logical dataset episode updates every ensemble member exactly once.  The
 logical update is the cross-model comparison unit; physical member optimizer
@@ -183,7 +183,7 @@ def initialize_stage_estimator(
 ) -> Any:
     """Build a fresh local-chunked ensemble and fresh optimizers from weights."""
     if task_type not in {"binary", "multiclass", "regression"}:
-        raise ValueError(f"Unsupported Section 3 Mitra task type: {task_type!r}.")
+        raise ValueError(f"Unsupported transfer Mitra task type: {task_type!r}.")
     seed_training_randomness(seed)
     estimator = adapter.resolve_finetune_estimator(
         task_type,
@@ -193,7 +193,7 @@ def initialize_stage_estimator(
         initial_checkpoint=initial_checkpoint,
     )
     if getattr(estimator, "foundation_mitra_finetune_interface", None) != "local_chunked":
-        raise ValueError("Section 3 Mitra training requires mitra_finetune_interface='local_chunked'.")
+        raise ValueError("Mitra transfer training requires mitra_finetune_interface='local_chunked'.")
     task = Task.REGRESSION if task_type == "regression" else Task.CLASSIFICATION
     dim_output = 1 if task == Task.REGRESSION else _MITRA_CLASS_OUTPUTS
     n_classes = 0 if task == Task.REGRESSION else _MITRA_CLASS_OUTPUTS
@@ -365,7 +365,7 @@ def _train_member_episode(
     trainer.model.train()
     batches = list(trainer.make_loader(training_data, training=True))
     if len(batches) != 1:
-        raise RuntimeError(f"A Section 3 Mitra episode must map to exactly one optimizer batch; got {len(batches)}.")
+        raise RuntimeError(f"A transfer Mitra episode must map to exactly one optimizer batch; got {len(batches)}.")
     scale_before = _scaler_scale(getattr(trainer, "scaler", None))
     optimizer_step_before = _optimizer_step_signature(trainer.optimizer)
     loss = trainer._train_batch(batches[0], tracker=tracker, diagnostics=diagnostics)

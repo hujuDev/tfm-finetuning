@@ -1,4 +1,4 @@
-"""Reusable statistics for Section 1 dataset-pattern analysis.
+"""Reusable statistics for overview dataset-pattern analysis.
 
 Example:
     >>> bootstrap_mean_ci([0.0, 1.0], seed=0, n_resamples=100)[0]

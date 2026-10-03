@@ -335,7 +335,7 @@ def local_mitra_snapshot_loading(snapshot: str | Path | None) -> Iterator[None]:
     """Make the vendor zero-shot fit load a resolved local snapshot exactly.
 
     AutoGluon's public estimator always calls ``Tab2D.from_pretrained`` with a
-    Hugging Face repository ID. Section 3 replaces that call only while fitting
+    Hugging Face repository ID. Transfer training replaces that call only while fitting
     a local content-addressed base snapshot; ordinary Mitra runs are unchanged.
     """
     if snapshot is None or not Path(snapshot).expanduser().is_dir():

@@ -402,7 +402,7 @@ class MitraAdapter:
         self,
         request: DatasetTransferTrainerRequest,
     ) -> DatasetTransferStageTrainer:
-        """Build the exact persistent-optimizer Section 3 Mitra trainer."""
+        """Build the exact persistent-optimizer transfer Mitra trainer."""
         from tfm_finetuning.finetuning.models.mitra.transfer import (
             MitraDatasetTransferStageTrainer,
         )

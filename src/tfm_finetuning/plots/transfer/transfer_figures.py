@@ -1,4 +1,4 @@
-"""Publication figures for the Section 3 E1 transfer schedule study."""
+"""Publication figures for the transfer E1 transfer schedule study."""
 
 from __future__ import annotations
 
@@ -13,8 +13,8 @@ from matplotlib.ticker import FuncFormatter, MultipleLocator
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    apply_section1_plot_style,
-    save_and_close_section1_figure,
+    apply_plot_style,
+    save_and_close_figure,
 )
 from tfm_finetuning.plots.transfer.transfer_data import (
     DISPLAY_ROUTE_ORDER,
@@ -58,7 +58,7 @@ def render_transfer_figures(
     thesis_asset_dir: Path,
 ) -> tuple[Path, ...]:
     """Render the consolidated E1 findings figure and mirror it into the thesis."""
-    apply_section1_plot_style()
+    apply_plot_style()
     output_dir.mkdir(parents=True, exist_ok=True)
     thesis_asset_dir.mkdir(parents=True, exist_ok=True)
     for directory in (output_dir, thesis_asset_dir):
@@ -140,11 +140,11 @@ def _render_training_order_comparison(tables: TransferTables, *, output: Path) -
         hspace=0.88,
         wspace=0.16,
     )
-    return save_and_close_section1_figure(figure, output, tight=False)
+    return save_and_close_figure(figure, output, tight=False)
 
 
 def add_model_legend(figure, *, anchor: tuple[float, float]) -> None:
-    """Add the compact model-color legend shared by Section 3 figures."""
+    """Add the compact model-color legend shared by transfer figures."""
     figure.legend(
         handles=[
             Line2D([], [], color=MODEL_COLORS[model], linewidth=4, label=MODEL_LABELS[model]) for model in MODEL_ORDER

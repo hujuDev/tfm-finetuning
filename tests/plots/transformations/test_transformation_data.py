@@ -1,4 +1,4 @@
-"""Focused tests for canonical Section 2 transformation result tables."""
+"""Focused tests for canonical transformation transformation result tables."""
 
 from __future__ import annotations
 

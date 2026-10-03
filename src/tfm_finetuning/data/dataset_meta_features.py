@@ -66,7 +66,7 @@ DEFAULT_MAX_CATEGORICAL_LEVELS = 32
 
 
 def empty_base_meta_features() -> dict[str, float | int | None]:
-    """Return the Section 1 base-meta fields with unavailable values.
+    """Return the overview base-meta fields with unavailable values.
 
     Example:
         >>> set(empty_base_meta_features()) == set(BASE_META_FEATURE_KEYS)
@@ -200,7 +200,7 @@ def compute_base_meta_features(
     seed: int = DEFAULT_META_FEATURE_SEED,
     include_univariate_signal: bool = True,
 ) -> dict[str, float | int | None]:
-    """Compute Section 1 base meta-features from the outer training distribution.
+    """Compute overview base meta-features from the outer training distribution.
 
     ``X_train`` and ``y_train`` should represent the exported outer train and
     validation rows concatenated together; test rows are intentionally absent.
@@ -760,7 +760,7 @@ def load_local_dataset_base_meta_features(
     split_tuple: tuple[int, int, int] = DEFAULT_SPLIT_TUPLE,
     include_univariate_signal: bool = True,
 ) -> dict[str, float | int | None]:
-    """Load local train+validation rows and compute Section 1 base meta-features.
+    """Load local train+validation rows and compute overview base meta-features.
 
     Missing or incompatible local exports return unavailable computed fields
     instead of failing study payload generation.

@@ -28,7 +28,7 @@ def test_foundation_model_dependencies_are_packaged_for_cluster_image() -> None:
     assert not Path(".gitmodules").exists()
 
 
-def test_section1_registry_reports_pinned_sources() -> None:
+def test_registry_reports_pinned_sources() -> None:
     specs = {spec.model_id: spec for spec in iter_foundation_model_specs(repo_root=Path.cwd())}
 
     assert set(specs) == {"tabpfn_v2", "tabpfn_v2_5", "tabicl_v2", "mitra"}

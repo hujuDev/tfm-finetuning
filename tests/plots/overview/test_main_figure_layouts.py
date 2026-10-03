@@ -1,4 +1,4 @@
-"""Focused layout contracts for the main-text Section 4.1 figures."""
+"""Focused layout contracts for the main-text figures."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import tfm_finetuning.plots.overview.pattern_diagnostic_plots as diagnostic_plot
 import tfm_finetuning.plots.overview.pattern_metric_plots as metric_plots
 import tfm_finetuning.plots.overview.pattern_model_comparison as model_comparison
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER, TASK_LABELS, TASK_ORDER
-from tfm_finetuning.plots.common.plot_style import apply_section1_plot_style, latex_fraction_width
+from tfm_finetuning.plots.common.plot_style import apply_plot_style, latex_fraction_width
 from tfm_finetuning.plots.figure_text_audit import inventory_visible_text
 
 
@@ -107,9 +107,9 @@ def test_metric_gain_figures_use_shallow_exact_width_metric_rows(tmp_path: Path,
         captured[path.name] = (figure, float(kwargs["inclusion_fraction"]))
         return path
 
-    monkeypatch.setattr(metric_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(metric_plots, "save_and_close_figure", capture)
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         metric_plots._plot_metric_gains(_metric_frame(), tmp_path)
 
     expected_layouts = {
@@ -144,9 +144,9 @@ def test_metric_agreement_is_full_width_horizontal_row(tmp_path: Path, monkeypat
         captured["figure"] = figure
         return path
 
-    monkeypatch.setattr(metric_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(metric_plots, "save_and_close_figure", capture)
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         metric_plots._plot_metric_gain_agreement(_metric_frame(), tmp_path)
 
     figure = captured["figure"]
@@ -216,7 +216,7 @@ def test_sft_dataset_win_plot_uses_five_equal_length_method_bars(
         captured["fraction"] = kwargs.get("inclusion_fraction")
         return path
 
-    monkeypatch.setattr(model_comparison, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(model_comparison, "save_and_close_figure", capture)
     model_comparison._plot_sft_dataset_wins(frame, tmp_path)
 
     figure = captured["figure"]
@@ -268,9 +268,9 @@ def test_final_gain_variance_has_three_task_panels(tmp_path: Path, monkeypatch) 
         captured.update(figure=figure, path=path)
         return path
 
-    monkeypatch.setattr(metric_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(metric_plots, "save_and_close_figure", capture)
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         metric_plots._plot_effect_variance(_effect_frame(), tmp_path)
     figure = captured["figure"]
     assert captured["path"] == tmp_path / "fine_tuning_gain_variance.pdf"
@@ -327,7 +327,7 @@ def test_combined_association_heatmap_groups_tasks_and_descriptor_families(
         captured["path"] = path
         return path
 
-    monkeypatch.setattr(diagnostic_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(diagnostic_plots, "save_and_close_figure", capture)
     general = pd.DataFrame(
         [
             {
@@ -364,7 +364,7 @@ def test_combined_association_heatmap_groups_tasks_and_descriptor_families(
         ]
     )
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         diagnostic_plots._plot_combined_association_heatmap(general, structural, tmp_path)
 
     figure = captured["figure"]
@@ -428,7 +428,7 @@ def test_combined_association_heatmap_can_label_epoch100_estimand(
         captured["path"] = path
         return path
 
-    monkeypatch.setattr(diagnostic_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(diagnostic_plots, "save_and_close_figure", capture)
     empty = pd.DataFrame(
         columns=[
             "task_family",
@@ -442,7 +442,7 @@ def test_combined_association_heatmap_can_label_epoch100_estimand(
         ]
     )
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         diagnostic_plots._plot_combined_association_heatmap(
             empty,
             empty,

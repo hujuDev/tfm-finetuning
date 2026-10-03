@@ -1,7 +1,7 @@
-"""Shared publication typography for Section 1 thesis figures.
+"""Shared publication typography for overview thesis figures.
 
 Example:
-    ``apply_section1_plot_style()`` before constructing any Matplotlib figures.
+    ``apply_plot_style()`` before constructing any Matplotlib figures.
 """
 
 from __future__ import annotations
@@ -32,8 +32,8 @@ Y_TICK_INTERVALS = (0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1.0, 2.0, 5.0)
 _SUPERSCRIPT_TRANSLATION = str.maketrans("-0123456789", "⁻⁰¹²³⁴⁵⁶⁷⁸⁹")
 
 
-def apply_section1_plot_style() -> None:
-    """Apply stable typography shared by every Section 1 plot generator."""
+def apply_plot_style() -> None:
+    """Apply stable typography shared by every overview plot generator."""
     mpl.rcParams.update(
         {
             "font.family": "DejaVu Sans",
@@ -68,7 +68,7 @@ def plain_log_power_label(value: float, _position: float | None = None) -> str:
     return f"10{str(exponent).translate(_SUPERSCRIPT_TRANSLATION)}"
 
 
-def save_section1_figure(
+def save_figure(
     figure: Figure,
     path: Path,
     *,
@@ -86,7 +86,7 @@ def save_section1_figure(
     actual_width = figure.get_figwidth()
     if not math.isclose(actual_width, expected_width, rel_tol=0.0, abs_tol=1e-3):
         raise AssertionError(
-            "Section 1 figure width does not match its LaTeX inclusion width: "
+            "Overview figure width does not match its LaTeX inclusion width: "
             f"source={actual_width:.5f} in, expected={expected_width:.5f} in "
             f"({inclusion_fraction:.0%} of text width)."
         )
@@ -105,7 +105,7 @@ def save_section1_figure(
     figure.savefig(path)
 
 
-def save_and_close_section1_figure(
+def save_and_close_figure(
     figure: Figure,
     path: Path,
     *,
@@ -114,10 +114,10 @@ def save_and_close_section1_figure(
     max_inclusion_height_fraction: float | None = None,
     minimum_text_size: float = MINIMUM_FINAL_TEXT_SIZE,
 ) -> Path:
-    """Finalize, save, and release one Section 1 publication figure."""
+    """Finalize, save, and release one overview publication figure."""
     if tight:
         figure.tight_layout()
-    save_section1_figure(
+    save_figure(
         figure,
         path,
         inclusion_fraction=inclusion_fraction,
@@ -138,7 +138,7 @@ def shared_y_tick_interval(axes: Iterable[Axes], *, max_guides: int = 18) -> flo
     return Y_TICK_INTERVALS[-1]
 
 
-def style_section1_y_axes(
+def style_y_axes(
     axes: Iterable[Axes],
     *,
     tick_interval: float | None = None,
@@ -182,7 +182,7 @@ def style_section1_y_axes(
     return interval
 
 
-def add_section1_model_legend(
+def add_model_legend(
     figure: Figure,
     *,
     model_order: Sequence[str],
@@ -190,7 +190,7 @@ def add_section1_model_legend(
     model_colors: Mapping[str, str],
     anchor: tuple[float, float],
 ) -> None:
-    """Render the titled, frameless model legend used by Section 3 figures."""
+    """Render the titled, frameless model legend used by transfer figures."""
     handles = [
         Line2D(
             [], [], color=model_colors[model], marker="o", linestyle="none", markersize=5, label=model_labels[model]
@@ -217,12 +217,12 @@ __all__ = [
     "FULL_WIDTH_INCHES",
     "MINIMUM_FINAL_TEXT_SIZE",
     "Y_TICK_INTERVALS",
-    "add_section1_model_legend",
-    "apply_section1_plot_style",
+    "add_model_legend",
+    "apply_plot_style",
     "latex_fraction_width",
     "plain_log_power_label",
-    "save_and_close_section1_figure",
-    "save_section1_figure",
+    "save_and_close_figure",
+    "save_figure",
     "shared_y_tick_interval",
-    "style_section1_y_axes",
+    "style_y_axes",
 ]

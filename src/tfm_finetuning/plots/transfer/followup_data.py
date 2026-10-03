@@ -116,5 +116,5 @@ def _metric(metrics: Mapping[str, Any], metric: str) -> float:
 def _gain(control: float, method: float, metric: str) -> float:
     value = fine_tuning_gain(control, method, metric)
     if value is None:
-        raise ValueError("A Section 3 follow-up contrast produced a non-finite gain.")
+        raise ValueError("A transfer follow-up contrast produced a non-finite gain.")
     return float(value)

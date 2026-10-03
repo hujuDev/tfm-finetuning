@@ -16,9 +16,9 @@ from matplotlib.ticker import MaxNLocator
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    apply_section1_plot_style,
+    apply_plot_style,
     latex_fraction_width,
-    save_section1_figure,
+    save_figure,
 )
 from tfm_finetuning.plots.transformations.transformation_overviews import (
     REPRESENTATION_SCORE_CONDITION_ORDER,
@@ -34,7 +34,7 @@ MODEL_HANDLES = [Line2D([], [], color=MODEL_COLORS[m], marker="o", label=MODEL_L
 def _save(fig: plt.Figure, output: Path, fraction: float = 0.94) -> Path:
     """Save at the manuscript's physical inclusion width and close the canvas."""
     output.parent.mkdir(parents=True, exist_ok=True)
-    save_section1_figure(fig, output, inclusion_fraction=fraction)
+    save_figure(fig, output, inclusion_fraction=fraction)
     plt.close(fig)
     return output
 
@@ -48,7 +48,7 @@ def _clean(axis: plt.Axes) -> None:
 
 def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Path) -> Path:
     """Show the five matched representation conditions as annotated heatmaps."""
-    apply_section1_plot_style()
+    apply_plot_style()
     fig, axes = plt.subplots(2, 1, figsize=(latex_fraction_width(0.94), 5.0), layout="constrained")
     cmap = LinearSegmentedColormap.from_list("white_gray_green", [(0, "#ffffff"), (0.4, "#dedede"), (1, "#006837")])
     cmap.set_bad("#eeeeee")
@@ -141,7 +141,7 @@ def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Pat
 
 def plot_class_tradeoff(summary: pd.DataFrame, output: Path) -> Path:
     """Pair class-accuracy changes without treating classes as independent runs."""
-    apply_section1_plot_style()
+    apply_plot_style()
     routes = {
         "icl_balanced": ("o", "Balanced ICL\n(no SFT)"),
         "sft_shared": ("s", "Balanced SFT +\nbalanced ICL"),
@@ -242,7 +242,7 @@ def paired_handles(first: str, second: str) -> list[Line2D]:
 
 def plot_heavy_tail_pairs(summary: pd.DataFrame, output: Path) -> Path:
     """Render the final horizontal three-dataset heavy-tail comparison."""
-    apply_section1_plot_style()
+    apply_plot_style()
     datasets = {
         "healthcare_insurance_expenses": "Healthcare expenses",
         "houses": "Houses",

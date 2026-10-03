@@ -1,4 +1,4 @@
-"""Build the balanced Section 3 target-budget extension.
+"""Build the balanced transfer target-budget extension.
 
 The extension reuses the already selected classification source boundaries and
 adds one Houses regression boundary. Keeping that mapping here makes each

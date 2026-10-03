@@ -1,6 +1,6 @@
-"""Exact update-based Section 3 trainer for TabPFN v2.5.
+"""Exact update-based transfer trainer for TabPFN v2.5.
 
-The official TabPFN fine-tuning wrapper owns a complete epoch loop.  Section 3
+The official TabPFN fine-tuning wrapper owns a complete epoch loop.  transfer
 instead needs one persistent optimizer while schema-native episodes from
 different datasets are interleaved.  This module composes the wrapper's pinned
 one-step primitives without changing the ordinary single-dataset ``fit`` path.
@@ -61,7 +61,7 @@ class _SelectionSnapshot:
 
 
 class TabPFNDatasetTransferStageTrainer:
-    """Train exact Section 3 stages with a fresh stage-local optimizer.
+    """Train exact transfer stages with a fresh stage-local optimizer.
 
     Example:
         The runner constructs this class through
@@ -309,17 +309,17 @@ class TabPFNDatasetTransferStageTrainer:
                 f"TabPFN transfer trainer received model {stage.model_id!r}, expected {self.adapter.model_id!r}."
             )
         if stage.task_family not in {"classification", "regression"}:
-            raise ValueError(f"Unsupported Section 3 TabPFN task family: {stage.task_family!r}.")
+            raise ValueError(f"Unsupported transfer TabPFN task family: {stage.task_family!r}.")
         if stage.preprocessing != "shared":
-            raise ValueError("TabPFN Section 3 requires independently applied shared finite-numeric preprocessing.")
+            raise ValueError("TabPFN transfer requires independently applied shared finite-numeric preprocessing.")
         if stage.update_budget % len(stage.datasets):
             raise ValueError("A balanced TabPFN stage requires an update budget divisible by its dataset count.")
         if any(boundary % len(stage.datasets) for boundary in stage.view_boundaries):
             raise ValueError("TabPFN checkpoint views must coincide with complete balanced dataset rounds.")
         if len(set(stage.sampling_weights)) != 1:
-            raise ValueError("TabPFN Section 3 currently requires equal dataset sampling weights.")
+            raise ValueError("TabPFN transfer currently requires equal dataset sampling weights.")
         if not stage.strict_resource_semantics:
-            raise ValueError("TabPFN Section 3 requires strict resource semantics.")
+            raise ValueError("TabPFN transfer requires strict resource semantics.")
 
     @staticmethod
     def _validate_dataset_tasks(stage: TransferStageSpec, datasets: Mapping[str, Any]) -> None:

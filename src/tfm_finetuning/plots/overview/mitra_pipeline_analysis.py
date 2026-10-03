@@ -26,9 +26,9 @@ from matplotlib.ticker import FuncFormatter, NullFormatter
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    apply_section1_plot_style,
+    apply_plot_style,
     plain_log_power_label,
-    save_section1_figure,
+    save_figure,
 )
 from tfm_finetuning.plots.common.report_labels import normalize_name
 from tfm_finetuning.plots.results import aggregate_metrics, metric_frame, read_runs
@@ -48,7 +48,7 @@ TASK_MARKERS = {"binary": "o", "multiclass": "s", "regression": "^"}
 
 def generate_mitra_pipeline_analysis(*, config_path: Path = DEFAULT_CONFIG) -> dict[str, Any]:
     """Write comparison tables, an appendix plot, and a compact summary."""
-    apply_section1_plot_style()
+    apply_plot_style()
     config = tomllib.loads(config_path.read_text(encoding="utf-8"))
     inputs = config["input"]
     results_root = REPO_ROOT / inputs["results_root"]
@@ -197,7 +197,7 @@ def _add_equality_line(ax: plt.Axes, x: pd.Series, y: pd.Series) -> None:
 
 def _save(fig: plt.Figure, path: Path) -> Path:
     fig.tight_layout()
-    save_section1_figure(fig, path, max_inclusion_height_fraction=0.82)
+    save_figure(fig, path, max_inclusion_height_fraction=0.82)
     plt.close(fig)
     return path
 

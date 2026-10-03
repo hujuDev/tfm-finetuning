@@ -10,7 +10,7 @@ import pytest
 
 import tfm_finetuning.plots.overview.pattern_diagnostic_plots as diagnostic_plots
 from tfm_finetuning.plots.common import plot_style
-from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES, apply_section1_plot_style
+from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES, apply_plot_style
 from tfm_finetuning.plots.figure_text_audit import inventory_visible_text
 from tfm_finetuning.plots.metrics import fine_tuning_gain
 from tfm_finetuning.plots.overview.pattern_data import _analysis_subset
@@ -41,7 +41,7 @@ from tfm_finetuning.plots.overview.pattern_statistics import (
 from tfm_finetuning.plots.overview.result_table import dataset_result_table_latex, write_dataset_result_table
 
 
-def test_section1_effect_uses_auc_difference_and_log_error_ratio() -> None:
+def test_effect_uses_auc_difference_and_log_error_ratio() -> None:
     """Task-family effects should be positive when fine-tuning improves."""
     assert fine_tuning_gain(0.7, 0.72, "roc_auc") == pytest.approx(0.02)
     assert fine_tuning_gain(2.0, 1.0, "rmse") == pytest.approx(math.log(2.0))
@@ -87,7 +87,7 @@ def test_metric_gain_y_labels_fit_the_fixed_canvas(tmp_path: Path, monkeypatch: 
         bounds = figure.axes[0].yaxis.label.get_window_extent(figure.canvas.get_renderer())
         label_bounds.append((bounds.x0, figure.get_window_extent().width - bounds.x1))
 
-    monkeypatch.setattr("tfm_finetuning.plots.common.plot_style.save_section1_figure", capture_bounds)
+    monkeypatch.setattr("tfm_finetuning.plots.common.plot_style.save_figure", capture_bounds)
 
     _plot_metric_gains(frame, tmp_path)
 
@@ -123,7 +123,7 @@ def test_preprocessing_difference_uses_exact_full_width_horizontal_row(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     captured: dict[str, object] = {}
-    original_save = plot_style.save_section1_figure
+    original_save = plot_style.save_figure
 
     def capture_figure(figure: object, path: Path, **kwargs: object) -> None:
         captured["width"] = figure.get_figwidth()
@@ -132,9 +132,9 @@ def test_preprocessing_difference_uses_exact_full_width_horizontal_row(
         captured["inclusion_fraction"] = kwargs.get("inclusion_fraction", 1.0)
         original_save(figure, path, **kwargs)
 
-    monkeypatch.setattr(plot_style, "save_section1_figure", capture_figure)
+    monkeypatch.setattr(plot_style, "save_figure", capture_figure)
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         _plot_preprocessing_difference(_preprocessing_comparison_frame(), tmp_path)
 
     assert captured["width"] == pytest.approx(FULL_WIDTH_INCHES)
@@ -148,7 +148,7 @@ def test_preprocessing_difference_visible_text_meets_final_print_floor(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     effective_sizes: list[float] = []
-    original_save = plot_style.save_section1_figure
+    original_save = plot_style.save_figure
 
     def capture_text(figure: object, path: Path, **kwargs: object) -> None:
         effective_sizes.extend(
@@ -156,9 +156,9 @@ def test_preprocessing_difference_visible_text_meets_final_print_floor(
         )
         original_save(figure, path, **kwargs)
 
-    monkeypatch.setattr(plot_style, "save_section1_figure", capture_text)
+    monkeypatch.setattr(plot_style, "save_figure", capture_text)
     with mpl.rc_context():
-        apply_section1_plot_style()
+        apply_plot_style()
         _plot_preprocessing_difference(_preprocessing_comparison_frame(), tmp_path)
 
     assert effective_sizes
@@ -277,7 +277,7 @@ def test_dataset_result_table_uses_overview_filename(tmp_path: Path) -> None:
     assert path.exists()
 
 
-def test_section1_statistics_use_dataset_rows_and_report_lodo_sensitivity() -> None:
+def test_statistics_use_dataset_rows_and_report_lodo_sensitivity() -> None:
     """Association output should expose dataset count and leave-one-out stability."""
     frame = pd.DataFrame(
         {
@@ -300,7 +300,7 @@ def test_section1_statistics_use_dataset_rows_and_report_lodo_sensitivity() -> N
     assert result.iloc[0]["p_value_holm"] == pytest.approx(result.iloc[0]["p_value"])
 
 
-def test_section1_statistics_accept_five_datasets_by_default() -> None:
+def test_statistics_accept_five_datasets_by_default() -> None:
     frame = pd.DataFrame(
         {
             "dataset": [f"d{index}" for index in range(5)],
@@ -425,7 +425,7 @@ def test_checkpoint_plot_keeps_collapses_visible_without_flattening_central_pane
         captured["figure"] = fig
         return path
 
-    monkeypatch.setattr(diagnostic_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(diagnostic_plots, "save_and_close_figure", capture)
     _plot_checkpoint_gap(frame, tmp_path)
     figure = captured["figure"]
     try:
@@ -471,7 +471,7 @@ def test_compact_checkpoint_plot_isolates_four_tabpfn_regression_collapses(
         captured.update(figure=fig, path=path, kwargs=kwargs)
         return path
 
-    monkeypatch.setattr(diagnostic_plots, "save_and_close_section1_figure", capture)
+    monkeypatch.setattr(diagnostic_plots, "save_and_close_figure", capture)
     path = _plot_checkpoint_collapses_compact(frame, tmp_path)
 
     assert path.name == "checkpoint_collapses_compact.pdf"

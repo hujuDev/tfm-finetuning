@@ -13,9 +13,9 @@ from matplotlib.lines import Line2D
 
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
-    apply_section1_plot_style,
+    apply_plot_style,
     latex_fraction_width,
-    save_section1_figure,
+    save_figure,
 )
 from tfm_finetuning.plots.transformations.transformation_data import _normalized_scores, _run_gain_table
 
@@ -45,7 +45,7 @@ def _save(fig, axes, path, *, fraction):
         ax.set_xticks(range(len(CONDITIONS)), TICK_LABELS)
         ax.grid(axis="y", alpha=0.2)
         ax.spines[["top", "right"]].set_visible(False)
-    save_section1_figure(fig, path, inclusion_fraction=fraction)
+    save_figure(fig, path, inclusion_fraction=fraction)
     plt.close(fig)
     return path
 
@@ -69,7 +69,7 @@ def plot_label_noise_figures(run_metrics: pd.DataFrame, output_dir: Path) -> lis
     normalized = _normalized_scores(rows)
     dataset_scores = normalized.groupby(["dataset", "model", "method", "condition"], as_index=False).value.mean()
     gains = _run_gain_table(rows).groupby(["dataset", "model", "condition", "seed"], as_index=False).value.mean()
-    apply_section1_plot_style()
+    apply_plot_style()
     output_dir.mkdir(parents=True, exist_ok=True)
     handles = [Line2D([], [], color=MODEL_COLORS[model], label=MODEL_LABELS[model]) for model in MODELS]
     figure, axis = plt.subplots(figsize=(latex_fraction_width(0.5), 2.65), layout="constrained")

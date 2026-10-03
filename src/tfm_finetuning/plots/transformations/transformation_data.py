@@ -1,4 +1,4 @@
-"""Build canonical run-level tables for Section 2 transformation findings.
+"""Build canonical run-level tables for transformation transformation findings.
 
 Completed runs supply conventional metrics, selected-checkpoint results, and
 same-checkpoint test views from their per-run fine-tuning reports.

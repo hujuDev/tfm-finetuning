@@ -1,4 +1,4 @@
-"""Cross-dataset overview figures and raw-score tables for Section 2.
+"""Cross-dataset overview figures and raw-score tables for the transformation studies.
 
 These helpers complement the dataset-faceted figures in
 ``transformation_figures``.  They deliberately pool only
@@ -17,9 +17,9 @@ from matplotlib.lines import Line2D
 
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER
 from tfm_finetuning.plots.common.plot_style import (
-    apply_section1_plot_style,
+    apply_plot_style,
     latex_fraction_width,
-    save_section1_figure,
+    save_figure,
 )
 from tfm_finetuning.plots.transformations.transformation_figures import (
     GROUP2_MODEL_ORDER,
@@ -157,7 +157,7 @@ def plot_pooled_primary_score_gain_composite(
     models = _ordered_models(pd.concat([score_rows[["model"]], gain_rows[["model"]]]))
     positions = {condition: index for index, condition in enumerate(condition_order)}
 
-    apply_section1_plot_style()
+    apply_plot_style()
     fig, axes = plt.subplots(
         2 if stacked else 1,
         1 if stacked else 2,
@@ -253,7 +253,7 @@ def plot_pooled_primary_score_gain_composite(
         fig.tight_layout(rect=(0.0, 0.10, 1, 0.87), w_pad=1.4)
     fig.supxlabel(x_axis_label, y=0.015, fontsize=9)
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    save_section1_figure(
+    save_figure(
         fig,
         output_path,
         inclusion_fraction=POOLED_COMPOSITE_LATEX_WIDTH_FRACTION,

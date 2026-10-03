@@ -27,9 +27,9 @@ from matplotlib.ticker import FuncFormatter, MultipleLocator
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
-    add_section1_model_legend,
-    apply_section1_plot_style,
-    save_section1_figure,
+    add_model_legend,
+    apply_plot_style,
+    save_figure,
     shared_y_tick_interval,
 )
 from tfm_finetuning.plots.final_tables import hpo_table
@@ -46,7 +46,7 @@ HPO_CHECKPOINT_POLICIES = {None, "", "best_val", "best_val_early_stopping"}
 
 def generate_hpo_analysis(*, config_path: Path = DEFAULT_CONFIG) -> dict[str, Any]:
     """Generate selection tables, held-out comparisons, fit surfaces, and resources."""
-    apply_section1_plot_style()
+    apply_plot_style()
     config = tomllib.loads(config_path.read_text(encoding="utf-8"))
     hpo_details = REPO_ROOT / config["input"]["results_root"]
     overview_details = REPO_ROOT / config["input"]["results_root"]
@@ -178,7 +178,7 @@ def _plot_test_comparison(frame: pd.DataFrame, output_dir: Path, *, models: list
         ax.grid(axis="both", color="#e5e7eb", linewidth=0.55)
         ax.set_axisbelow(True)
         ax.spines[["top", "right"]].set_visible(False)
-    add_section1_model_legend(
+    add_model_legend(
         fig,
         model_order=models,
         model_labels=MODEL_LABELS,
@@ -230,7 +230,7 @@ def _save(
 ) -> Path:
     if tight:
         fig.tight_layout()
-    save_section1_figure(
+    save_figure(
         fig,
         path,
         inclusion_fraction=inclusion_fraction,

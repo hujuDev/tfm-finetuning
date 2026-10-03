@@ -174,7 +174,7 @@ class TransferStageSpec:
         if self.training_mode == "single_dataset" and len(self.datasets) != 1:
             raise ValueError("single_dataset stages must name exactly one dataset.")
         if self.optimizer_reset != "fresh":
-            raise ValueError("Section 3 transfer stages require optimizer_reset='fresh'.")
+            raise ValueError("Transfer stages require optimizer_reset='fresh'.")
         if any((boundary <= 0 or boundary >= self.update_budget for boundary in self.view_boundaries)):
             raise ValueError("view boundaries must lie strictly inside the stage update budget.")
 

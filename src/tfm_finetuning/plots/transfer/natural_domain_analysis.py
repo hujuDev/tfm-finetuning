@@ -1,4 +1,4 @@
-"""Generate the Section 3 natural-domain transfer findings figure.
+"""Generate the transfer natural-domain transfer findings figure.
 
 Example:
     ``python -m tfm_finetuning.plots.transfer.natural_domain_analysis``

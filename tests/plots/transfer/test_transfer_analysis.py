@@ -106,7 +106,7 @@ def test_training_order_gains_use_each_model_seed_icl_as_zero() -> None:
     assert all(gain >= 0 for _model, _seed, setting, gain in records if setting != "icl_only")
 
 
-def test_section3_route_grid_matches_153_scientific_units() -> None:
+def test_route_grid_matches_153_scientific_units() -> None:
     route_count = sum(1 + len(ROUTE_ORDER[dataset]) for dataset in DATASET_ORDER)
     assert route_count * len(MODEL_ORDER) * 3 == 153
 

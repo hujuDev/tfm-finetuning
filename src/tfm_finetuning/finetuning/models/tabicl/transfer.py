@@ -1,4 +1,4 @@
-"""Section 3 exact stage trainer for TabICLv2.
+"""Exact transfer stage trainer for TabICLv2.
 
 The orchestrator in this module is intentionally backend-injectable: production
 uses :class:`TabICLTransferEngine`, while focused tests can verify scheduling,
@@ -81,7 +81,7 @@ class _CandidateState:
 
 
 class TabICLDatasetTransferStageTrainer:
-    """Train exact Section 3 stages with one optimizer session per stage."""
+    """Train exact transfer stages with one optimizer session per stage."""
 
     contract = DatasetTransferTrainerContract.exact_balanced()
 
@@ -116,12 +116,12 @@ class TabICLDatasetTransferStageTrainer:
         if stage.model_id != "tabicl_v2":
             raise ValueError(f"TabICL transfer trainer received model_id={stage.model_id!r}.")
         if stage.strict_resource_semantics is not True:
-            raise ValueError("TabICL Section 3 requires strict resource semantics.")
+            raise ValueError("TabICL transfer requires strict resource semantics.")
         dataset_count = len(stage.datasets)
         if stage.update_budget % dataset_count:
             raise ValueError("Balanced TabICL stages require update_budget divisible by dataset count.")
         if len(set(stage.sampling_weights)) != 1:
-            raise ValueError("TabICL Section 3 currently supports uniform dataset sampling only.")
+            raise ValueError("TabICL transfer currently supports uniform dataset sampling only.")
         if any(boundary % dataset_count for boundary in stage.view_boundaries):
             raise ValueError("Checkpoint views must align with complete balanced dataset rounds.")
 

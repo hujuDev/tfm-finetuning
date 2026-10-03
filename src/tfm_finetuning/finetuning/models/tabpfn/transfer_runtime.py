@@ -60,7 +60,7 @@ class TabPFNTransferRuntime:
         total_updates: int,
     ) -> None:
         if os.environ.get("LOCAL_RANK") is not None:
-            raise RuntimeError("Section 3 TabPFN episodic training currently supports one process/GPU only.")
+            raise RuntimeError("TabPFN transfer episodic training currently supports one process/GPU only.")
         if task_type not in {"binary", "multiclass", "regression"}:
             raise ValueError(f"Unsupported TabPFN transfer task type: {task_type!r}.")
         self.task_type = task_type

@@ -1,4 +1,4 @@
-"""Exact one-update TabICL engine for Section 3 dataset-transfer stages.
+"""Exact one-update TabICL engine for transfer dataset-transfer stages.
 
 This module is intentionally model-specific.  It composes the pinned TabICL
 fine-tuner's model loading, task loss, AMP, scheduler, and inference helpers,
@@ -76,9 +76,9 @@ class TabICLTransferEngine:
         initial_checkpoint: Path | None,
     ) -> None:
         if int(os.environ.get("RANK", "-1")) != -1:
-            raise RuntimeError("Section 3 TabICL transfer stages currently require one process and one GPU.")
+            raise RuntimeError("TabICL transfer stages currently require one process and one GPU.")
         if stage.task_family not in {"classification", "regression"}:
-            raise RuntimeError(f"Unsupported Section 3 TabICL task family: {stage.task_family!r}.")
+            raise RuntimeError(f"Unsupported transfer TabICL task family: {stage.task_family!r}.")
         self.classification = stage.task_family == "classification"
         training_datasets = set(stage.datasets)
         provided_datasets = set(datasets)

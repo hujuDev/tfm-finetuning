@@ -1,4 +1,4 @@
-"""Build canonical evidence frames and tabular summaries for Section 1."""
+"""Build canonical evidence frames and tabular summaries for the overview study."""
 
 from __future__ import annotations
 

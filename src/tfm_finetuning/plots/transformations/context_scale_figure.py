@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
 
-from tfm_finetuning.plots.common.plot_style import apply_section1_plot_style, latex_fraction_width
+from tfm_finetuning.plots.common.plot_style import apply_plot_style, latex_fraction_width
 from tfm_finetuning.plots.transformations.transformation_comparisons import (
     METHODS,
     MODEL_COLORS,
@@ -23,7 +23,7 @@ from tfm_finetuning.plots.transformations.transformation_overviews import pooled
 
 def plot_context_interactions(summary: pd.DataFrame, output: Path) -> Path:
     """Compare methods on aligned axes, retaining the pooled mean and dataset SE."""
-    apply_section1_plot_style()
+    apply_plot_style()
     pooled = pooled_subsampling_summary(
         summary, value_column="normalized_score_mean", group_columns=("model", "method", "condition")
     ).set_index(["model", "method", "condition"])

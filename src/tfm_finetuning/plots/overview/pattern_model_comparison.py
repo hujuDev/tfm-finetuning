@@ -21,7 +21,7 @@ from tfm_finetuning.plots.common.model_display import (
 )
 from tfm_finetuning.plots.common.plot_style import (
     latex_fraction_width,
-    save_and_close_section1_figure,
+    save_and_close_figure,
 )
 from tfm_finetuning.plots.metrics import metric_is_lower_better
 
@@ -435,7 +435,7 @@ def _plot_sft_dataset_wins(frame: pd.DataFrame, output_dir: Path) -> Path:
         fontsize=9.0,
     )
     figure.subplots_adjust(left=0.37, right=0.97, top=0.82, bottom=0.16)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         figure,
         output_dir / "sft_dataset_wins.pdf",
         tight=False,
@@ -590,7 +590,7 @@ def _plot_overall_critical_differences(comparisons: pd.DataFrame, output_dir: Pa
     _draw_critical_difference_panel(axis, comparisons, title="", contain_side_labels=True)
     axis.set_xlim(-2.8, 12.3)
     figure.subplots_adjust(left=0.02, right=0.98, top=0.98, bottom=0.04)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         figure,
         output_dir / "critical_difference_overall.pdf",
         tight=False,

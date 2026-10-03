@@ -1,4 +1,4 @@
-"""Regression tests for Section 2 publication figure primitives."""
+"""Regression tests for transformation publication figure primitives."""
 
 import shutil
 from pathlib import Path
@@ -30,7 +30,7 @@ SUPPLEMENTAL_SCORE_GAIN_CASES = (
 
 def _capture_figure(monkeypatch: pytest.MonkeyPatch) -> dict[str, object]:
     captured: dict[str, object] = {}
-    real_save = figures.save_section1_figure
+    real_save = figures.save_figure
 
     def capture(
         figure: matplotlib.figure.Figure,
@@ -44,7 +44,7 @@ def _capture_figure(monkeypatch: pytest.MonkeyPatch) -> dict[str, object]:
         FigureCanvasAgg(figure)
         figure.canvas.draw()
 
-    monkeypatch.setattr(figures, "save_section1_figure", capture)
+    monkeypatch.setattr(figures, "save_figure", capture)
     return captured
 
 

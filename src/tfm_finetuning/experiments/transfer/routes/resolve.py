@@ -1,4 +1,4 @@
-"""Resolve maintained Section 3 route IDs into explicit stage DAGs."""
+"""Resolve maintained transfer route IDs into explicit stage DAGs."""
 
 from __future__ import annotations
 

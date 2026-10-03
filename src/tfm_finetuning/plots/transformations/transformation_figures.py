@@ -1,8 +1,8 @@
-"""Publication figures for the completed Section 2 transformation studies.
+"""Publication figures for the completed transformation transformation studies.
 
 The functions consume already summarized data frames so that experiment-result
 selection and figure rendering remain separate.  Every export uses the fixed
-Section 1 thesis canvas and typography.
+overview thesis canvas and typography.
 
 Example:
     ``plot_dataset_dose_response(summary, output_path=Path("noise.pdf"), ...)``
@@ -21,9 +21,9 @@ from matplotlib.ticker import LogFormatter
 
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER
 from tfm_finetuning.plots.common.plot_style import (
-    apply_section1_plot_style,
+    apply_plot_style,
     latex_fraction_width,
-    save_section1_figure,
+    save_figure,
 )
 
 GROUP2_MODEL_ORDER = ("tabpfnv25", "tabiclv2", "mitra")
@@ -65,7 +65,7 @@ def plot_heavy_tail_mitigation(
         "fit_side_contaminated": (contaminated_dash, "s"),
     }
 
-    apply_section1_plot_style()
+    apply_plot_style()
     fig, axes = plt.subplots(
         1,
         len(datasets),
@@ -199,7 +199,7 @@ def plot_diamonds_mitigation(
     for column in (icl_column, selected_column, final_column):
         _require_positive(heldout[column], column)
 
-    apply_section1_plot_style()
+    apply_plot_style()
     fig, (trajectory_ax, heldout_ax) = plt.subplots(
         1,
         2,
@@ -367,7 +367,7 @@ def _save(
     inclusion_fraction: float = 1.0,
 ) -> Path:
     path.parent.mkdir(parents=True, exist_ok=True)
-    save_section1_figure(fig, path, inclusion_fraction=inclusion_fraction)
+    save_figure(fig, path, inclusion_fraction=inclusion_fraction)
     plt.close(fig)
     return path
 

@@ -74,7 +74,7 @@ class TabPFNAdapter:
         self,
         request: DatasetTransferTrainerRequest,
     ) -> DatasetTransferStageTrainer:
-        """Build the exact update-based Section 3 trainer for TabPFN v2.5."""
+        """Build the exact update-based transfer trainer for TabPFN v2.5."""
         from tfm_finetuning.finetuning.models.tabpfn.transfer import (
             TabPFNDatasetTransferStageTrainer,
         )

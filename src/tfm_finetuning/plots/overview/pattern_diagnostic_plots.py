@@ -1,4 +1,4 @@
-"""Resource, robustness, metadata, and per-dataset Section 1 plots."""
+"""Resource, robustness, metadata, and per-dataset overview plots."""
 
 from __future__ import annotations
 
@@ -22,8 +22,8 @@ from tfm_finetuning.plots.common.model_display import (
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
     latex_fraction_width,
-    save_and_close_section1_figure,
-    style_section1_y_axes,
+    save_and_close_figure,
+    style_y_axes,
 )
 from tfm_finetuning.plots.metrics import metric_is_lower_better
 from tfm_finetuning.plots.overview.metadata_plots import AXIS_FEATURE_LABELS
@@ -88,10 +88,10 @@ def _plot_checkpoint_gap(frame: pd.DataFrame, output_dir: Path) -> Path:
     # The inclusive panel deliberately spans the catastrophic collapses. Style
     # each panel independently so that its coarse tick interval cannot flatten
     # the robust, collapse-excluded central view.
-    style_section1_y_axes([axes[0]])
-    style_section1_y_axes([axes[1]])
+    style_y_axes([axes[0]])
+    style_y_axes([axes[1]])
     fig.subplots_adjust(left=0.13, right=0.985, top=0.88, bottom=0.25, wspace=0.40)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         fig,
         output_dir / "checkpoint_selection_gap.pdf",
         tight=False,
@@ -215,7 +215,7 @@ def _plot_checkpoint_collapses_compact(frame: pd.DataFrame, output_dir: Path) ->
         columnspacing=0.8,
     )
     fig.subplots_adjust(left=0.36, right=0.91, top=0.72, bottom=0.30)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         fig,
         output_dir / "checkpoint_collapses_compact.pdf",
         tight=False,
@@ -390,7 +390,7 @@ def _plot_combined_association_heatmap(
     colorbar = figure.colorbar(image, cax=colorbar_axis)
     colorbar.set_label(f"Spearman correlation with {gain_label}", fontsize=8.5)
     colorbar.ax.tick_params(labelsize=8.0)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         figure,
         output_dir / filename,
         tight=False,

@@ -1,4 +1,4 @@
-"""Decode and validate Section 3 route configuration."""
+"""Decode and validate transfer route configuration."""
 
 from __future__ import annotations
 
@@ -125,7 +125,7 @@ def split_identity(config: Mapping[str, Any]) -> SplitIdentity:
         split_name,
     )
     if match is None:
-        raise ValueError("Section 3 requires data.split=fold<k>_repeat<r>_sample<s>.")
+        raise ValueError("Transfer requires data.split=fold<k>_repeat<r>_sample<s>.")
     return SplitIdentity(*(int(value) for value in match.groups()))
 
 
@@ -251,7 +251,7 @@ def required_context_policy(
     }
     if policy not in supported:
         raise ValueError(
-            f"Section 3 requires dataset_transfer.context_policy to be one of: {', '.join(sorted(supported))}."
+            f"Transfer requires dataset_transfer.context_policy to be one of: {', '.join(sorted(supported))}."
         )
     if (
         policy == "route_matched_train_plus_validation"
@@ -267,7 +267,7 @@ def required_context_policy(
         raw_flag = foundation.get("test_context_includes_explicit_validation_data")
     if not strict_bool(raw_flag):
         raise ValueError(
-            "Section 3 requires "
+            "Transfer requires "
             "foundation_model.test_context_includes_validation_data=true "
             "so each declared train-plus-validation context policy matches "
             "runtime evaluation."
@@ -310,11 +310,11 @@ def transfer_data_recipe(
     elif isinstance(raw_steps, list | tuple):
         steps = tuple(str(step).strip() for step in raw_steps)
     else:
-        raise ValueError("preprocess.steps must be a list for Section 3 transfer routes.")
+        raise ValueError("preprocess.steps must be a list for transfer routes.")
     unsupported = sorted(set(steps).difference({"clamp_train_pool"}))
     if unsupported:
         raise ValueError(
-            "Section 3 transfer routes only support clamp_train_pool data "
+            "Transfer routes only support clamp_train_pool data "
             f"preprocessing; unsupported: {', '.join(unsupported)}."
         )
     clamp = mapping(preprocess.get("clamp_train_pool"))
@@ -337,7 +337,7 @@ def transfer_data_recipe(
     try:
         validation_fraction = float(raw_fraction)
     except (TypeError, ValueError) as exc:
-        raise ValueError("Section 3 validation split ratio must be numeric.") from exc
+        raise ValueError("Transfer validation split ratio must be numeric.") from exc
     raw_validation_seed = foundation.get(
         "validation_split_seed",
         evaluation.get(

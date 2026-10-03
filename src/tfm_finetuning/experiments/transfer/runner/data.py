@@ -65,7 +65,7 @@ class TransferDatasetLoader:
                 model_id=self.setup.spec.model_id,
             )
             if comparison is not None:
-                raise ValueError("Section 3 transfer routes do not support alternate test-view comparisons.")
+                raise ValueError("Transfer routes do not support alternate test-view comparisons.")
             self._cache[name] = data
         data = self._cache[name]
         effective_budget = effective_row_budget(

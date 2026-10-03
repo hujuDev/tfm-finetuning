@@ -272,7 +272,7 @@ class TabICLAdapter:
         self,
         request: DatasetTransferTrainerRequest,
     ) -> DatasetTransferStageTrainer:
-        """Return the exact persistent-optimizer Section 3 stage trainer."""
+        """Return the exact persistent-optimizer transfer stage trainer."""
         from tfm_finetuning.finetuning.models.tabicl.transfer import (
             TabICLDatasetTransferStageTrainer,
         )

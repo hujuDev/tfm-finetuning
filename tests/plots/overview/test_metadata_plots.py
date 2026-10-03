@@ -1,4 +1,4 @@
-"""Regression tests for Section 1 metadata-plot annotations."""
+"""Regression tests for overview metadata-plot annotations."""
 
 
 import pytest

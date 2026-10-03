@@ -12,7 +12,7 @@ from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
 
 from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
-from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES, apply_section1_plot_style, save_section1_figure
+from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES, apply_plot_style, save_figure
 from tfm_finetuning.plots.transfer.balanced_transfer_data import SOURCE_LABELS, TASK_DATASETS
 from tfm_finetuning.plots.transfer.balanced_transfer_figures import PANEL_LABELS
 
@@ -26,7 +26,7 @@ TASK_LABELS = {
 
 def plot_transfer_pairs(frame: pd.DataFrame, output: Path) -> Path:
     """Retain per-seed uncertainty and a separate metric scale for each task."""
-    apply_section1_plot_style()
+    apply_plot_style()
     keys = ["dataset", "model", "source", "seed"]
     if frame.duplicated(keys).any():
         raise ValueError("Repeated seed results in transfer input")
@@ -106,6 +106,6 @@ def plot_transfer_pairs(frame: pd.DataFrame, output: Path) -> Path:
     )
     fig.subplots_adjust(left=0.285, right=0.985, top=0.88, bottom=0.095, hspace=0.57, wspace=0.20)
     output.parent.mkdir(parents=True, exist_ok=True)
-    save_section1_figure(fig, output)
+    save_figure(fig, output)
     plt.close(fig)
     return output

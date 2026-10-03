@@ -404,7 +404,7 @@ class DatasetTransferStageTrainer(Protocol):
 
 @runtime_checkable
 class DatasetTransferStageTrainerAdapter(Protocol):
-    """Adapter exposing an exact update-counted Section 3 stage trainer."""
+    """Adapter exposing an exact update-counted transfer stage trainer."""
 
     def create_dataset_transfer_stage_trainer(
         self,

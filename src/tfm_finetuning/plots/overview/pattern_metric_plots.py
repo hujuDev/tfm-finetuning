@@ -1,4 +1,4 @@
-"""Metric-oriented Section 1 effect plots."""
+"""Metric-oriented overview effect plots."""
 
 from __future__ import annotations
 
@@ -19,8 +19,8 @@ from tfm_finetuning.plots.common.model_display import (
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
     latex_fraction_width,
-    save_and_close_section1_figure,
-    style_section1_y_axes,
+    save_and_close_figure,
+    style_y_axes,
 )
 
 _GAIN_AXIS_LABELS = {
@@ -118,9 +118,9 @@ def _plot_preprocessing_difference(frame: pd.DataFrame, output_dir: Path) -> Pat
         _draw_preprocessing_difference_panel(ax, paired, task)
         ax.set_title(TASK_LABELS[task], fontsize=10.0, pad=2)
         ax.set_ylabel(metric_labels[task], fontsize=9.0)
-    style_section1_y_axes(axes)
+    style_y_axes(axes)
     fig.subplots_adjust(left=0.11, right=0.99, top=0.88, bottom=0.25, wspace=0.47)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         fig,
         output_dir / "preprocessing_gain_difference.pdf",
         tight=False,
@@ -157,9 +157,9 @@ def _plot_effect_variance(frame: pd.DataFrame, output_dir: Path) -> Path:
                 zorder=4,
             )
         ax.set_title(TASK_LABELS[task], fontsize=10.0, pad=3)
-    style_section1_y_axes(axes, tick_interval=0.05)
+    style_y_axes(axes, tick_interval=0.05)
     fig.subplots_adjust(left=0.11, right=0.99, top=0.90, bottom=0.25, wspace=0.47)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         fig,
         output_dir / "fine_tuning_gain_variance.pdf",
         tight=False,
@@ -198,7 +198,7 @@ def _plot_metric_gains(metric_frame: pd.DataFrame, output_dir: Path) -> list[Pat
         for ax, metric in zip(axes, available, strict=True):
             rows = metric_frame[(metric_frame["task_family"] == task) & (metric_frame["metric"] == metric)]
             _draw_metric_gain_panel(ax, rows, metric)
-        style_section1_y_axes(axes)
+        style_y_axes(axes)
         left_margin = 0.15 if task == "multiclass" else 0.10
         fig.subplots_adjust(
             left=left_margin,
@@ -208,7 +208,7 @@ def _plot_metric_gains(metric_frame: pd.DataFrame, output_dir: Path) -> list[Pat
             wspace=0.48,
         )
         paths.append(
-            save_and_close_section1_figure(
+            save_and_close_figure(
                 fig,
                 output_dir / f"metric_gains_{task}.pdf",
                 tight=False,
@@ -282,7 +282,7 @@ def _plot_metric_gain_agreement(metric_frame: pd.DataFrame, output_dir: Path) ->
             f"{TASK_LABELS[task]}\nρ={rho:.2f} · n={len(common)}",
             fontsize=8,
         )
-    style_section1_y_axes(axes.flat)
+    style_y_axes(axes.flat)
     handles, labels = axes[0, 0].get_legend_handles_labels()
     fig.legend(
         handles,
@@ -295,7 +295,7 @@ def _plot_metric_gain_agreement(metric_frame: pd.DataFrame, output_dir: Path) ->
         handletextpad=0.2,
     )
     fig.subplots_adjust(left=0.10, right=0.99, top=0.68, bottom=0.22, wspace=0.85)
-    return save_and_close_section1_figure(
+    return save_and_close_figure(
         fig,
         output_dir / "metric_gain_agreement.pdf",
         tight=False,

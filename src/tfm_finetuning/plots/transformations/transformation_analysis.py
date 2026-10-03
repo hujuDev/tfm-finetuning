@@ -40,7 +40,7 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 DEFAULT_CONFIG = REPO_ROOT / "configs/plots/transformations/transformation_analysis.toml"
 
 
-def generate_section2_transformation_findings(
+def generate_transformation_findings(
     *,
     config_path: Path = DEFAULT_CONFIG,
     repo_root: Path = REPO_ROOT,
@@ -286,7 +286,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = parser.parse_args(argv)
     print(
         json.dumps(
-            generate_section2_transformation_findings(
+            generate_transformation_findings(
                 config_path=args.config,
                 repo_root=args.repo_root,
                 output_dir=args.output_dir,

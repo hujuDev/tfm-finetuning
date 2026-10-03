@@ -1,4 +1,4 @@
-"""Stable model and task display metadata for Section 1 figures."""
+"""Stable model and task display metadata for overview figures."""
 
 MODEL_ORDER = ["tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"]
 MODEL_LABELS = {
