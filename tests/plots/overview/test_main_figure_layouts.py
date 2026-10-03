@@ -10,12 +10,12 @@ import pandas as pd
 import pytest
 from matplotlib.colors import to_hex
 
-import plots.overview.pattern_diagnostic_plots as diagnostic_plots
-import plots.overview.pattern_metric_plots as metric_plots
-import plots.overview.pattern_model_comparison as model_comparison
-from plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER, TASK_LABELS, TASK_ORDER
-from plots.common.plot_style import apply_section1_plot_style, latex_fraction_width
-from plots.figure_text_audit import inventory_visible_text
+import tfm_finetuning.plots.overview.pattern_diagnostic_plots as diagnostic_plots
+import tfm_finetuning.plots.overview.pattern_metric_plots as metric_plots
+import tfm_finetuning.plots.overview.pattern_model_comparison as model_comparison
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER, TASK_LABELS, TASK_ORDER
+from tfm_finetuning.plots.common.plot_style import apply_section1_plot_style, latex_fraction_width
+from tfm_finetuning.plots.figure_text_audit import inventory_visible_text
 
 
 def _minimum_visible_text_size(figure: plt.Figure) -> float:

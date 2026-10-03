@@ -7,7 +7,7 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import pytest
 
-from plots.common.plot_style import (
+from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
     apply_section1_plot_style,
     latex_fraction_width,

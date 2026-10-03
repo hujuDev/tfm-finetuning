@@ -9,8 +9,8 @@ from unittest.mock import Mock
 
 import pytest
 
-from data.download import tabpfn_checkpoints as downloader
-from finetuning.models.tabpfn.versions import TABPFN_VERSIONS
+from tfm_finetuning.data.download import tabpfn_checkpoints as downloader
+from tfm_finetuning.finetuning.models.tabpfn.versions import TABPFN_VERSIONS
 
 
 def test_checkpoint_files_match_model_config_and_original_v2_weights():

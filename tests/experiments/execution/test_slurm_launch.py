@@ -11,13 +11,13 @@ from pathlib import Path
 
 import pytest
 
-from experiments.execution.bundle import write_bundle
-from experiments.execution.catalog import load_catalog
-from experiments.execution.launch import main
-from experiments.execution.planning import build_plan
-from experiments.execution.resources import resolve_resources
-from experiments.execution.submission import submit_plan
-from utils.config import read_yaml_mapping
+from tfm_finetuning.experiments.execution.bundle import write_bundle
+from tfm_finetuning.experiments.execution.catalog import load_catalog
+from tfm_finetuning.experiments.execution.launch import main
+from tfm_finetuning.experiments.execution.planning import build_plan
+from tfm_finetuning.experiments.execution.resources import resolve_resources
+from tfm_finetuning.experiments.execution.submission import submit_plan
+from tfm_finetuning.utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[3]
 
@@ -47,7 +47,7 @@ def test_every_pinned_experiment_has_a_resource_plan_and_wrapper(tmp_path, clust
             text=True, capture_output=True, check=True,
         )
         args = result.stdout.splitlines()
-        assert args[:4] == ["-m", "experiments.execution.launch", "--repo-root", str(root)]
+        assert args[:4] == ["-m", "tfm_finetuning.experiments.execution.launch", "--repo-root", str(root)]
         assert args[5:] == ["--local", "--dataset", "dataset with spaces", "--dry-run"]
         wrappers.append(args[4])
     assert len(wrappers) == len(set(wrappers))

@@ -4,7 +4,7 @@ import math
 
 import pytest
 
-from plots.metrics import (
+from tfm_finetuning.plots.metrics import (
     best_relative_normalized_score,
     fine_tuning_gain,
     split_raw_metric_value,

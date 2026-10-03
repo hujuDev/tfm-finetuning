@@ -6,12 +6,12 @@ from pathlib import Path
 
 import pytest
 
-from experiments.configuration import expand_runs
-from experiments.execution.bundle import write_bundle
-from experiments.execution.catalog import load_catalog
-from experiments.execution.planning import build_plan
-from experiments.run_experiment import execute_run
-from utils.config import read_yaml_mapping
+from tfm_finetuning.experiments.configuration import expand_runs
+from tfm_finetuning.experiments.execution.bundle import write_bundle
+from tfm_finetuning.experiments.execution.catalog import load_catalog
+from tfm_finetuning.experiments.execution.planning import build_plan
+from tfm_finetuning.experiments.run_experiment import execute_run
+from tfm_finetuning.utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[2]
 

@@ -11,19 +11,19 @@ import pandas as pd
 import pytest
 import torch
 
-from experiments.transfer.spec import (
+from tfm_finetuning.experiments.transfer.spec import (
     SplitIdentity,
     TransferRouteSpec,
     TransferStageSpec,
     ValidationSelector,
 )
-from finetuning.models.base import (
+from tfm_finetuning.finetuning.models.base import (
     CommonFineTuneConfig,
     DatasetTransferTrainerRequest,
 )
-from finetuning.models.tabicl.model import TabICLAdapter
-from finetuning.models.tabicl.transfer import TabICLDatasetTransferStageTrainer
-from finetuning.models.tabicl.transfer_engine import (
+from tfm_finetuning.finetuning.models.tabicl.model import TabICLAdapter
+from tfm_finetuning.finetuning.models.tabicl.transfer import TabICLDatasetTransferStageTrainer
+from tfm_finetuning.finetuning.models.tabicl.transfer_engine import (
     TabICLTransferEngine,
     _PreparedDataset,
     _reload_context_indices,

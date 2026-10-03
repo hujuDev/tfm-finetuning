@@ -8,21 +8,21 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments.transfer.pooled import (
+from tfm_finetuning.experiments.transfer.pooled import (
     build_balanced_episode_schedule,
     run_balanced_pooled_training,
 )
-from experiments.transfer.rows import (
+from tfm_finetuning.experiments.transfer.rows import (
     apply_train_subset_to_split,
     build_nested_train_subsets,
 )
-from experiments.transfer.selection import (
+from tfm_finetuning.experiments.transfer.selection import (
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,
     select_target_checkpoint,
 )
-from finetuning.datasets.loading import SplitEvaluationData
+from tfm_finetuning.finetuning.datasets.loading import SplitEvaluationData
 
 
 def _split_data() -> SplitEvaluationData:

@@ -6,13 +6,13 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from plots.overview import mitra_pipeline_analysis as mitra_analysis
-from plots.overview.mitra_pipeline_analysis import (
+from tests.support.pdf_text_audit import assert_pdf_minimum_text_size
+from tfm_finetuning.plots.overview import mitra_pipeline_analysis as mitra_analysis
+from tfm_finetuning.plots.overview.mitra_pipeline_analysis import (
     CHUNKED_PIPELINE,
     ORIGINAL_PIPELINE,
     _plot_pipeline_comparison,
 )
-from tests.support.pdf_text_audit import assert_pdf_minimum_text_size
 
 
 @pytest.mark.skipif(shutil.which("mutool") is None, reason="PDF glyph audit requires mutool")

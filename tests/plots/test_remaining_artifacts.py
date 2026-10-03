@@ -14,12 +14,12 @@ from pathlib import Path
 import pytest
 import tomli_w
 
-from experiments.configuration import dataset_key, expand_runs
-from experiments.run_experiment import execute_run
-from experiments.transfer.routes.resolve import resolve_transfer_route
-from experiments.transfer.runner.executor import StageProduction, StageResult
-from experiments.transfer.runner.reporting import training_report
-from utils.config import read_yaml_mapping
+from tfm_finetuning.experiments.configuration import dataset_key, expand_runs
+from tfm_finetuning.experiments.run_experiment import execute_run
+from tfm_finetuning.experiments.transfer.routes.resolve import resolve_transfer_route
+from tfm_finetuning.experiments.transfer.runner.executor import StageProduction, StageResult
+from tfm_finetuning.experiments.transfer.runner.reporting import training_report
+from tfm_finetuning.utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = tomllib.loads((ROOT / "configs/plots/final_figures.toml").read_text())

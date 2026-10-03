@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from data import build_base_meta_cache as cache_builder
+from tfm_finetuning.data import build_base_meta_cache as cache_builder
 
 
 def test_build_cache_includes_every_local_export(tmp_path, monkeypatch):

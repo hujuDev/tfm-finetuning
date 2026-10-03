@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from experiments.datasets import ensure_dataset
+from tfm_finetuning.experiments.datasets import ensure_dataset
 
 
 def complete_export(path: Path):
@@ -40,7 +40,7 @@ def test_partial_export_is_repaired_instead_of_skipped(tmp_path, monkeypatch, pa
         assert command[command.index("--task-id") + 1] == "123"
         complete_export(output)
 
-    monkeypatch.setattr("experiments.datasets.subprocess.run", export)
+    monkeypatch.setattr("tfm_finetuning.experiments.datasets.subprocess.run", export)
     assert ensure_dataset("demo", {}, repo_root=tmp_path) == output
     assert len(commands) == 1
     assert ensure_dataset("demo", {}, repo_root=tmp_path) == output

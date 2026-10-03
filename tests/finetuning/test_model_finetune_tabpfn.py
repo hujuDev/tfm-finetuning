@@ -10,26 +10,26 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning.datasets.loading import (
-    SplitEvaluationData,
-)
-from finetuning.datasets.preprocessing_protocol import (
-    PREPROCESSING_NATIVE,
-    PREPROCESSING_SHARED,
-)
-from finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
-from finetuning.models.registry import FoundationModelSpec
-from finetuning.models.tabpfn.model import TabPFNAdapter
-from finetuning.models.tabpfn.vendor import TabPFNBindings
-from finetuning.training import fit as fit_runner
-from finetuning.training import history as history_runner
-from finetuning.training import resource_policy as policy_runner
-from finetuning.training.in_memory import InMemoryFitController
-from finetuning.training.runtime_probe import _FitRuntimeProbe
 from tests.support.model_finetune_support import (
     FakeTorchTensor,
     _tabpfn_test_spec,
 )
+from tfm_finetuning.finetuning.datasets.loading import (
+    SplitEvaluationData,
+)
+from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
+    PREPROCESSING_NATIVE,
+    PREPROCESSING_SHARED,
+)
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
+from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.tabpfn.model import TabPFNAdapter
+from tfm_finetuning.finetuning.models.tabpfn.vendor import TabPFNBindings
+from tfm_finetuning.finetuning.training import fit as fit_runner
+from tfm_finetuning.finetuning.training import history as history_runner
+from tfm_finetuning.finetuning.training import resource_policy as policy_runner
+from tfm_finetuning.finetuning.training.in_memory import InMemoryFitController
+from tfm_finetuning.finetuning.training.runtime_probe import _FitRuntimeProbe
 
 
 def test_fit_with_oom_retry_can_be_enabled_for_tabpfn_context(tmp_path: Path, monkeypatch) -> None:
@@ -352,7 +352,7 @@ def test_tabpfn_export_requires_best_checkpoint_but_falls_back_for_final(tmp_pat
     spec = FoundationModelSpec(
         model_id="tabpfn_v2_5",
         display_name="TabPFNv2.5",
-        adapter_cls_path="finetuning.models.tabpfn.model.TabPFNAdapter",
+        adapter_cls_path="tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="models/tabpfn-v2.5-classifier.ckpt",

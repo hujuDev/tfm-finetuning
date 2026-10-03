@@ -3,7 +3,7 @@
 import matplotlib.pyplot as plt
 import pytest
 
-from plots.figure_text_audit import assert_minimum_text_size, inventory_visible_text
+from tfm_finetuning.plots.figure_text_audit import assert_minimum_text_size, inventory_visible_text
 
 
 def test_inventory_covers_ticks_labels_legends_annotations_and_figure_text() -> None:

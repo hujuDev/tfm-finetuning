@@ -6,14 +6,14 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning.datasets.loading import SplitEvaluationData
-from finetuning.distribution_shift import (
+from tfm_finetuning.finetuning.datasets.loading import SplitEvaluationData
+from tfm_finetuning.finetuning.distribution_shift import (
     apply_post_finite_distribution_shift_with_comparison,
     apply_pre_finite_distribution_shift,
     apply_test_context_majority_downsampling,
     inverse_transform_metric_prediction,
 )
-from finetuning.distribution_shift.fit_pool import combine_fit_pool, nested_selection_indices
+from tfm_finetuning.finetuning.distribution_shift.fit_pool import combine_fit_pool, nested_selection_indices
 
 
 def _classification_data() -> SplitEvaluationData:

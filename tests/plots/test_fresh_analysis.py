@@ -8,11 +8,11 @@ from pathlib import Path
 
 import pytest
 
-from plots.overview.hpo_analysis import generate_hpo_analysis
-from plots.overview.pattern_data import _canonical_frame
-from plots.overview.result_table import dataset_result_table_latex
-from plots.results import aggregate_metrics, metric_frame, read_runs
-from plots.thesis_resource_analysis import generate as generate_resources
+from tfm_finetuning.plots.overview.hpo_analysis import generate_hpo_analysis
+from tfm_finetuning.plots.overview.pattern_data import _canonical_frame
+from tfm_finetuning.plots.overview.result_table import dataset_result_table_latex
+from tfm_finetuning.plots.results import aggregate_metrics, metric_frame, read_runs
+from tfm_finetuning.plots.thesis_resource_analysis import generate as generate_resources
 
 
 def write_run(
@@ -155,7 +155,7 @@ def test_resource_table_uses_fresh_measured_runtime_only(tmp_path):
 def test_overview_generates_all_final_outputs_from_fresh_reports(tmp_path):
     import tomllib
 
-    from plots.overview.pattern_analysis import generate_section1_pattern_analysis
+    from tfm_finetuning.plots.overview.pattern_analysis import generate_section1_pattern_analysis
 
     results = tmp_path / "results"
     metadata = {}
@@ -211,7 +211,7 @@ features = ["baseTrainRows", "nFeaturesTotal"]
 
 
 def test_schedule_loader_pairs_fresh_update_horizons(tmp_path):
-    from plots.transfer.transfer_data import (
+    from tfm_finetuning.plots.transfer.transfer_data import (
         DATASET_ORDER,
         MODEL_ORDER,
         ROUTE_ORDER,
@@ -258,7 +258,7 @@ def test_schedule_loader_pairs_fresh_update_horizons(tmp_path):
 
 
 def test_natural_domains_read_fresh_training_boundaries_and_frozen_context_views(tmp_path):
-    from plots.transfer.natural_domain_data import (
+    from tfm_finetuning.plots.transfer.natural_domain_data import (
         FIXED_TARGET_CONTEXT_POLICY,
         MODEL_ORDER,
         PANEL_DATASETS,
@@ -325,7 +325,7 @@ def test_natural_domains_read_fresh_training_boundaries_and_frozen_context_views
 
 
 def test_results_root_environment_only_overrides_default_input(tmp_path, monkeypatch):
-    from plots.results import REPO_ROOT
+    from tfm_finetuning.plots.results import REPO_ROOT
 
     alternate = tmp_path / "environment_results"
     explicit = tmp_path / "configured_results"

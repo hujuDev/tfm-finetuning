@@ -11,7 +11,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from experiments.configuration import expand_runs
+from tfm_finetuning.experiments.configuration import expand_runs
 
 ROOT = Path(__file__).resolve().parents[1]
 NOTEBOOK = ROOT / "notebooks/introductory.ipynb"

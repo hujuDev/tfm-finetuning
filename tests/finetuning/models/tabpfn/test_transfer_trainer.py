@@ -8,18 +8,18 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 
-from experiments.transfer.spec import (
+from tfm_finetuning.experiments.transfer.spec import (
     TransferRouteSpec,
     TransferStageSpec,
     ValidationSelector,
 )
-from finetuning.models.base import (
+from tfm_finetuning.finetuning.models.base import (
     CommonFineTuneConfig,
     DatasetTransferTrainerRequest,
 )
-from finetuning.models.tabpfn import transfer as tabpfn_transfer
-from finetuning.models.tabpfn import transfer_runtime as tabpfn_transfer_runtime
-from finetuning.models.tabpfn.model import TabPFNAdapter
+from tfm_finetuning.finetuning.models.tabpfn import transfer as tabpfn_transfer
+from tfm_finetuning.finetuning.models.tabpfn import transfer_runtime as tabpfn_transfer_runtime
+from tfm_finetuning.finetuning.models.tabpfn.model import TabPFNAdapter
 
 
 def _data(name: str) -> SimpleNamespace:

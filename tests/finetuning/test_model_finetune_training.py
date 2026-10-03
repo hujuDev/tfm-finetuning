@@ -10,20 +10,20 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning import model_finetune as runner
-from finetuning.datasets.loading import (
-    SplitEvaluationData,
-)
-from finetuning.datasets.preprocessing_protocol import (
-    PREPROCESSING_NATIVE,
-)
-from finetuning.models.base import CommonFineTuneConfig
-from finetuning.reporting import report as reporting_runner
-from finetuning.training import checkpoints as checkpoint_runner
-from finetuning.training import history as history_runner
 from tests.support.model_finetune_support import (
     run_data_runner,
 )
+from tfm_finetuning.finetuning import model_finetune as runner
+from tfm_finetuning.finetuning.datasets.loading import (
+    SplitEvaluationData,
+)
+from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
+    PREPROCESSING_NATIVE,
+)
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig
+from tfm_finetuning.finetuning.reporting import report as reporting_runner
+from tfm_finetuning.finetuning.training import checkpoints as checkpoint_runner
+from tfm_finetuning.finetuning.training import history as history_runner
 
 
 def test_select_checkpoint_path_prefers_latest_epoch_for_final_mode(tmp_path: Path) -> None:

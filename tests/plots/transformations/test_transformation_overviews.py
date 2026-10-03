@@ -10,8 +10,8 @@ import pandas as pd
 import pytest
 from matplotlib.container import ErrorbarContainer
 
-from plots.transformations import transformation_analysis as analysis
-from plots.transformations import transformation_overviews as overviews
+from tfm_finetuning.plots.transformations import transformation_analysis as analysis
+from tfm_finetuning.plots.transformations import transformation_overviews as overviews
 
 
 def test_subsampling_pooling_uses_unweighted_dataset_means_and_cross_dataset_sem() -> None:

@@ -7,7 +7,7 @@ mpl.use("Agg")
 import pandas as pd
 import pytest
 
-from plots.overview.checkpoint_selection import checkpoint_selection_data, plot_checkpoint_selection
+from tfm_finetuning.plots.overview.checkpoint_selection import checkpoint_selection_data, plot_checkpoint_selection
 
 
 def test_checkpoint_evidence_filters_missing_and_wrong_training_length(tmp_path):

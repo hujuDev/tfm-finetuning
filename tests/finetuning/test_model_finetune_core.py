@@ -10,21 +10,21 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning import model_finetune as runner
-from finetuning.datasets.loading import (
-    SplitEvaluationData,
-)
-from finetuning.datasets.preprocessing_protocol import (
-    PREPROCESSING_SHARED,
-)
-from finetuning.models.base import CommonFineTuneConfig
-from finetuning.models.preprocessing import (
-    SHARED_FEATURE_PREPROCESSING,
-)
-from finetuning.training import resource_policy as policy_runner
 from tests.support.model_finetune_support import (
     run_data_runner,
 )
+from tfm_finetuning.finetuning import model_finetune as runner
+from tfm_finetuning.finetuning.datasets.loading import (
+    SplitEvaluationData,
+)
+from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
+    PREPROCESSING_SHARED,
+)
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig
+from tfm_finetuning.finetuning.models.preprocessing import (
+    SHARED_FEATURE_PREPROCESSING,
+)
+from tfm_finetuning.finetuning.training import resource_policy as policy_runner
 
 
 def test_estimator_fallback_treats_none_minimum_as_no_requirement() -> None:

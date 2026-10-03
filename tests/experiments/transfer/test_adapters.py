@@ -9,22 +9,22 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning.models.base import CommonFineTuneConfig
-from finetuning.models.mitra import configured as mitra_configured
-from finetuning.models.mitra import preprocessing as mitra_preprocessing
-from finetuning.models.mitra.adapter import MitraAdapter
-from finetuning.models.mitra.checkpoints import (
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig
+from tfm_finetuning.finetuning.models.mitra import configured as mitra_configured
+from tfm_finetuning.finetuning.models.mitra import preprocessing as mitra_preprocessing
+from tfm_finetuning.finetuning.models.mitra.adapter import MitraAdapter
+from tfm_finetuning.finetuning.models.mitra.checkpoints import (
     MITRA_PORTABLE_CHECKPOINT_FORMAT,
     read_checkpoint_for_finetuning,
     read_checkpoint_package,
     write_checkpoint_package,
 )
-from finetuning.models.mitra.configured import _ConfiguredMitraMixin
-from finetuning.models.registry import FoundationModelSpec
-from finetuning.models.tabicl.model import TabICLAdapter
-from finetuning.models.tabicl.vendor import TabICLBindings
-from finetuning.models.tabpfn.model import TabPFNAdapter
-from finetuning.models.tabpfn.vendor import TabPFNBindings
+from tfm_finetuning.finetuning.models.mitra.configured import _ConfiguredMitraMixin
+from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
+from tfm_finetuning.finetuning.models.tabicl.model import TabICLAdapter
+from tfm_finetuning.finetuning.models.tabicl.vendor import TabICLBindings
+from tfm_finetuning.finetuning.models.tabpfn.model import TabPFNAdapter
+from tfm_finetuning.finetuning.models.tabpfn.vendor import TabPFNBindings
 
 
 class _Tensor:
@@ -87,15 +87,15 @@ class _PortableEstimator:
 
 def _spec(model_id: str, tmp_path: Path) -> FoundationModelSpec:
     if model_id == "tabpfn_v2_5":
-        adapter = "finetuning.models.tabpfn.model.TabPFNAdapter"
+        adapter = "tfm_finetuning.finetuning.models.tabpfn.model.TabPFNAdapter"
         classifier = "models/tabpfn-classifier.ckpt"
         regressor = "models/tabpfn-regressor.ckpt"
     elif model_id == "tabicl_v2":
-        adapter = "finetuning.models.tabicl.model.TabICLAdapter"
+        adapter = "tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter"
         classifier = "tabicl-classifier.ckpt"
         regressor = "tabicl-regressor.ckpt"
     else:
-        adapter = "finetuning.models.mitra.model.MitraAdapter"
+        adapter = "tfm_finetuning.finetuning.models.mitra.model.MitraAdapter"
         classifier = "autogluon/mitra-classifier"
         regressor = "autogluon/mitra-regressor"
     return FoundationModelSpec(
@@ -187,7 +187,7 @@ def test_mitra_portable_inference_rebuilds_fresh_trainers_from_weights(
             self.experiment_logger = None
 
     modules = {
-        "finetuning.models.mitra.local_trainer": SimpleNamespace(LocalMitraTrainer=FreshTrainer),
+        "tfm_finetuning.finetuning.models.mitra.local_trainer": SimpleNamespace(LocalMitraTrainer=FreshTrainer),
         "autogluon.tabular.models.mitra.sklearn_interface": SimpleNamespace(USE_HF=True),
     }
     monkeypatch.setattr(mitra_configured.importlib, "import_module", modules.__getitem__)
@@ -232,7 +232,7 @@ def test_mitra_loads_warm_start_weights_before_fresh_trainer_construction(monkey
         pass
 
     modules = {
-        "finetuning.models.mitra.local_trainer": SimpleNamespace(LocalMitraTrainer=FreshTrainer),
+        "tfm_finetuning.finetuning.models.mitra.local_trainer": SimpleNamespace(LocalMitraTrainer=FreshTrainer),
         "autogluon.tabular.models.mitra.sklearn_interface": SimpleNamespace(USE_HF=True),
         "torch": SimpleNamespace(cuda=SimpleNamespace(OutOfMemoryError=FakeCudaOom)),
     }

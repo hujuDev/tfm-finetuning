@@ -6,9 +6,9 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data.beyondarena.natural_domain_catalog import CONTAINERS, WIDS_HOSPITAL_IDS
-from data.beyondarena.natural_domains import materialize_natural_domain_datasets
-from finetuning.datasets.loading import load_split_evaluation_data
+from tfm_finetuning.data.beyondarena.natural_domain_catalog import CONTAINERS, WIDS_HOSPITAL_IDS
+from tfm_finetuning.data.beyondarena.natural_domains import materialize_natural_domain_datasets
+from tfm_finetuning.finetuning.datasets.loading import load_split_evaluation_data
 
 
 def test_materializer_writes_ten_leakage_safe_local_exports(tmp_path: Path) -> None:

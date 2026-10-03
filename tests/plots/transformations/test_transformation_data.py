@@ -9,8 +9,8 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from plots.transformations import transformation_analysis as analysis
-from plots.transformations import transformation_data as data
+from tfm_finetuning.plots.transformations import transformation_analysis as analysis
+from tfm_finetuning.plots.transformations import transformation_data as data
 
 
 def _metric(value: float, metric: str) -> dict[str, float | str]:

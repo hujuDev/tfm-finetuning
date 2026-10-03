@@ -10,29 +10,29 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning import model_finetune as runner
-from finetuning.datasets import loading as data_runner
-from finetuning.datasets.loading import (
+from tests.support.model_finetune_support import (
+    preprocessing_runner,
+    run_data_runner,
+)
+from tfm_finetuning.finetuning import model_finetune as runner
+from tfm_finetuning.finetuning.datasets import loading as data_runner
+from tfm_finetuning.finetuning.datasets.loading import (
     TEST_CONTEXT_POLICY_BALANCED_ORIGINAL_MAJORITY,
     TEST_CONTEXT_POLICY_FULL_ORIGINAL,
     TEST_CONTEXT_POLICY_TRAIN_ONLY,
     TEST_CONTEXT_POLICY_TRAIN_PLUS_VALIDATION,
     SplitEvaluationData,
 )
-from finetuning.datasets.preprocessing_protocol import (
+from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_NATIVE,
 )
-from finetuning.evaluation import core as evaluation_runner
-from finetuning.models.base import CommonFineTuneConfig
-from finetuning.training import fit as fit_runner
-from finetuning.training import history as history_runner
-from finetuning.training import resource_policy as policy_runner
-from finetuning.training.in_memory import InMemoryFitController
-from tests.support.model_finetune_support import (
-    preprocessing_runner,
-    run_data_runner,
-)
-from utils.config import get_nested
+from tfm_finetuning.finetuning.evaluation import core as evaluation_runner
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig
+from tfm_finetuning.finetuning.training import fit as fit_runner
+from tfm_finetuning.finetuning.training import history as history_runner
+from tfm_finetuning.finetuning.training import resource_policy as policy_runner
+from tfm_finetuning.finetuning.training.in_memory import InMemoryFitController
+from tfm_finetuning.utils.config import get_nested
 
 
 def test_evaluation_splits_default_to_test_and_allow_validation_only_calibration() -> None:

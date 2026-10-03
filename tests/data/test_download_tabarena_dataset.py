@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from data.download import tabarena_dataset as exporter
+from tfm_finetuning.data.download import tabarena_dataset as exporter
 
 if TYPE_CHECKING:
     from pathlib import Path

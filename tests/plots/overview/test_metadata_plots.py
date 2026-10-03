@@ -3,8 +3,8 @@
 
 import pytest
 
-from plots.common.plot_style import plain_log_power_label
-from plots.overview.metadata_plots import AXIS_FEATURE_LABELS
+from tfm_finetuning.plots.common.plot_style import plain_log_power_label
+from tfm_finetuning.plots.overview.metadata_plots import AXIS_FEATURE_LABELS
 
 
 def test_long_metadata_axis_labels_wrap_without_shrinking_text() -> None:

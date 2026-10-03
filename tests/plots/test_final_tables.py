@@ -3,7 +3,7 @@
 import pandas as pd
 import pytest
 
-from plots.final_tables import MODELS, hpo_table, resource_table
+from tfm_finetuning.plots.final_tables import MODELS, hpo_table, resource_table
 
 
 def test_hpo_caption_counts_current_selections_and_marks_largest_context():

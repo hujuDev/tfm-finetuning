@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
-import plots.overview.hpo_analysis as hpo_analysis
-from plots.common.plot_style import FULL_WIDTH_INCHES
-from plots.overview.hpo_analysis import _select_trials
+import tfm_finetuning.plots.overview.hpo_analysis as hpo_analysis
+from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES
+from tfm_finetuning.plots.overview.hpo_analysis import _select_trials
 
 
 def test_hpo_comparison_uses_matched_limits_and_equal_aspect(tmp_path, monkeypatch) -> None:

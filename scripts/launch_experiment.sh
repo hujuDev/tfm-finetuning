@@ -13,4 +13,4 @@ if [[ -z "$launcher_python" ]]; then
     launcher_python=python3
   fi
 fi
-exec "$launcher_python" -m experiments.execution.launch --repo-root "$repo_root" "$@"
+exec "$launcher_python" -m tfm_finetuning.experiments.execution.launch --repo-root "$repo_root" "$@"

@@ -9,26 +9,26 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments.transfer.pooled import run_balanced_pooled_training
-from experiments.transfer.runner.training import ValidatedStageTrainer
-from experiments.transfer.spec import (
+from tfm_finetuning.experiments.transfer.pooled import run_balanced_pooled_training
+from tfm_finetuning.experiments.transfer.runner.training import ValidatedStageTrainer
+from tfm_finetuning.experiments.transfer.spec import (
     TransferRouteSpec,
     TransferStageSpec,
     TransferTrainingRecipe,
     ValidationSelector,
 )
-from finetuning.models.base import (
+from tfm_finetuning.finetuning.models.base import (
     CommonFineTuneConfig,
     DatasetTransferTrainerRequest,
 )
-from finetuning.models.mitra.adapter import MitraAdapter
-from finetuning.models.mitra.chunking import LocalMitraFineTuneDiagnostics
-from finetuning.models.mitra.configured import _configured_mitra_class
-from finetuning.models.mitra.transfer import MitraDatasetTransferStageTrainer
-from finetuning.models.mitra.transfer_evaluation import (
+from tfm_finetuning.finetuning.models.mitra.adapter import MitraAdapter
+from tfm_finetuning.finetuning.models.mitra.chunking import LocalMitraFineTuneDiagnostics
+from tfm_finetuning.finetuning.models.mitra.configured import _configured_mitra_class
+from tfm_finetuning.finetuning.models.mitra.transfer import MitraDatasetTransferStageTrainer
+from tfm_finetuning.finetuning.models.mitra.transfer_evaluation import (
     MitraTransferEvaluator,
 )
-from finetuning.models.mitra.transfer_session import (
+from tfm_finetuning.finetuning.models.mitra.transfer_session import (
     MitraDatasetEpisodeSource,
     MitraPersistentStageSession,
     PreparedMitraDataset,
@@ -277,7 +277,7 @@ def test_mitra_stage_initializer_sets_portable_task_and_architecture_metadata(mo
             SimpleNamespace(cfg=SimpleNamespace(hyperparams={"dim_output": 10}), n_classes=10),
         ]
 
-    monkeypatch.setattr("finetuning.models.mitra.transfer_session._fresh_local_trainers", fresh)
+    monkeypatch.setattr("tfm_finetuning.finetuning.models.mitra.transfer_session._fresh_local_trainers", fresh)
     common = CommonFineTuneConfig(
         n_estimators_finetune=2,
         n_estimators_validation=2,
@@ -322,7 +322,7 @@ def test_mitra_stage_initializer_uses_regression_architecture(monkeypatch) -> No
         observed["fresh"] = (task, dim_output, n_classes, states)
         return [SimpleNamespace(cfg=SimpleNamespace(hyperparams={"dim_output": 1}), n_classes=0)]
 
-    monkeypatch.setattr("finetuning.models.mitra.transfer_session._fresh_local_trainers", fresh)
+    monkeypatch.setattr("tfm_finetuning.finetuning.models.mitra.transfer_session._fresh_local_trainers", fresh)
 
     initialized = initialize_stage_estimator(
         adapter,
@@ -440,20 +440,20 @@ def test_mitra_stage_early_stopping_waits_for_checkpoint_view_boundary(monkeypat
     members = tuple(_FakeMember() for _ in range(2))
     estimator = SimpleNamespace(trainers=list(members))
     monkeypatch.setattr(
-        "finetuning.models.mitra.transfer.initialize_stage_estimator",
+        "tfm_finetuning.finetuning.models.mitra.transfer.initialize_stage_estimator",
         lambda *args, **kwargs: estimator,
     )
     monkeypatch.setattr(
-        "finetuning.models.mitra.transfer.assign_transfer_member_indices",
+        "tfm_finetuning.finetuning.models.mitra.transfer.assign_transfer_member_indices",
         lambda trainers: None,
     )
     prepared = _prepared("target", rows=10, features=1, members=2)
     monkeypatch.setattr(
-        "finetuning.models.mitra.transfer.prepare_stage_datasets",
+        "tfm_finetuning.finetuning.models.mitra.transfer.prepare_stage_datasets",
         lambda *args, **kwargs: {"target": prepared},
     )
     monkeypatch.setattr(
-        "finetuning.models.mitra.transfer.exact_stage_schedulers",
+        "tfm_finetuning.finetuning.models.mitra.transfer.exact_stage_schedulers",
         lambda *args, **kwargs: ((None, None), (LocalMitraFineTuneDiagnostics(),) * 2),
     )
 
@@ -471,7 +471,7 @@ def test_mitra_stage_early_stopping_waits_for_checkpoint_view_boundary(monkeypat
             self.member_examples += episode.example_count * 2
             return {"loss": 1.0, "member_optimizer_steps": 2}
 
-    monkeypatch.setattr("finetuning.models.mitra.transfer.MitraPersistentStageSession", FakeSession)
+    monkeypatch.setattr("tfm_finetuning.finetuning.models.mitra.transfer.MitraPersistentStageSession", FakeSession)
 
     def fake_write(estimator, path):
         _ = estimator
@@ -479,7 +479,7 @@ def test_mitra_stage_early_stopping_waits_for_checkpoint_view_boundary(monkeypat
         path.write_text(update, encoding="utf-8")
 
     monkeypatch.setattr(
-        "finetuning.models.mitra.transfer_evaluation."
+        "tfm_finetuning.finetuning.models.mitra.transfer_evaluation."
         "write_checkpoint_package",
         fake_write,
     )

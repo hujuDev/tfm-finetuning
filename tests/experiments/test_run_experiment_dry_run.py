@@ -15,7 +15,7 @@ def test_foundation_mainline_dry_run_emits_expanded_plan_without_results(tmp_pat
     result = subprocess.run(
         [
             sys.executable,
-            "src/experiments/run_experiment.py",
+            "src/tfm_finetuning/experiments/run_experiment.py",
             "--config",
             config_path.as_posix(),
             "--dataset",

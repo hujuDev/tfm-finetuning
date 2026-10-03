@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from plots.metrics import fine_tuning_gain
-from plots.transfer.transfer_data import (
+from tfm_finetuning.plots.metrics import fine_tuning_gain
+from tfm_finetuning.plots.transfer.transfer_data import (
     DATASET_ORDER,
     DISPLAY_ROUTE_ORDER,
     MODEL_ORDER,
@@ -15,7 +15,7 @@ from plots.transfer.transfer_data import (
     TransferTables,
     training_order_icl_gains,
 )
-from plots.transfer.transfer_figures import TRAINING_ORDER_ROUTE_LABELS
+from tfm_finetuning.plots.transfer.transfer_figures import TRAINING_ORDER_ROUTE_LABELS
 
 
 def _complete_training_order_tables() -> TransferTables:

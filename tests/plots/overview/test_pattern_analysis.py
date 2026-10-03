@@ -8,37 +8,37 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
-import plots.overview.pattern_diagnostic_plots as diagnostic_plots
-from plots.common import plot_style
-from plots.common.plot_style import FULL_WIDTH_INCHES, apply_section1_plot_style
-from plots.figure_text_audit import inventory_visible_text
-from plots.metrics import fine_tuning_gain
-from plots.overview.pattern_data import _analysis_subset
-from plots.overview.pattern_diagnostic_plots import (
+import tfm_finetuning.plots.overview.pattern_diagnostic_plots as diagnostic_plots
+from tfm_finetuning.plots.common import plot_style
+from tfm_finetuning.plots.common.plot_style import FULL_WIDTH_INCHES, apply_section1_plot_style
+from tfm_finetuning.plots.figure_text_audit import inventory_visible_text
+from tfm_finetuning.plots.metrics import fine_tuning_gain
+from tfm_finetuning.plots.overview.pattern_data import _analysis_subset
+from tfm_finetuning.plots.overview.pattern_diagnostic_plots import (
     _checkpoint_collapse_summary,
     _checkpoint_plot_frame,
     _plot_checkpoint_collapses_compact,
     _plot_checkpoint_gap,
 )
-from plots.overview.pattern_metric_plots import (
+from tfm_finetuning.plots.overview.pattern_metric_plots import (
     _draw_metric_gain_panel,
     _metric_display_name,
     _plot_metric_gains,
     _plot_preprocessing_difference,
 )
-from plots.overview.pattern_model_comparison import (
+from tfm_finetuning.plots.overview.pattern_model_comparison import (
     DEFAULT_DECISIVE_WINNER_MARGIN,
     _critical_difference_table,
     _draw_critical_difference_panel,
     _global_winner_table,
 )
-from plots.overview.pattern_statistics import (
+from tfm_finetuning.plots.overview.pattern_statistics import (
     _lodo_spearman,
     association_table,
     fine_tuning_outcome_table,
     structural_hypothesis_association_table,
 )
-from plots.overview.result_table import dataset_result_table_latex, write_dataset_result_table
+from tfm_finetuning.plots.overview.result_table import dataset_result_table_latex, write_dataset_result_table
 
 
 def test_section1_effect_uses_auc_difference_and_log_error_ratio() -> None:
@@ -87,7 +87,7 @@ def test_metric_gain_y_labels_fit_the_fixed_canvas(tmp_path: Path, monkeypatch: 
         bounds = figure.axes[0].yaxis.label.get_window_extent(figure.canvas.get_renderer())
         label_bounds.append((bounds.x0, figure.get_window_extent().width - bounds.x1))
 
-    monkeypatch.setattr("plots.common.plot_style.save_section1_figure", capture_bounds)
+    monkeypatch.setattr("tfm_finetuning.plots.common.plot_style.save_section1_figure", capture_bounds)
 
     _plot_metric_gains(frame, tmp_path)
 
@@ -358,7 +358,7 @@ def test_lodo_spearman_recomputes_each_reduced_sample(monkeypatch: pytest.Monkey
         calls.append((tuple(left), tuple(right)))
         return real_spearmanr(left, right)
 
-    monkeypatch.setattr("plots.overview.pattern_statistics.stats.spearmanr", recording_spearmanr)
+    monkeypatch.setattr("tfm_finetuning.plots.overview.pattern_statistics.stats.spearmanr", recording_spearmanr)
 
     result = _lodo_spearman(x, y)
 

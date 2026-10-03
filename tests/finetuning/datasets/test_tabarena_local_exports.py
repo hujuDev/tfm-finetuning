@@ -5,7 +5,7 @@ from pathlib import Path
 
 import numpy as np
 
-from finetuning.datasets.tabarena import TaskType, build_dataset_from_local_path
+from tfm_finetuning.finetuning.datasets.tabarena import TaskType, build_dataset_from_local_path
 
 
 def test_build_dataset_from_local_path_uses_indexed_openml_split_export(tmp_path: Path) -> None:

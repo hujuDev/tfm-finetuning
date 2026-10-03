@@ -4,7 +4,7 @@ root = "results/figure_assets/findings"
 
 [groups.overview]
 studies = ["unified_foundation_baseline"]
-entrypoint = "plots.overview.pattern_analysis:generate_section1_pattern_analysis"
+entrypoint = "tfm_finetuning.plots.overview.pattern_analysis:generate_section1_pattern_analysis"
 config = "configs/plots/section1_pattern_analysis.toml"
 assets = [
   "default_overview/normalized_score_distributions.pdf",
@@ -26,7 +26,7 @@ assets = [
 
 [groups.hpo]
 studies = ["foundation_regular_hpo_representative", "unified_foundation_baseline"]
-entrypoint = "plots.overview.hpo_analysis:generate_hpo_analysis"
+entrypoint = "tfm_finetuning.plots.overview.hpo_analysis:generate_hpo_analysis"
 config = "configs/plots/section1_hpo_analysis.toml"
 assets = [
   "hyperparameter_tuning/hpo_test_gain_vs_default.pdf",
@@ -35,7 +35,7 @@ assets = [
 
 [groups.mitra_pipeline]
 studies = ["mitra_original_pipeline", "mitra_adapted_pipeline"]
-entrypoint = "plots.overview.mitra_pipeline_analysis:generate_mitra_pipeline_analysis"
+entrypoint = "tfm_finetuning.plots.overview.mitra_pipeline_analysis:generate_mitra_pipeline_analysis"
 config = "configs/plots/section1_mitra_pipeline_analysis.toml"
 assets = [
   "appendix/mitra_pipeline_comparison.pdf",
@@ -43,7 +43,7 @@ assets = [
 
 [groups.transformations]
 studies = ["distribution_shift_subsample", "distribution_shift_label_noise", "distribution_shift_feature_order", "distribution_shift_numeric_scale", "distribution_shift_feature_order_alignment", "distribution_shift_numeric_scale_alignment", "distribution_shift_spurious_correlation", "distribution_shift_heavy_tail_diamonds", "distribution_shift_contextual_scale", "distribution_shift_heavy_tail", "distribution_shift_class_prior_majority_downsampling", "distribution_shift_class_prior_context_only_downsampling"]
-entrypoint = "plots.transformations.transformation_analysis:generate_section2_transformation_findings"
+entrypoint = "tfm_finetuning.plots.transformations.transformation_analysis:generate_section2_transformation_findings"
 config = "configs/plots/section2_transformation_analysis.toml"
 assets = [
   "transformation_studies/subsample_pooled_scores_and_gains.pdf",
@@ -61,7 +61,7 @@ assets = [
 
 [groups.transfer]
 studies = ["dataset_transfer", "dataset_transfer_data_budget", "dataset_transfer_balanced_budget_classification", "dataset_transfer_balanced_budget_regression", "dataset_transfer_source_only_eval_classification", "dataset_transfer_source_only_eval_regression"]
-entrypoint = "plots.transfer.transfer_analysis:generate"
+entrypoint = "tfm_finetuning.plots.transfer.transfer_analysis:generate"
 config = "configs/plots/section3_transfer_analysis.toml"
 assets = [
   "cross_dataset_transfer/source_initialization_by_target_data.pdf",
@@ -71,7 +71,7 @@ assets = [
 
 [groups.natural_domains]
 studies = ["dataset_transfer_natural_domain", "dataset_transfer_natural_domain_training"]
-entrypoint = "plots.transfer.natural_domain_analysis:generate"
+entrypoint = "tfm_finetuning.plots.transfer.natural_domain_analysis:generate"
 config = "configs/plots/section3_natural_domain_analysis.toml"
 assets = [
   "cross_dataset_transfer/natural_domain_route_matched_transfer.pdf",
@@ -79,14 +79,14 @@ assets = [
 
 [groups.retention]
 studies = ["dataset_transfer", "dataset_transfer_target_controls", "dataset_transfer_learned_retention_eval"]
-entrypoint = "plots.transfer.retention_table:generate"
+entrypoint = "tfm_finetuning.plots.transfer.retention_table:generate"
 config = "configs/plots/retention.toml"
 assets = [
   "cross_dataset_transfer/learned_capability_changes.tex",
 ]
 
 [groups.resources]
-entrypoint = "plots.thesis_resource_analysis:generate"
+entrypoint = "tfm_finetuning.plots.thesis_resource_analysis:generate"
 config = "configs/plots/thesis_resource_analysis.toml"
 assets = [
   "resources/resource_table.tex",

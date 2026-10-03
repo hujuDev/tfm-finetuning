@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from data.dataset_meta_features import (
+from tfm_finetuning.data.dataset_meta_features import (
     compute_base_meta_features,
     compute_distribution_structure_features,
     compute_label_entropy_normalized,

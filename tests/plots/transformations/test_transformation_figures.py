@@ -9,9 +9,9 @@ import pytest
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.container import ErrorbarContainer
 
-from plots.figure_text_audit import inventory_visible_text
-from plots.transformations import transformation_figures as figures
 from tests.support.pdf_text_audit import assert_pdf_minimum_text_size
+from tfm_finetuning.plots.figure_text_audit import inventory_visible_text
+from tfm_finetuning.plots.transformations import transformation_figures as figures
 
 MODELS = ("tabpfnv25", "tabiclv2", "mitra")
 DATASETS = tuple(f"dataset_{index}" for index in range(5))

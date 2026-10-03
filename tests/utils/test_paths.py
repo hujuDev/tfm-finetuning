@@ -1,4 +1,4 @@
-from utils.paths import get_paths, get_repo_root
+from tfm_finetuning.utils.paths import get_paths, get_repo_root
 
 
 def test_configured_relative_results_are_repository_relative(tmp_path, monkeypatch):

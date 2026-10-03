@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from plots.transfer.balanced_transfer_data import (
+from tfm_finetuning.plots.transfer.balanced_transfer_data import (
     BUDGET_ROWS,
     DATASET_ORDER,
     DATASET_SOURCE,
@@ -12,7 +12,7 @@ from plots.transfer.balanced_transfer_data import (
     SourceInitializationAdvantage,
     pair_source_advantages,
 )
-from plots.transfer.transfer_data import MODEL_ORDER
+from tfm_finetuning.plots.transfer.transfer_data import MODEL_ORDER
 
 
 def test_source_initialization_advantage_uses_direct_paired_metric_gain() -> None:

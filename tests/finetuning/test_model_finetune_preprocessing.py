@@ -10,21 +10,21 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from finetuning import config as config_runner
-from finetuning.datasets import loading as data_runner
-from finetuning.datasets.loading import (
-    SplitEvaluationData,
-)
-from finetuning.datasets.preprocessing_protocol import (
-    PREPROCESSING_NATIVE,
-)
-from finetuning.models.preprocessing import (
-    feature_schema_metadata,
-)
-from finetuning.models.registry import FoundationModelSpec
 from tests.support.model_finetune_support import (
     preprocessing_runner,
 )
+from tfm_finetuning.finetuning import config as config_runner
+from tfm_finetuning.finetuning.datasets import loading as data_runner
+from tfm_finetuning.finetuning.datasets.loading import (
+    SplitEvaluationData,
+)
+from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
+    PREPROCESSING_NATIVE,
+)
+from tfm_finetuning.finetuning.models.preprocessing import (
+    feature_schema_metadata,
+)
+from tfm_finetuning.finetuning.models.registry import FoundationModelSpec
 
 
 def test_feature_schema_metadata_marks_native_categorical_columns() -> None:
@@ -239,7 +239,7 @@ def test_resolve_configured_foundation_model_spec_honors_checkpoint_metadata(tmp
     spec = FoundationModelSpec(
         model_id="tabicl_v2",
         display_name="TabICLv2",
-        adapter_cls_path="finetuning.models.tabicl.model.TabICLAdapter",
+        adapter_cls_path="tfm_finetuning.finetuning.models.tabicl.model.TabICLAdapter",
         supports_classification=True,
         supports_regression=True,
         classifier_checkpoint="old-classifier.ckpt",

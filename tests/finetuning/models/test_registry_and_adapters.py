@@ -5,17 +5,17 @@ from pathlib import Path
 
 import pytest
 
-from finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
-from finetuning.models.registry import (
+from tfm_finetuning.finetuning.models.base import CommonFineTuneConfig, InMemoryFinetuneLogger
+from tfm_finetuning.finetuning.models.registry import (
     FoundationModelRegistryError,
     get_foundation_model_spec,
     iter_foundation_model_specs,
 )
-from finetuning.models.tabpfn.versions import (
+from tfm_finetuning.finetuning.models.tabpfn.versions import (
     TABPFN_VERSIONS,
     VENDOR_ONLY_TABPFN_ARCHITECTURES,
 )
-from finetuning.training import fit as fit_runner
+from tfm_finetuning.finetuning.training import fit as fit_runner
 
 
 def test_foundation_model_dependencies_are_packaged_for_cluster_image() -> None:

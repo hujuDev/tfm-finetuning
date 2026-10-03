@@ -2,7 +2,7 @@ from pathlib import Path
 
 import yaml
 
-from experiments.configuration import expand_runs, recipe_groups
+from tfm_finetuning.experiments.configuration import expand_runs, recipe_groups
 
 ROOT = Path(__file__).resolve().parents[3]
 CONFIG_ROOT = ROOT / 'configs/experiments'

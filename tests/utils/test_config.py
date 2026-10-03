@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from utils.config import read_json_mapping, read_yaml_mapping, write_json
+from tfm_finetuning.utils.config import read_json_mapping, read_yaml_mapping, write_json
 
 
 def test_read_yaml_mapping_returns_empty_for_missing_file(tmp_path: Path) -> None:

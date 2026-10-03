@@ -10,11 +10,11 @@ from types import SimpleNamespace
 
 import pytest
 
-from experiments.transfer.dependencies import producer_config, resolve_checkpoint_dependency
-from experiments.transfer.routes.resolve import resolve_transfer_route
-from experiments.transfer.runner.executor import StageProduction, execute_route
-from experiments.transfer.runner.reporting import training_report
-from experiments.transfer.runner.training import ValidatedStageTrainer
+from tfm_finetuning.experiments.transfer.dependencies import producer_config, resolve_checkpoint_dependency
+from tfm_finetuning.experiments.transfer.routes.resolve import resolve_transfer_route
+from tfm_finetuning.experiments.transfer.runner.executor import StageProduction, execute_route
+from tfm_finetuning.experiments.transfer.runner.reporting import training_report
+from tfm_finetuning.experiments.transfer.runner.training import ValidatedStageTrainer
 
 
 def config(route="pooled_sources_then_target", **transfer):
@@ -104,7 +104,7 @@ def test_shorter_budget_control_retains_own_validation_selection(tmp_path):
     )
     validated = ValidatedStageTrainer(delegate, stage.training_recipe)
     result = validated.train_stage(stage=stage, initial_checkpoint=None, output_dir=tmp_path)
-    from experiments.transfer.runner.executor import StageResult
+    from tfm_finetuning.experiments.transfer.runner.executor import StageResult
 
     payload = training_report(route, (StageResult(stage, result),))
     assert payload["target_update_metrics"]["2"]["selection"]["max_update"] == 2
@@ -180,7 +180,7 @@ def test_dependency_ambiguity_requires_an_explicit_choice(tmp_path):
 
 
 def test_frozen_evaluation_has_no_training_path_and_uses_identical_context(monkeypatch, tmp_path):
-    from experiments.transfer.runner import evaluation
+    from tfm_finetuning.experiments.transfer.runner import evaluation
 
     checkpoint = tmp_path / "weights.ckpt"
     checkpoint.write_text("weights")
@@ -224,9 +224,9 @@ def test_all_final_transfer_consumers_have_one_matching_producer_recipe():
     from collections import defaultdict
     from pathlib import Path
 
-    from experiments.configuration import expand_runs
-    from experiments.transfer.dependencies import _stage_recipe
-    from utils.config import read_yaml_mapping
+    from tfm_finetuning.experiments.configuration import expand_runs
+    from tfm_finetuning.experiments.transfer.dependencies import _stage_recipe
+    from tfm_finetuning.utils.config import read_yaml_mapping
 
     root = Path(__file__).resolve().parents[3]
     producers, consumers = defaultdict(list), []

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from plots.transfer.natural_domain_data import (
+from tfm_finetuning.plots.transfer.natural_domain_data import (
     MODEL_ORDER,
     PANEL_DATASETS,
     PANEL_METRICS,

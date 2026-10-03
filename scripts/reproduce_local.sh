@@ -25,5 +25,5 @@ for study in "${studies[@]}"; do
   bash scripts/launch_experiment.sh "$study" --local --run "$@"
 done
 export PYTHONPATH="$repo_root/src${PYTHONPATH:+:$PYTHONPATH}"
-"${TFM_PYTHON:-python3}" -m data.build_base_meta_cache
-"${TFM_PYTHON:-python3}" -m plots.final_figures
+"${TFM_PYTHON:-python3}" -m tfm_finetuning.data.build_base_meta_cache
+"${TFM_PYTHON:-python3}" -m tfm_finetuning.plots.final_figures

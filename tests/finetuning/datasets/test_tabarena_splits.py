@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from finetuning.datasets.tabarena import Dataset, build_dataset_from_local_path
+from tfm_finetuning.finetuning.datasets.tabarena import Dataset, build_dataset_from_local_path
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 os.environ.setdefault("REPO_ROOT", str(REPO_ROOT))

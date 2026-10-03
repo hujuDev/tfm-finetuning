@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from finetuning.training.checkpoint_retention import checkpoint_retention_payload
+from tfm_finetuning.finetuning.training.checkpoint_retention import checkpoint_retention_payload
 
 
 def test_checkpoint_retention_deletes_weight_files_by_default(tmp_path: Path, monkeypatch) -> None:
