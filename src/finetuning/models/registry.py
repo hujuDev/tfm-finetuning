@@ -13,9 +13,9 @@ from finetuning.models.registry_sources import (
     mitra_version_payload,
 )
 from finetuning.models.source import installed_package_version_payload
+from finetuning.models.tabpfn.official import ensure_official_tabpfn_on_path
 from finetuning.models.tabpfn.versions import TABPFN_VERSIONS, TabPFNVersion, get_tabpfn_version
 from utils.paths import get_repo_root
-from utils.tabpfn_official import ensure_official_tabpfn_on_path
 
 TABICL_V2_CLASSIFIER_CHECKPOINT = "tabicl-classifier-v2-20260212.ckpt"
 TABICL_V2_REGRESSOR_CHECKPOINT = "tabicl-regressor-v2-20260212.ckpt"

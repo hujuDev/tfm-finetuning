@@ -14,8 +14,7 @@ import tomllib
 from pathlib import Path
 from typing import Any
 
-from utils.config_io import read_yaml_mapping
-from utils.config_utils import set_nested
+from utils.config import read_yaml_mapping, set_nested
 
 
 def dataset_key(value: str) -> str:

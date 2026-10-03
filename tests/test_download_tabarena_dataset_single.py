@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from data import download_tabarena_dataset_single as exporter
+from data.download import tabarena_dataset as exporter
 
 if TYPE_CHECKING:
     from pathlib import Path

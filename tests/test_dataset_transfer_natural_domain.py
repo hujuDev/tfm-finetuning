@@ -6,8 +6,8 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments.dataset_transfer.natural_domain_context import build_route_matched_evaluation_data
-from experiments.dataset_transfer.routes import resolve_transfer_route
+from experiments.transfer.natural_domain_context import build_route_matched_evaluation_data
+from experiments.transfer.routes.resolve import resolve_transfer_route
 from finetuning.datasets.loading import SplitEvaluationData
 
 ROOT = Path(__file__).resolve().parents[1]

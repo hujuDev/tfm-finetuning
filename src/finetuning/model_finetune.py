@@ -73,7 +73,7 @@ def main(config: dict[str, Any], output_path: Path, *, force: bool = False) -> d
     """
     transfer = config.get("dataset_transfer", {})
     if transfer.get("enabled") or transfer.get("route_id"):
-        from experiments.dataset_transfer.runner import run_dataset_transfer
+        from experiments.transfer.runner.run import run_dataset_transfer
 
         return run_dataset_transfer(
             config,

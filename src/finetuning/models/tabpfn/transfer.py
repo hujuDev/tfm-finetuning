@@ -21,16 +21,16 @@ from typing import Any
 
 import numpy as np
 
-from experiments.dataset_transfer.executor import StageProduction
-from experiments.dataset_transfer.pooled import build_balanced_episode_schedule
-from experiments.dataset_transfer.runner_data import transfer_package_versions
-from experiments.dataset_transfer.selection import (
+from experiments.transfer.pooled import build_balanced_episode_schedule
+from experiments.transfer.runner.data import transfer_package_versions
+from experiments.transfer.runner.executor import StageProduction
+from experiments.transfer.selection import (
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,
     select_target_checkpoint,
 )
-from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec
+from experiments.transfer.spec import TransferRouteSpec, TransferStageSpec
 from finetuning.evaluation.core import (
     _evaluate_checkpoint,
     _evaluate_in_memory_estimator_on_data,

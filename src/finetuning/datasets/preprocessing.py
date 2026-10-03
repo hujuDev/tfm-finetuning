@@ -36,7 +36,7 @@ from finetuning.models.preprocessing import (
     FiniteFeaturePreprocessor,
     feature_schema_metadata,
 )
-from utils.config_utils import get_nested
+from utils.config import get_nested
 
 TEST_CONTEXT_COMPARISON_TOGGLE_VALIDATION = "toggle_validation_inclusion"
 TEST_CONTEXT_COMPARISON_MAJORITY_DOWNSAMPLING = "original_majority_downsampling"

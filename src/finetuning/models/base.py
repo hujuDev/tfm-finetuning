@@ -10,8 +10,8 @@ if TYPE_CHECKING:
     import numpy as np
     import pandas as pd
 
-    from experiments.dataset_transfer.executor import StageProduction
-    from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec
+    from experiments.transfer.runner.executor import StageProduction
+    from experiments.transfer.spec import TransferRouteSpec, TransferStageSpec
 
 TaskKind = Literal["binary", "multiclass", "regression"]
 

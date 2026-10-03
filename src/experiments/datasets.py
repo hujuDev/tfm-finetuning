@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 from experiments.configuration import dataset_key
-from utils.config_io import read_yaml_mapping
+from utils.config import read_yaml_mapping
 
 
 def _ready(path: Path, split: str) -> bool:
@@ -48,7 +48,7 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
     for path in candidates:
         if _ready(path, split):
             return path
-    from data.beyondarena_natural_domain_catalog import GROUPED_COVERTYPE_DATASET, NATURAL_DOMAIN_PANELS
+    from data.beyondarena.natural_domain_catalog import GROUPED_COVERTYPE_DATASET, NATURAL_DOMAIN_PANELS
 
     derived = {d for panel in NATURAL_DOMAIN_PANELS for d in panel.datasets} | {GROUPED_COVERTYPE_DATASET}
     locks = repo_root / "data" / ".locks"
@@ -59,7 +59,7 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
             if _ready(path, split):
                 return path
         if key in derived:
-            from data.beyondarena_natural_domains import (
+            from data.beyondarena.natural_domains import (
                 download_selected_snapshot,
                 materialize_natural_domain_datasets,
             )
@@ -72,7 +72,7 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
             task = registry.get(key, {}).get("task_id")
             output = repo_root / "data" / ("openml" if task else "tabarena") / key
             # The exporter uses official OpenML folds, and creates validation only from training rows.
-            command = [sys.executable, "-m", "data.download_tabarena_dataset_single", "--output-dir", str(output)]
+            command = [sys.executable, "-m", "data.download.tabarena_dataset", "--output-dir", str(output)]
             command += ["--source", "openml", "--task-id", str(task)] if task else ["--dataset-name", dataset]
             if output.exists():
                 command.append("--overwrite")  # Repair a partial export; the exporter otherwise skips existing files.

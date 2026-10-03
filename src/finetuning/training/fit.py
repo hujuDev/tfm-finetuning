@@ -32,7 +32,7 @@ from finetuning.training.resource_policy import (
     _resolve_resource_fallback_policy,
 )
 from finetuning.training.runtime_probe import _FitRuntimeProbe
-from utils.config_utils import get_nested
+from utils.config import get_nested
 
 
 def _configure_periodic_checkpoint_saving(estimator: Any, *, test_eval_interval: int) -> None:

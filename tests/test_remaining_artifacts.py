@@ -15,11 +15,11 @@ import pytest
 import tomli_w
 
 from experiments.configuration import dataset_key, expand_runs
-from experiments.dataset_transfer.executor import StageProduction, StageResult
-from experiments.dataset_transfer.routes import resolve_transfer_route
-from experiments.dataset_transfer.runner_reporting import training_report
 from experiments.run_experiment import execute_run
-from utils.config_io import read_yaml_mapping
+from experiments.transfer.routes.resolve import resolve_transfer_route
+from experiments.transfer.runner.executor import StageProduction, StageResult
+from experiments.transfer.runner.reporting import training_report
+from utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = tomllib.loads((ROOT / "configs/plots/final_figures.toml").read_text())

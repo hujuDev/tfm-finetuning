@@ -8,7 +8,7 @@ from types import SimpleNamespace
 import numpy as np
 import pandas as pd
 
-from experiments.dataset_transfer.spec import (
+from experiments.transfer.spec import (
     TransferRouteSpec,
     TransferStageSpec,
     ValidationSelector,

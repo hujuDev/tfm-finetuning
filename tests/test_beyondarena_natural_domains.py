@@ -6,8 +6,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from data.beyondarena_natural_domain_catalog import CONTAINERS, WIDS_HOSPITAL_IDS
-from data.beyondarena_natural_domains import materialize_natural_domain_datasets
+from data.beyondarena.natural_domain_catalog import CONTAINERS, WIDS_HOSPITAL_IDS
+from data.beyondarena.natural_domains import materialize_natural_domain_datasets
 from finetuning.datasets.loading import load_split_evaluation_data
 
 

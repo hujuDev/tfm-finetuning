@@ -10,7 +10,7 @@ from pathlib import Path
 from experiments.configuration import expand_runs, recipe_groups
 from experiments.execution.catalog import load_catalog
 from experiments.execution.resources import resolve_resources
-from utils.config_io import read_yaml_mapping
+from utils.config import read_yaml_mapping
 from utils.paths import get_paths
 
 

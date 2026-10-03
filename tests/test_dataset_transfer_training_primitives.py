@@ -8,15 +8,15 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments.dataset_transfer.pooled import (
+from experiments.transfer.pooled import (
     build_balanced_episode_schedule,
     run_balanced_pooled_training,
 )
-from experiments.dataset_transfer.rows import (
+from experiments.transfer.rows import (
     apply_train_subset_to_split,
     build_nested_train_subsets,
 )
-from experiments.dataset_transfer.selection import (
+from experiments.transfer.selection import (
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,

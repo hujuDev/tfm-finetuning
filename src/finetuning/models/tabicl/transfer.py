@@ -19,16 +19,16 @@ from typing import TYPE_CHECKING, Any, Protocol
 
 import numpy as np
 
-from experiments.dataset_transfer.executor import StageProduction
-from experiments.dataset_transfer.pooled import build_balanced_episode_schedule
-from experiments.dataset_transfer.selection import (
+from experiments.transfer.pooled import build_balanced_episode_schedule
+from experiments.transfer.runner.executor import StageProduction
+from experiments.transfer.selection import (
     CheckpointSelection,
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,
     select_target_checkpoint,
 )
-from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec
+from experiments.transfer.spec import TransferRouteSpec, TransferStageSpec
 from finetuning.models.base import DatasetTransferTrainerContract
 from finetuning.models.peak_memory import (
     peak_gpu_memory_gib,
@@ -255,7 +255,7 @@ class TabICLDatasetTransferStageTrainer:
             stage_started=stage_started,
             phase_offset=phase_offset,
         )
-        from experiments.dataset_transfer.runner_data import transfer_package_versions
+        from experiments.transfer.runner.data import transfer_package_versions
 
         return StageProduction(
             checkpoint_path=checkpoint_path,

@@ -32,7 +32,7 @@ from tests.support.split_suites.foundation_model_finetune_support_1 import (
     preprocessing_runner,
     run_data_runner,
 )
-from utils.config_utils import get_nested
+from utils.config import get_nested
 
 
 def test_evaluation_splits_default_to_test_and_allow_validation_only_calibration() -> None:

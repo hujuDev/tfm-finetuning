@@ -15,7 +15,7 @@ from finetuning.models.base import (
     FoundationModelAdapter,
 )
 from finetuning.models.registry import FoundationModelSpec
-from utils.config_utils import get_nested
+from utils.config import get_nested
 
 _RESOURCE_FALLBACK_STRICT = "strict"
 _RESOURCE_FALLBACK_OOM_CONTEXT_RETRY = "oom_context_retry"

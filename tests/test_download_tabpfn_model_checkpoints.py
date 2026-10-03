@@ -9,7 +9,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from data import download_tabpfn_model_checkpoints as downloader
+from data.download import tabpfn_checkpoints as downloader
 from finetuning.models.tabpfn.versions import TABPFN_VERSIONS
 
 

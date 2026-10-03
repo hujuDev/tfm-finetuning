@@ -30,8 +30,8 @@ from plots.common.plot_style import (
     plain_log_power_label,
     save_section1_figure,
 )
+from plots.common.report_labels import normalize_name
 from plots.results import aggregate_metrics, metric_frame, read_runs
-from utils.report_labels import normalize_name
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CONFIG = REPO_ROOT / "configs/plots/section1_mitra_pipeline_analysis.toml"

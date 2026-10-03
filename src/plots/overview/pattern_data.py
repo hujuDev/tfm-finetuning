@@ -125,7 +125,7 @@ def _add_normalized_scores(frame: pd.DataFrame) -> pd.DataFrame:
 def _dataset_metadata(*, cache_path: Path) -> dict[str, dict[str, Any]]:
     """Load train-only characteristics computed from the reproduction datasets."""
     if not cache_path.is_file():
-        from data.build_section1_base_meta_cache import build_cache
+        from data.build_base_meta_cache import build_cache
 
         build_cache(output_path=cache_path)
     return json.loads(cache_path.read_text())["datasets"]

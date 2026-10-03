@@ -13,7 +13,7 @@ import traceback
 from pathlib import Path
 
 from experiments.configuration import expand_runs
-from utils.config_io import read_yaml_mapping
+from utils.config import read_yaml_mapping
 from utils.logging_utils import raise_noisy_library_log_levels
 from utils.paths import get_paths, get_repo_root
 
@@ -41,7 +41,7 @@ def execute_run(run: dict, results_root: Path, *, repo_root: Path, force: bool =
                 report = json.loads((output / "finetune_report.json").read_text())
                 transfer = report.get("dataset_transfer", {})
                 if transfer.get("execution_mode") == "train":
-                    from experiments.dataset_transfer.executor import require_checkpoint
+                    from experiments.transfer.runner.executor import require_checkpoint
 
                     checkpoints = report.get("stage_checkpoints", {})
                     if not checkpoints:

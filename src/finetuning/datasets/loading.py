@@ -16,7 +16,7 @@ from finetuning.distribution_shift import TargetTransformState
 from finetuning.models.base import TaskKind, task_kind_from_value
 from finetuning.run import eval_shared as _pipeline_eval_shared
 from finetuning.run import shared as _pipeline_shared
-from utils.config_utils import get_nested, set_nested
+from utils.config import get_nested, set_nested
 
 TEST_CONTEXT_POLICY_TRAIN_ONLY = "train_only_for_test_icl"
 TEST_CONTEXT_POLICY_TRAIN_PLUS_VALIDATION = "train_plus_validation_for_test_icl"

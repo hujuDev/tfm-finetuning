@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from experiments.dataset_transfer.balanced_budget_routes import SOURCE_INITIALIZED_ROUTE, TARGET_ONLY_ROUTE
-from experiments.dataset_transfer.routes import resolve_transfer_route
+from experiments.transfer.routes.balanced_budget import SOURCE_INITIALIZED_ROUTE, TARGET_ONLY_ROUTE
+from experiments.transfer.routes.resolve import resolve_transfer_route
 
 
 def _config(

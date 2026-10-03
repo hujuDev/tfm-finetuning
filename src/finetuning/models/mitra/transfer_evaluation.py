@@ -10,14 +10,14 @@ from typing import Any
 
 import numpy as np
 
-from experiments.dataset_transfer.selection import (
+from experiments.transfer.selection import (
     CheckpointSelection,
     CheckpointValidation,
     ValidationMetric,
     select_source_mean_checkpoint,
     select_target_checkpoint,
 )
-from experiments.dataset_transfer.spec import (
+from experiments.transfer.spec import (
     TransferRouteSpec,
     TransferStageSpec,
 )

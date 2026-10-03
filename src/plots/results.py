@@ -184,7 +184,7 @@ def aggregate_metrics(frame: pd.DataFrame, keys: list[str]) -> pd.DataFrame:
 def validate_study(results_root: Path, study: str, *, repo_root: Path) -> None:
     """Reject incomplete or obsolete run grids before exporting final figures."""
     from experiments.configuration import expand_runs
-    from utils.config_io import read_yaml_mapping
+    from utils.config import read_yaml_mapping
 
     recipe = read_yaml_mapping(repo_root / "configs/experiments" / f"{study}.yaml")
     expected = {run["run_id"] for run in expand_runs(recipe, repo_root=repo_root)}

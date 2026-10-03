@@ -12,9 +12,9 @@ from typing import Any
 
 import numpy as np
 
-from experiments.dataset_transfer.executor import StageProduction
-from experiments.dataset_transfer.pooled import build_balanced_episode_schedule
-from experiments.dataset_transfer.spec import TransferRouteSpec, TransferStageSpec
+from experiments.transfer.pooled import build_balanced_episode_schedule
+from experiments.transfer.runner.executor import StageProduction
+from experiments.transfer.spec import TransferRouteSpec, TransferStageSpec
 from finetuning.models.base import DatasetTransferTrainerContract
 from finetuning.models.mitra.transfer_evaluation import (
     MitraTransferCandidate,
@@ -362,7 +362,7 @@ class MitraDatasetTransferStageTrainer:
                 {"phase": "mitra_transfer_validation_selection", "seconds": selection_seconds},
             ],
         }
-        from experiments.dataset_transfer.runner_data import transfer_package_versions
+        from experiments.transfer.runner.data import transfer_package_versions
 
         return StageProduction(
             checkpoint_path=selected.path,

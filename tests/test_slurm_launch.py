@@ -13,11 +13,11 @@ import pytest
 
 from experiments.execution.bundle import write_bundle
 from experiments.execution.catalog import load_catalog
+from experiments.execution.launch import main
 from experiments.execution.planning import build_plan
 from experiments.execution.resources import resolve_resources
 from experiments.execution.submission import submit_plan
-from experiments.launch import main
-from utils.config_io import read_yaml_mapping
+from utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -47,7 +47,7 @@ def test_every_pinned_experiment_has_a_resource_plan_and_wrapper(tmp_path, clust
             text=True, capture_output=True, check=True,
         )
         args = result.stdout.splitlines()
-        assert args[:4] == ["-m", "experiments.launch", "--repo-root", str(root)]
+        assert args[:4] == ["-m", "experiments.execution.launch", "--repo-root", str(root)]
         assert args[5:] == ["--local", "--dataset", "dataset with spaces", "--dry-run"]
         wrappers.append(args[4])
     assert len(wrappers) == len(set(wrappers))

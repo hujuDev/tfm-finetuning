@@ -11,7 +11,7 @@ import pandas as pd
 import pytest
 import torch
 
-from experiments.dataset_transfer.spec import (
+from experiments.transfer.spec import (
     SplitIdentity,
     TransferRouteSpec,
     TransferStageSpec,

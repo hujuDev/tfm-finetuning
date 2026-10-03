@@ -1,7 +1,7 @@
 """Discover the standalone experiment recipes, e.g. ``load_catalog(root)``."""
 from pathlib import Path
 
-from utils.config_io import read_yaml_mapping
+from utils.config import read_yaml_mapping
 
 
 def load_catalog(root: Path) -> dict:

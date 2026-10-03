@@ -7,8 +7,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from finetuning.models.tabpfn.official import import_official_tabpfn
 from utils.paths import get_repo_root
-from utils.tabpfn_official import import_official_tabpfn
 
 
 @dataclass(frozen=True)

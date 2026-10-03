@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from experiments.distribution_shift_calibration import (
+from experiments.transformations.calibration import (
     CalibrationRow,
     select_contextual_scale,
     select_heavy_tail,
@@ -79,7 +79,7 @@ def test_fresh_calibration_uses_validation_only_and_rejects_failed_runs(tmp_path
 
     import pytest
 
-    from experiments.distribution_shift_calibration import load_calibration_rows
+    from experiments.transformations.calibration import load_calibration_rows
 
     run = tmp_path / "run-1"
     run.mkdir()

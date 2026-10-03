@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import asdict
 
-from experiments.dataset_transfer.routes import resolve_transfer_route
+from experiments.transfer.routes.resolve import resolve_transfer_route
 
 
 def _config(*, family: str, route_id: str, target: str) -> dict[str, object]:

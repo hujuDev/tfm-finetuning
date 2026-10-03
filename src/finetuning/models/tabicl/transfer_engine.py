@@ -34,7 +34,7 @@ from finetuning.models.tabicl.preprocessing import (
 )
 
 if TYPE_CHECKING:
-    from experiments.dataset_transfer.spec import TransferStageSpec
+    from experiments.transfer.spec import TransferStageSpec
     from finetuning.models.base import CommonFineTuneConfig
     from finetuning.models.tabicl.model import TabICLAdapter
 

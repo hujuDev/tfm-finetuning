@@ -9,9 +9,9 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from experiments.dataset_transfer.pooled import run_balanced_pooled_training
-from experiments.dataset_transfer.runner_training import ValidatedStageTrainer
-from experiments.dataset_transfer.spec import (
+from experiments.transfer.pooled import run_balanced_pooled_training
+from experiments.transfer.runner.training import ValidatedStageTrainer
+from experiments.transfer.spec import (
     TransferRouteSpec,
     TransferStageSpec,
     TransferTrainingRecipe,
