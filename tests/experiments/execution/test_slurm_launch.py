@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -252,14 +253,15 @@ def test_experiment_notebook_previews_and_submits_through_submitit(tmp_path, sch
     namespace = {}
     exec(cells["load-environment"], namespace)
     namespace["results"] = tmp_path / "results"
-    exec(cells["preview-experiment"], namespace)
+    with_backend = lambda backend: re.sub(r'BACKEND = "\w+"', f'BACKEND = "{backend}"', cells["preview-experiment"])  # noqa: E731
+    exec(with_backend("local"), namespace)
     assert namespace["plan"]["backend"] == "local"
     assert namespace["EXPERIMENT_CONFIG"] == ROOT / "configs/experiments/distribution_shift_label_noise.yaml"
     assert namespace["plan"]["experiment"] == namespace["EXPERIMENT_CONFIG"].stem
     exec(cells["submit-experiment"], namespace)
     assert not Path(namespace["plan"]["output"]).exists()
     assert not scheduler[0].exists()
-    preview = cells["preview-experiment"].replace('BACKEND = "local"', 'BACKEND = "slurm"')
+    preview = with_backend("slurm")
     exec(preview, namespace)
     assert namespace["plan"]["backend"] == "slurm"
     launch = cells["submit-experiment"].replace("SUBMIT = False", "SUBMIT = True")

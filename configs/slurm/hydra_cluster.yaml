@@ -1,5 +1,7 @@
 # HYDRA (TU Berlin) defaults. Uses the scheduler account selected by the cluster.
 # If an explicit account is required, add slurm_account under parameters.
+# For another SLURM cluster, copy this file and edit the partitions, GPU constraints,
+# account and resource limits, then pass the copy via --cluster or SLURM_CONFIG in the notebook.
 schema_version: 1
 # Jobs use the Python interpreter running the launcher or notebook.
 # That environment must also be accessible on compute nodes.
