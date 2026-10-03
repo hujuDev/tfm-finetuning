@@ -30,7 +30,3 @@ uv run jupyter lab notebooks/introductory.ipynb
     - The supplied HPC setup targets **HYDRA at TU Berlin**. It should also work on other SLURM clusters with some configuration
 
 The author’s code is available under the [MIT license](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.md) for upstream software.
-
-## Citation
-
-If you use this code, please cite the thesis. Add its title and link here once published.
