@@ -1,6 +1,6 @@
 study: dataset_transfer_balanced_budget_classification
 title: 'Dataset Transfer: Balanced Classification Budgets'
-section: section3
+category: transfer
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

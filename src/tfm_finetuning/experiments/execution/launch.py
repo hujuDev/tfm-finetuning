@@ -82,7 +82,7 @@ def main(argv=None) -> int:
     try:
         if args.list:
             for name, recipe in load_catalog(root).items():
-                print(f"{name}\t{recipe['section']}\t{recipe['title']}")
+                print(f"{name}\t{recipe['category']}\t{recipe['title']}")
             return 0
         cluster = None
         if not args.local:

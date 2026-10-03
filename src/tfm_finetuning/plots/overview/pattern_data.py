@@ -22,7 +22,7 @@ def _canonical_frame(
     results_root: Path,
     *,
     metadata: dict[str, dict[str, Any]],
-    studies: Sequence[str] = ("unified_foundation_baseline",),
+    studies: Sequence[str] = ("overview_baseline",),
     expected_context_size: int | None = None,
 ) -> pd.DataFrame:
     """Aggregate fresh primary metrics, preserving paired-run gains and uncertainty."""
@@ -44,7 +44,7 @@ def _metric_frame(
     results_root: Path,
     *,
     metadata: dict[str, dict[str, Any]],
-    studies: Sequence[str] = ("unified_foundation_baseline",),
+    studies: Sequence[str] = ("overview_baseline",),
     expected_context_size: int | None = None,
 ) -> pd.DataFrame:
     """Average measurements over fixed seed/split repetitions for each model."""
@@ -59,7 +59,7 @@ def _metric_frame(
     )
 
 
-def _resource_frame(results_root: Path, studies: Sequence[str] = ("unified_foundation_baseline",)) -> pd.DataFrame:
+def _resource_frame(results_root: Path, studies: Sequence[str] = ("overview_baseline",)) -> pd.DataFrame:
     """Summarize the wall time of physical completed runs once per run."""
     records = []
     for run in read_runs(results_root, studies):

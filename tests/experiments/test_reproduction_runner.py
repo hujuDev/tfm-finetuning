@@ -45,12 +45,12 @@ def test_small_datasets_have_three_folds_without_changing_training_seeds():
 
 def test_hpo_removes_only_saturated_context_duplicates():
     runs = expand_runs(
-        recipe("foundation_regular_hpo_representative"), repo_root=ROOT, datasets=["anneal"], models=["mitra"]
+        recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["anneal"], models=["mitra"]
     )
     assert len(runs) == 81  # 3 folds * 3 seeds * 3 learning rates * 3 weight decays
     assert {r["config"]["foundation_model"]["context_size"] for r in runs} == {5000}
     large = expand_runs(
-        recipe("foundation_regular_hpo_representative"), repo_root=ROOT, datasets=["covertype"], models=["mitra"]
+        recipe("overview_hpo_representative"), repo_root=ROOT, datasets=["covertype"], models=["mitra"]
     )
     assert {r["config"]["foundation_model"]["context_size"] for r in large} == {5000, 10000, 20000}
 
@@ -111,7 +111,7 @@ def test_all_recipes_local_slurm_same_grid(tmp_path):
 def test_filtered_bundle_runs_only_selection(tmp_path):
     plan = build_plan(
         ROOT,
-        "unified_foundation_baseline",
+        "overview_baseline",
         None,
         tmp_path / "launch",
         datasets=["churn"],

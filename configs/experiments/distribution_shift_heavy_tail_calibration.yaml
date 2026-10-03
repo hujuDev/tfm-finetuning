@@ -1,6 +1,6 @@
 study: distribution_shift_heavy_tail_calibration
 title: 'Distribution Shift: Heavy-Tail Calibration'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

@@ -5,7 +5,7 @@ repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 # Put all producers before their checkpoint consumers.
 studies=(
-  unified_foundation_baseline foundation_regular_hpo_representative
+  overview_baseline overview_hpo_representative
   mitra_original_pipeline mitra_adapted_pipeline
   distribution_shift_subsample distribution_shift_label_noise distribution_shift_spurious_correlation
   distribution_shift_feature_order distribution_shift_numeric_scale

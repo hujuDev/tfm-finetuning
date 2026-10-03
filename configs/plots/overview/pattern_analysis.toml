@@ -1,6 +1,6 @@
 [input]
 results_root = "results"
-studies = ["unified_foundation_baseline"]
+studies = ["overview_baseline"]
 meta_feature_cache = "results/dataset_characteristics.json"
 
 [output]

@@ -1,6 +1,6 @@
-study: unified_foundation_baseline
+study: overview_baseline
 title: Default run atlas
-section: section1
+category: overview
 axes:
   preprocessing:
   - value: native

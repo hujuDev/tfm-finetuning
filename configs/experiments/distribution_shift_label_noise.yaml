@@ -1,6 +1,6 @@
 study: distribution_shift_label_noise
 title: 'Distribution Shift: Label Noise'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

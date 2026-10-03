@@ -61,7 +61,7 @@ def generate_hpo_analysis(*, config_path: Path = DEFAULT_CONFIG) -> dict[str, An
     defaults = _overview_gains(overview_details, models=models)
     comparison = selected.merge(defaults, on=["dataset", "model", "task_family", "score_metric"], how="left")
     comparison["gain_change_from_default"] = comparison["test_gain"] - comparison["default_gain"]
-    resources = _resource_frame(hpo_details, ["foundation_regular_hpo_representative"])
+    resources = _resource_frame(hpo_details, ["overview_hpo_representative"])
     trials.to_csv(output_dir / "trials.csv", index=False)
     selected.to_csv(output_dir / "selected_configurations.csv", index=False)
     comparison.to_csv(output_dir / "default_comparison.csv", index=False)
@@ -88,7 +88,7 @@ def generate_hpo_analysis(*, config_path: Path = DEFAULT_CONFIG) -> dict[str, An
 
 def _trial_frame(results_root: Path, *, models: list[str]) -> pd.DataFrame:
     """Aggregate HPO repetitions before selecting configurations on validation only."""
-    frame = metric_frame(results_root, ["foundation_regular_hpo_representative"])
+    frame = metric_frame(results_root, ["overview_hpo_representative"])
     if frame.empty:
         raise RuntimeError("No completed HPO runs found")
     frame = frame[(frame.metric == frame.score_metric) & frame.model.isin(models)]
@@ -136,7 +136,7 @@ def _select_trials(trials: pd.DataFrame) -> pd.DataFrame:
 
 def _overview_gains(results_root: Path, *, models: list[str]) -> pd.DataFrame:
     """Return default native-preprocessing gains from fresh baseline runs."""
-    frame = metric_frame(results_root, ["unified_foundation_baseline"])
+    frame = metric_frame(results_root, ["overview_baseline"])
     frame = frame[
         (frame.metric == frame.score_metric)
         & frame.model.isin(models)

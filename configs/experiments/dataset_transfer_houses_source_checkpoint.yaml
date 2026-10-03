@@ -1,6 +1,6 @@
 study: dataset_transfer_houses_source_checkpoint
 title: 'Dataset Transfer: Houses Source Checkpoint'
-section: section3
+category: transfer
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

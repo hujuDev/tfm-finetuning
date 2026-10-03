@@ -1,6 +1,6 @@
 study: distribution_shift_contextual_scale_coil_screen
 title: 'Distribution Shift: Contextual Scale Coil2000 Screen'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

@@ -1,6 +1,6 @@
 study: distribution_shift_class_prior_majority_downsampling
 title: 'Class Rebalancing: Balanced Training and Context'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

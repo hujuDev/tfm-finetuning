@@ -1,6 +1,6 @@
 study: distribution_shift_numeric_scale_alignment
 title: 'Distribution Shift: Numeric Scale and inference alignment'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

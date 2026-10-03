@@ -1,6 +1,6 @@
 study: distribution_shift_feature_order_alignment
 title: 'Distribution Shift: Feature Order and inference alignment'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

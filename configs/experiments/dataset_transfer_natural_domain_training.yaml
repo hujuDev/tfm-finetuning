@@ -1,6 +1,6 @@
 study: dataset_transfer_natural_domain_training
 title: 'Dataset Transfer: Natural Same-Schema Domains'
-section: section3
+category: transfer
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

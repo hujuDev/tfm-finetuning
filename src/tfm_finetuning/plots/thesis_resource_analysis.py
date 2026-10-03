@@ -35,7 +35,7 @@ def generate(config_path: Path = DEFAULT_CONFIG) -> dict[str, Any]:
         raise ValueError("No results for retained thesis experiment recipes")
     groups = defaultdict(lambda: defaultdict(float))
     for run in read_runs(results_root, studies):
-        if run.study == "foundation_regular_hpo_representative":
+        if run.study == "overview_hpo_representative":
             group = "HPO"
         elif run.study.startswith("distribution_shift_"):
             group = "Controlled transformations"

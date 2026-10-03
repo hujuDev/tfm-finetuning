@@ -19,7 +19,7 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def local_plan(tmp_path, **kwargs):
-    return build_plan(ROOT, "unified_foundation_baseline", None, tmp_path / "bundle with spaces",
+    return build_plan(ROOT, "overview_baseline", None, tmp_path / "bundle with spaces",
                       datasets=["splice"], models=["mitra"], preprocessing=["native"],
                       results_root=tmp_path / 'results', **kwargs)
 
@@ -43,7 +43,7 @@ def test_local_preview_needs_no_cluster_or_executor(tmp_path, monkeypatch, capsy
     monkeypatch.setattr(launch, 'read_yaml_mapping', no_cluster)
     monkeypatch.setattr(submission, 'make_executor', unexpected)
     output = tmp_path / 'out'
-    assert launch.main(['unified_foundation_baseline', '--local', '--dataset', 'splice', '--model', 'mitra',
+    assert launch.main(['overview_baseline', '--local', '--dataset', 'splice', '--model', 'mitra',
                         '--output', str(output), '--json']) == 0
     plan = json.loads(capsys.readouterr().out)
     assert plan['python'] == [sys.executable]
@@ -55,7 +55,7 @@ def test_local_preview_needs_no_cluster_or_executor(tmp_path, monkeypatch, capsy
 @pytest.mark.parametrize('options', [['--run'], ['--local', '--submit'], ['--local', '--cluster', 'unused.yaml']])
 def test_cli_rejects_mixed_execution_modes(options):
     with pytest.raises(SystemExit):
-        launch.main(['unified_foundation_baseline', *options])
+        launch.main(['overview_baseline', *options])
 
 
 def test_local_submitit_jobs_reuse_completed_results_from_another_directory(tmp_path, monkeypatch):

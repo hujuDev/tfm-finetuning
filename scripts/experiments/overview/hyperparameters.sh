@@ -2,4 +2,4 @@
 # Example: run this script with --dataset DATASET --dry-run.
 set -euo pipefail
 script_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-exec "$script_dir/../../launch_experiment.sh" foundation_regular_hpo_representative "$@"
+exec "$script_dir/../../launch_experiment.sh" overview_hpo_representative "$@"

@@ -1,6 +1,6 @@
 """Read completed fresh runs directly; no catalog or historical artifact lookup.
 
-Example: ``rows = metric_frame(Path("results"), ["unified_foundation_baseline"])``.
+Example: ``rows = metric_frame(Path("results"), ["overview_baseline"])``.
 """
 
 from __future__ import annotations

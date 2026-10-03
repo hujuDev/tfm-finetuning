@@ -10,7 +10,7 @@ from pathlib import Path
 def test_foundation_mainline_dry_run_emits_expanded_plan_without_results(tmp_path: Path) -> None:
     repo_root = Path(__file__).resolve().parents[2]
     results_root = tmp_path / "results"
-    config_path = repo_root / "configs/experiments/unified_foundation_baseline.yaml"
+    config_path = repo_root / "configs/experiments/overview_baseline.yaml"
 
     result = subprocess.run(
         [
@@ -30,7 +30,7 @@ def test_foundation_mainline_dry_run_emits_expanded_plan_without_results(tmp_pat
     )
 
     payload = json.loads(result.stdout)
-    assert payload["runs"][0]["study"] == "unified_foundation_baseline"
+    assert payload["runs"][0]["study"] == "overview_baseline"
     assert payload["run_count"] > 0
     assert payload["runs"][0]["dataset"] == "churn"
     assert not results_root.exists()

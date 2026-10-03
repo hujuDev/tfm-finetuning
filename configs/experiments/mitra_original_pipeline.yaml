@@ -1,6 +1,6 @@
 study: mitra_original_pipeline
 title: Original Mitra pipeline
-section: section1
+category: overview
 models:
 - name: mitra
   config: configs/finetuning/default_mitra.toml

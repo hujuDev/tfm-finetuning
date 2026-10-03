@@ -18,7 +18,7 @@ from tfm_finetuning.plots.thesis_resource_analysis import generate as generate_r
 def write_run(
     root: Path,
     *,
-    study="unified_foundation_baseline",
+    study="overview_baseline",
     dataset="houses",
     model="mitra",
     seed=0,
@@ -89,7 +89,7 @@ def test_completed_duplicate_corrupt_and_failed_runs_are_not_silently_pooled(tmp
     write_run(tmp_path, run_id="duplicate")
     with pytest.raises(ValueError, match="Duplicate"):
         list(read_runs(tmp_path))
-    (tmp_path / "unified_foundation_baseline" / "duplicate" / "run.json").unlink()
+    (tmp_path / "overview_baseline" / "duplicate" / "run.json").unlink()
     directory = write_run(tmp_path, run_id="failed", seed=1, status="failed")
     with pytest.warns(UserWarning, match="Excluded failed"):
         assert len(list(read_runs(tmp_path))) == 1
@@ -114,7 +114,7 @@ def test_hpo_selects_validation_config_and_renders_final_artifacts_from_fresh_ru
                 for seed in (0, 1, 2):
                     write_run(
                         results,
-                        study="foundation_regular_hpo_representative",
+                        study="overview_hpo_representative",
                         model=model,
                         dataset=dataset,
                         metric=metric,
@@ -190,7 +190,7 @@ def test_overview_generates_all_final_outputs_from_fresh_reports(tmp_path):
     config = tmp_path / "overview.toml"
     config.write_text(f'''[input]
 results_root = "{results}"
-studies = ["unified_foundation_baseline"]
+studies = ["overview_baseline"]
 meta_feature_cache = "{cache}"
 [output]
 root = "{tmp_path / "analysis"}"

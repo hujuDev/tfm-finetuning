@@ -1,6 +1,6 @@
-study: foundation_regular_hpo_representative
+study: overview_hpo_representative
 title: Foundation Regular HPO Representative
-section: section1
+category: overview
 models:
 - name: tabpfnv2
   config: configs/finetuning/default_tabpfnv2_foundation.toml

@@ -1,6 +1,6 @@
 study: distribution_shift_numeric_scale
 title: 'Distribution Shift: Numeric Scale'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

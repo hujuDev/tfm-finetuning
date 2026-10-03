@@ -1,6 +1,6 @@
 study: dataset_transfer_learned_retention_eval
 title: 'Dataset Transfer: Learned Bank--Covertype Capability Retention'
-section: section3
+category: transfer
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

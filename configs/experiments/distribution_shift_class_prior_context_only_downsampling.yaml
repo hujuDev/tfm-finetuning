@@ -1,6 +1,6 @@
 study: distribution_shift_class_prior_context_only_downsampling
 title: 'Class Rebalancing: Balanced Context Only'
-section: section2
+category: transformations
 models:
 - name: tabpfnv25
   config: configs/finetuning/default_tabpfnv2_5_foundation.toml

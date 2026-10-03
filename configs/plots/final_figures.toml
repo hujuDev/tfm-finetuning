@@ -3,7 +3,7 @@
 root = "results/figure_assets/findings"
 
 [groups.overview]
-studies = ["unified_foundation_baseline"]
+studies = ["overview_baseline"]
 entrypoint = "tfm_finetuning.plots.overview.pattern_analysis:generate_pattern_analysis"
 config = "configs/plots/overview/pattern_analysis.toml"
 assets = [
@@ -25,7 +25,7 @@ assets = [
 ]
 
 [groups.hpo]
-studies = ["foundation_regular_hpo_representative", "unified_foundation_baseline"]
+studies = ["overview_hpo_representative", "overview_baseline"]
 entrypoint = "tfm_finetuning.plots.overview.hpo_analysis:generate_hpo_analysis"
 config = "configs/plots/overview/hpo_analysis.toml"
 assets = [

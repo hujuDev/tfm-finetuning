@@ -61,7 +61,7 @@ def test_every_pinned_experiment_has_a_resource_plan_and_wrapper(tmp_path, clust
 
 
 def test_baseline_includes_main_panel_addendum_and_all_four_models(tmp_path, cluster):
-    plan = plan_for(tmp_path, cluster, "unified_foundation_baseline")
+    plan = plan_for(tmp_path, cluster, "overview_baseline")
     jobs = plan["jobs"]
     assert len({d for job in jobs for d in job["datasets"]}) == 57
     assert {m for job in jobs for m in job["models"]} == {"tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"}
@@ -213,7 +213,7 @@ def test_invalid_submitit_parameters_fail_before_any_submission(tmp_path, cluste
 
 
 def test_same_dataset_keeps_experiment_specific_resource_rule(tmp_path, cluster):
-    baseline = plan_for(tmp_path, cluster, "unified_foundation_baseline", datasets=["splice"], models=["mitra"])
+    baseline = plan_for(tmp_path, cluster, "overview_baseline", datasets=["splice"], models=["mitra"])
     transformed = plan_for(tmp_path, cluster, datasets=["splice"], models=["mitra"])
     assert baseline["jobs"][0]["resources"]["profile"] == "gpu_40gb_5h"
     assert transformed["jobs"][0]["resources"]["profile"] == "gpu_80gb_2d"
@@ -221,7 +221,7 @@ def test_same_dataset_keeps_experiment_specific_resource_rule(tmp_path, cluster)
 
 def test_unknown_preprocessing_is_not_silently_ignored(tmp_path, cluster):
     with pytest.raises(ValueError, match="Preprocessing must be native or shared"):
-        plan_for(tmp_path, cluster, "unified_foundation_baseline", preprocessing=["native", "typo"])
+        plan_for(tmp_path, cluster, "overview_baseline", preprocessing=["native", "typo"])
 
 
 @pytest.mark.parametrize("key", ["nodes", "tasks_per_node", "slurm_nodes", "slurm_ntasks_per_node"])
