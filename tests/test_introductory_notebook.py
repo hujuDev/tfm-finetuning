@@ -44,7 +44,6 @@ def setup_notebook(tmp_path, monkeypatch):
     assert sys.path == old_path
     assert "PYTHONPATH" not in os.environ
     namespace["display"] = lambda *args: None
-    execute(cells["settings"], namespace)
     return cells, namespace
 
 
@@ -80,8 +79,7 @@ def test_tracking_and_current_report_comparison(setup_notebook, monkeypatch, mod
     monkeypatch.setenv("WANDB_PROJECT", "example-project")
     monkeypatch.setenv("WANDB_ENTITY", "example-team")
     monkeypatch.setenv("WANDB_API_KEY", "not-a-real-test-credential")
-    execute(cells["tracking-settings"], namespace)
-    execute(cells["save-config"], namespace)
+    execute(cells["settings"], namespace)
     execute(cells["preview"], namespace)
     saved = yaml.safe_load(namespace["config_path"].read_text())
     assert saved["wandb"] == {"mode": mode, "project": "example-project", "entity": "example-team"}
@@ -92,6 +90,9 @@ def test_tracking_and_current_report_comparison(setup_notebook, monkeypatch, mod
     def fake_runner(argv):
         calls.append(argv)
         assert argv[0] == sys.executable
+        if "--config" not in argv:
+            assert argv[2] == "tfm_finetuning.data.download.tabpfn_checkpoints"
+            return
         assert argv[argv.index("--config") + 1] == str(namespace["config_path"])
         assert argv[argv.index("--results-root") + 1] == str(namespace["results"])
         for run in expand_runs(saved, repo_root=ROOT):
@@ -118,7 +119,7 @@ def test_tracking_and_current_report_comparison(setup_notebook, monkeypatch, mod
     namespace["run_command"] = fake_runner
     monkeypatch.setitem(sys.modules, "wandb", SimpleNamespace(login=lambda: logins.append(True) or True))
     execute(cells["run"], namespace)
-    assert len(calls) == 1
+    assert len(calls) == 2
     assert len(logins) == (1 if mode == "online" else 0)
     execute(cells["results"], namespace)
     table = namespace["comparison"]
@@ -130,6 +131,7 @@ def test_tracking_and_current_report_comparison(setup_notebook, monkeypatch, mod
 
 def test_results_require_completed_runs(setup_notebook):
     cells, namespace = setup_notebook
+    execute(cells["settings"], namespace)
     execute(cells["preview"], namespace)
     with pytest.raises(RuntimeError, match="Run training first"):
         execute(cells["results"], namespace)
