@@ -245,11 +245,11 @@ def test_multi_process_runs_are_rejected_before_submission(tmp_path, cluster, sc
 
 def test_experiment_notebook_previews_and_submits_through_submitit(tmp_path, scheduler):
     """Execute the actual notebook cells against the fake scheduler, never training."""
-    notebook = json.loads((ROOT / "notebooks/hydra_experiments.ipynb").read_text())
+    notebook = json.loads((ROOT / "notebooks/launch_experiments.ipynb").read_text())
     cells = {cell["id"]: "".join(cell["source"]) for cell in notebook["cells"] if cell["cell_type"] == "code"}
     for cell in notebook["cells"]:
         if cell["cell_type"] == "code":
-            compile("".join(cell["source"]), str(ROOT / "notebooks/hydra_experiments.ipynb"), "exec")
+            compile("".join(cell["source"]), str(ROOT / "notebooks/launch_experiments.ipynb"), "exec")
     namespace = {}
     exec(cells["load-environment"], namespace)
     namespace["results"] = tmp_path / "results"

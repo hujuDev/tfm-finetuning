@@ -47,7 +47,7 @@ uv run python -m tfm_finetuning.experiments.execution.launch distribution_shift_
 uv run jupyter lab notebooks/introductory.ipynb
 ```
 
-- Then use the [experiments notebook](notebooks/hydra_experiments.ipynb) to select, preview and launch the same experiments interactively
+- Then use the [experiments notebook](notebooks/launch_experiments.ipynb) to select, preview and launch the same experiments interactively
 
 ## Repository layout
 
