@@ -49,6 +49,18 @@ uv run jupyter lab notebooks/introductory.ipynb
 
 - Then use the [experiments notebook](notebooks/launch_experiments.ipynb) to select, preview and launch the same experiments interactively
 
+## Results
+
+The results of the thesis experiments (8,988 runs) are available as an asset of the latest [release](https://github.com/hujuDev/tfm-finetuning/releases/latest). Download and extract them in the repository root to regenerate the figures and tables without a GPU (see the README inside the archive for details):
+
+```bash
+curl -L -O https://github.com/hujuDev/tfm-finetuning/releases/latest/download/tfm-finetuning-results.tar.gz
+```
+
+```bash
+tar -xzf tfm-finetuning-results.tar.gz
+```
+
 ## Repository layout
 
 - `src/tfm_finetuning/`
