@@ -17,4 +17,6 @@ exec "${TFM_PYTHON:-python3}" -m pytest -q \
   tests/plots/transfer/test_transfer_analysis.py tests/plots/transfer/test_natural_domain_analysis.py \
   tests/experiments/transformations/test_calibration.py tests/experiments/transformations/test_final_configs.py \
   tests/data/test_build_base_meta_cache.py tests/plots/test_metrics.py \
+  tests/experiments/test_prefetch.py tests/experiments/test_preprint_experiment.py \
+  tests/finetuning/models/test_source.py tests/plots/preprint \
   "$@"
