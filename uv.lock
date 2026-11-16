@@ -3,8 +3,8 @@ revision = 3
 requires-python = ">=3.11, <3.14"
 resolution-markers = [
     "python_full_version >= '3.13' and sys_platform == 'linux'",
-    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform == 'linux'",
     "python_full_version == '3.12.*' and sys_platform != 'linux'",
     "python_full_version < '3.12' and sys_platform == 'linux'",
     "python_full_version < '3.12' and sys_platform != 'linux'",
@@ -5523,7 +5523,6 @@ dependencies = [
     { name = "pandas" },
     { name = "pyarrow" },
     { name = "pydantic" },
-    { name = "pytest" },
     { name = "python-dotenv" },
     { name = "pyyaml" },
     { name = "scikit-learn" },
@@ -5545,6 +5544,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "pre-commit" },
+    { name = "pytest" },
     { name = "ruff" },
 ]
 
@@ -5564,7 +5564,6 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "pyarrow", specifier = ">=19.0.0" },
     { name = "pydantic", specifier = ">=2.10.3" },
-    { name = "pytest", specifier = ">=8.3.5" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "pyyaml" },
     { name = "scikit-learn", specifier = ">=1.6.1" },
@@ -5586,6 +5585,7 @@ requires-dist = [
 [package.metadata.requires-dev]
 dev = [
     { name = "pre-commit", specifier = ">=4.0.1" },
+    { name = "pytest", specifier = ">=8.3.5" },
     { name = "ruff", specifier = ">=0.8.0" },
 ]
 

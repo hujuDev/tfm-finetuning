@@ -40,7 +40,6 @@ dependencies = [
     "wandb>=0.18.5",
     "python-dotenv>=1.0.1",
     "pydantic>=2.10.3",
-    "pytest>=8.3.5",
 ]
 
 [project.urls]
@@ -51,7 +50,7 @@ tfm-experiment = "tfm_finetuning.experiments.run_experiment:main"
 tfm-figures = "tfm_finetuning.plots.final_figures:main"
 
 [dependency-groups]
-dev = ["pre-commit>=4.0.1", "ruff>=0.8.0"]
+dev = ["pre-commit>=4.0.1", "pytest>=8.3.5", "ruff>=0.8.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
