@@ -79,7 +79,12 @@ def ensure_dataset(dataset: str, config: dict, *, repo_root: Path) -> Path:
                 "--output-dir",
                 str(output),
             ]
-            command += ["--source", "openml", "--task-id", str(task)] if task else ["--dataset-name", dataset]
+            # The exporter defaults to the TabPFNv2 subset, which does not contain the largest TabArena datasets.
+            command += (
+                ["--source", "openml", "--task-id", str(task)]
+                if task
+                else ["--dataset-name", dataset, "--subset", "all"]
+            )
             if output.exists():
                 command.append("--overwrite")  # Repair a partial export; the exporter otherwise skips existing files.
             for flag, value in zip(("--fold", "--repeat", "--sample"), match.groups(), strict=True):

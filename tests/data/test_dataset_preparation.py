@@ -45,3 +45,21 @@ def test_partial_export_is_repaired_instead_of_skipped(tmp_path, monkeypatch, pa
     assert len(commands) == 1
     assert ensure_dataset("demo", {}, repo_root=tmp_path) == output
     assert len(commands) == 1
+
+
+def test_tabarena_datasets_are_exported_from_the_full_tabarena_list(tmp_path, monkeypatch):
+    """The exporter's default TabPFNv2 subset omits large datasets such as APSFailure."""
+    (tmp_path / "configs").mkdir()
+    (tmp_path / "configs/datasets.yaml").write_text("demo:\n  n_rows: 10\n")
+    output = tmp_path / "data/tabarena/demo"
+    commands = []
+
+    def export(command, **kwargs):
+        commands.append(command)
+        complete_export(output)
+
+    monkeypatch.setattr("tfm_finetuning.experiments.datasets.subprocess.run", export)
+    ensure_dataset("demo", {}, repo_root=tmp_path)
+
+    assert commands[0][commands[0].index("--dataset-name") + 1] == "demo"
+    assert commands[0][commands[0].index("--subset") + 1] == "all"
