@@ -6,7 +6,7 @@
 # 2. Export the datasets once, serially, before submitting; parallel jobs can corrupt each other's export on BeeGFS:
 #    python -m tfm_finetuning.experiments.prefetch overview_baseline
 # 3. Submit (add --scope smoke for a 2-epoch check with one split per dataset):
-#    APPTAINERENV_WANDB_MODE=disabled PYTHONPATH=src python -m tfm_finetuning.experiments.execution.launch \
+#    PYTHONPATH=src python -m tfm_finetuning.experiments.execution.launch \
 #        overview_baseline --cluster configs/slurm/hydra_apptainer.yaml --scope smoke --dataset credit-g --submit
 schema_version: 1
 python: [apptainer, exec, --nv, --env, PYTHONPATH=src, scripts/apptainer/img/tfm_finetuning.sif, python]

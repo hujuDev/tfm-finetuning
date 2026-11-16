@@ -37,5 +37,5 @@ backend = "tabarena_aligned"
 device = "auto"
 
 [wandb]
-project = "tabpfn-finetune-eval"
-mode = "online"
+project = "tfm-finetuning"
+mode = "disabled"
