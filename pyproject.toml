@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Fine-tuning, evaluation, and controlled experiments for tabular foundation models."
 license = "MIT"
 readme = "README.md"
-requires-python = ">=3.11,<3.14"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "autogluon>=1.5,<1.6",
     "einops>=0.8.0",
