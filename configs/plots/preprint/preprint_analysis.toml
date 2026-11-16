@@ -1,0 +1,18 @@
+[input]
+results_root = "results"
+studies = ["overview_baseline", "preprint_tabpfn_v3"]
+
+[analysis]
+bootstrap_seed = 20261013
+bootstrap_resamples = 5000
+default_preprocessing = "shared"
+default_context_size = 10000
+# The 55-dataset panel of the baseline analysis.
+excluded_datasets = ["airlines", "miniboone"]
+
+# Appendix heatmap: oldest permissive model, most capable model and the other two model families.
+[analysis.associations]
+models = ["tabpfnv2", "tabpfnv35", "tabiclv2", "mitra"]
+meta_feature_cache = "results/dataset_characteristics.json"
+# Dataset characteristics and predeclared structural hypotheses.
+feature_config = "configs/plots/overview/pattern_analysis.toml"
