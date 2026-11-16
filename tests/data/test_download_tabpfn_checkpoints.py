@@ -1,4 +1,4 @@
-"""Model setup must reproduce the four configured thesis weights without hidden defaults."""
+"""Model setup must reproduce the configured TabPFN weights without hidden defaults."""
 
 from __future__ import annotations
 
@@ -20,7 +20,7 @@ def test_checkpoint_files_match_model_config_and_original_v2_weights():
         for path in (version.classifier_checkpoint, version.regressor_checkpoint)
     }
     assert {spec.filename for spec in downloader.CHECKPOINTS} == configured
-    assert len(downloader.CHECKPOINTS) == 4
+    assert len(downloader.CHECKPOINTS) == 8
     classifier = downloader.CHECKPOINTS[0]
     assert classifier.repo_id == "Prior-Labs/TabPFN-v2-clf"
     assert classifier.filename == "tabpfn-v2-classifier.ckpt"
@@ -95,8 +95,28 @@ def test_cli_filters_versions_and_returns_failure_after_attempting_group(tmp_pat
     assert all(call.args[0].version == "v2.5" for call in fetch.call_args_list)
 
 
-def test_cli_default_downloads_all_four_weights(tmp_path, monkeypatch):
+def test_cli_default_downloads_all_weights(tmp_path, monkeypatch):
     fetch = Mock(return_value="downloaded")
     monkeypatch.setattr(downloader, "download_checkpoint", fetch)
     downloader.main(["--models-root", str(tmp_path)])
     assert [call.args[0] for call in fetch.call_args_list] == list(downloader.CHECKPOINTS)
+
+
+def test_v3_checkpoints_are_pinned_to_the_published_hugging_face_files():
+    by_name = {spec.filename: spec for spec in downloader.CHECKPOINTS}
+    v3_classifier = by_name["tabpfn-v3-classifier-v3_default.ckpt"]
+    assert (v3_classifier.version, v3_classifier.repo_id) == ("v3", "Prior-Labs/tabpfn_3")
+    assert v3_classifier.revision == "24a16a89d245878b846555110985634aa2e656d7"
+    assert by_name["tabpfn-v3-regressor-v3_default.ckpt"].repo_id == "Prior-Labs/tabpfn_3"
+    for filename in ("tabpfn-v3.5-20260909.safetensors", "tabpfn-v3.5-fast-20260909.safetensors"):
+        assert (by_name[filename].version, by_name[filename].repo_id) == ("v3.5", "Prior-Labs/tabpfn_3_5")
+        assert by_name[filename].revision == "06bf2ba35c80a92a3b9abb436b99cf49e7a0365e"
+
+
+@pytest.mark.parametrize(("group", "expected"), [("v3", 2), ("v3.5", 2), ("v2", 2), ("v2.5", 2)])
+def test_cli_group_selects_only_that_version(tmp_path, monkeypatch, group, expected):
+    fetch = Mock(return_value="downloaded")
+    monkeypatch.setattr(downloader, "download_checkpoint", fetch)
+    downloader.main(["--models-root", str(tmp_path), "--group", group])
+    assert fetch.call_count == expected
+    assert all(call.args[0].version == group for call in fetch.call_args_list)

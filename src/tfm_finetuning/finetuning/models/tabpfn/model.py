@@ -1,4 +1,4 @@
-"""TabPFN v2/v2.5 adapter: preprocessing boundary, vendor calls, state, and prediction."""
+"""TabPFN adapter (v2 to v3.5): preprocessing boundary, vendor calls, state, and prediction."""
 
 from __future__ import annotations
 
@@ -34,7 +34,7 @@ _TABPFN_MAX_FEATURES_PER_ESTIMATOR = 500
 
 
 class TabPFNAdapter:
-    """Complete thesis-side fine-tuning slice for TabPFN v2 and v2.5.
+    """Fine-tuning adapter for TabPFN v2, v2.5, v3, v3.5 and v3.5-Fast.
 
     Example:
         >>> from tfm_finetuning.finetuning.models.registry import get_model_spec

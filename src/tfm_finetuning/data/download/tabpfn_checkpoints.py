@@ -1,4 +1,4 @@
-"""Fetch the four thesis TabPFN weights: ``python -m tfm_finetuning.data.download.tabpfn_checkpoints``."""
+"""Fetch the TabPFN weights: ``python -m tfm_finetuning.data.download.tabpfn_checkpoints``."""
 
 from __future__ import annotations
 
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class CheckpointSpec:
-    """An immutable upstream file and the SHA-256 of the thesis checkpoint."""
+    """An immutable upstream file and the SHA-256 of the checkpoint used in the published runs."""
 
     version: str
     repo_id: str
@@ -28,8 +28,11 @@ class CheckpointSpec:
     sha256: str
 
 
-# Verified against the original thesis files and Hugging Face LFS metadata.
+# The v2 and v2.5 entries are verified against the files of the published runs and Hugging Face LFS metadata.
 # Explicit v2 classifier selection matters: the package default has since changed.
+# The v3 and v3.5 entries carry the SHA-256 published in the Hugging Face LFS metadata of the pinned revision.
+# v3.5 and v3.5-Fast are single multitask checkpoints. The v3 repo and the v3.5 repo are not gated, but their
+# licenses (tabpfn-3-license-v1.0, tabpfn-3-5-license-v1.0) are non-commercial.
 CHECKPOINTS = (
     CheckpointSpec(
         "v2",
@@ -59,6 +62,34 @@ CHECKPOINTS = (
         "tabpfn-v2.5-regressor-v2.5_default.ckpt",
         "6e0308b7e5f3a8325b798b96d986b2b282c3608b1cda6e2991425a2a261d40b8",
     ),
+    CheckpointSpec(
+        "v3",
+        "Prior-Labs/tabpfn_3",
+        "24a16a89d245878b846555110985634aa2e656d7",
+        "tabpfn-v3-classifier-v3_default.ckpt",
+        "d0d865d54dfbc524f5703104be90620182dca7e5fb2c16de72e9959ea18f3988",
+    ),
+    CheckpointSpec(
+        "v3",
+        "Prior-Labs/tabpfn_3",
+        "24a16a89d245878b846555110985634aa2e656d7",
+        "tabpfn-v3-regressor-v3_default.ckpt",
+        "311ce18d97e9533d8585eaadafe040fbdd8070533209ed8696641dadc97a7301",
+    ),
+    CheckpointSpec(
+        "v3.5",
+        "Prior-Labs/tabpfn_3_5",
+        "06bf2ba35c80a92a3b9abb436b99cf49e7a0365e",
+        "tabpfn-v3.5-20260909.safetensors",
+        "ece4d67eadfea42eb0e610df5189bea60cb7f31073d81e9c7a019b76eacf0be3",
+    ),
+    CheckpointSpec(
+        "v3.5",
+        "Prior-Labs/tabpfn_3_5",
+        "06bf2ba35c80a92a3b9abb436b99cf49e7a0365e",
+        "tabpfn-v3.5-fast-20260909.safetensors",
+        "14e0b81285bca7a6d1ef121169f27f651f76dff49cad6c0b8779d5c836018550",
+    ),
 )
 
 
@@ -66,7 +97,7 @@ def _verify(path: Path, spec: CheckpointSpec) -> None:
     with path.open("rb") as handle:
         digest = hashlib.file_digest(handle, "sha256").hexdigest()
     if digest != spec.sha256:
-        raise ValueError(f"{path}: checkpoint checksum mismatch; use --overwrite to fetch the thesis weights")
+        raise ValueError(f"{path}: checkpoint checksum mismatch; use --overwrite to fetch the pinned weights")
 
 
 def download_checkpoint(spec: CheckpointSpec, models_root: Path, *, overwrite: bool = False) -> str:
@@ -97,10 +128,10 @@ def download_checkpoint(spec: CheckpointSpec, models_root: Path, *, overwrite: b
 
 
 def main(argv: list[str] | None = None) -> None:
-    """Download all thesis weights, or select ``--group v2`` / ``--group v2.5``."""
-    parser = argparse.ArgumentParser(description="Download and verify the four TabPFN checkpoints used in the thesis.")
+    """Download all weights, or select ``--group v2`` / ``v2.5`` / ``v3`` / ``v3.5`` (v3.5 includes v3.5-Fast)."""
+    parser = argparse.ArgumentParser(description="Download and verify the pinned TabPFN checkpoints.")
     parser.add_argument("--models-root", type=Path, default=get_repo_root() / "models")
-    parser.add_argument("--group", choices=("all", "v2", "v2.5"), default="all")
+    parser.add_argument("--group", choices=("all", "v2", "v2.5", "v3", "v3.5"), default="all")
     parser.add_argument("--overwrite", action="store_true", help="Fetch and replace existing checkpoints.")
     args = parser.parse_args(argv)
     logging.basicConfig(level=logging.INFO, format="%(message)s")

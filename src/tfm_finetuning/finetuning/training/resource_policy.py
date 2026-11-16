@@ -64,7 +64,7 @@ def _resolve_estimator_fallback_policy(config: Mapping[str, Any], *, model_id: s
     raw_policy = get_nested(config, "finetune.estimator_fallback_policy")
     if raw_policy is not None:
         return _normalize_estimator_fallback_policy(raw_policy)
-    return _ESTIMATOR_FALLBACK_RETRY if model_id.startswith("tabpfn_v2") else _ESTIMATOR_FALLBACK_STRICT
+    return _ESTIMATOR_FALLBACK_RETRY if model_id.startswith("tabpfn_") else _ESTIMATOR_FALLBACK_STRICT
 
 
 def _coerce_context_sizes(value: Any) -> tuple[int, ...] | None:

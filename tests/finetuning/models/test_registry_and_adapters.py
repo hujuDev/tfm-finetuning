@@ -31,8 +31,16 @@ def test_finetune_dependencies_are_packaged_for_cluster_image() -> None:
 def test_registry_reports_pinned_sources() -> None:
     specs = {spec.model_id: spec for spec in iter_model_specs(repo_root=Path.cwd())}
 
-    assert set(specs) == {"tabpfn_v2", "tabpfn_v2_5", "tabicl_v2", "mitra"}
-    for model_id in ("tabpfn_v2", "tabpfn_v2_5"):
+    assert set(specs) == {
+        "tabpfn_v2",
+        "tabpfn_v2_5",
+        "tabpfn_v3",
+        "tabpfn_v3_5",
+        "tabpfn_v3_5_fast",
+        "tabicl_v2",
+        "mitra",
+    }
+    for model_id in ("tabpfn_v2", "tabpfn_v2_5", "tabpfn_v3", "tabpfn_v3_5", "tabpfn_v3_5_fast"):
         assert specs[model_id].version_payload["source_available"]
         assert specs[model_id].version_payload["source_resolved_path"]
         assert specs[model_id].version_payload["package_version"].startswith("9.")
@@ -48,8 +56,14 @@ def test_registry_reports_pinned_sources() -> None:
 
 
 def test_tabpfn_version_catalog_separates_supported_and_vendor_only_models() -> None:
-    assert [version.model_id for version in TABPFN_VERSIONS] == ["tabpfn_v2", "tabpfn_v2_5"]
-    assert VENDOR_ONLY_TABPFN_ARCHITECTURES == ("tabpfn_v2_6", "tabpfn_v3")
+    assert [version.model_id for version in TABPFN_VERSIONS] == [
+        "tabpfn_v2",
+        "tabpfn_v2_5",
+        "tabpfn_v3",
+        "tabpfn_v3_5",
+        "tabpfn_v3_5_fast",
+    ]
+    assert VENDOR_ONLY_TABPFN_ARCHITECTURES == ("tabpfn_v2_6",)
 
     for model_id in VENDOR_ONLY_TABPFN_ARCHITECTURES:
         with pytest.raises(ModelRegistryError, match="Unknown"):

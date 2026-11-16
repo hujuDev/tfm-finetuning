@@ -148,7 +148,7 @@ def _native_preprocessing_metadata(data: SplitEvaluationData, *, model_id: str) 
         "adapter_feature_schema": schema,
         "categorical_feature_indices": list(schema["categorical_feature_indices"]),
     }
-    if model_id.startswith("tabpfn_v2"):
+    if model_id.startswith("tabpfn_"):
         metadata.update(_tabpfn_native_validation_encoding_metadata(schema))
     return metadata
 
