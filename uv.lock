@@ -2,14 +2,12 @@ version = 1
 revision = 3
 requires-python = ">=3.11, <3.14"
 resolution-markers = [
-    "python_full_version >= '3.13' and sys_platform != 'linux' and sys_platform != 'win32'",
     "python_full_version >= '3.13' and sys_platform == 'linux'",
-    "python_full_version >= '3.13' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform != 'linux'",
     "python_full_version == '3.12.*' and sys_platform == 'linux'",
-    "python_full_version < '3.12' and sys_platform != 'linux'",
+    "python_full_version >= '3.13' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and sys_platform != 'linux'",
     "python_full_version < '3.12' and sys_platform == 'linux'",
-    "python_version < '0'",
+    "python_full_version < '3.12' and sys_platform != 'linux'",
 ]
 
 [[package]]
@@ -579,15 +577,6 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/7d/6b/d52e42361e1aa00709585ecc30b3f9684b3ab62530771402248b1b1d6240/babel-2.17.0.tar.gz", hash = "sha256:0c54cffb19f690cdcc52a3b50bcbf71e07a808d1c80d549f2459b9d2cf0afb9d", size = 9951852, upload-time = "2025-02-01T15:17:41.026Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b7/b8/3fe70c75fe32afc4bb507f75563d39bc5642255d1d94f1f23604725780bf/babel-2.17.0-py3-none-any.whl", hash = "sha256:4d0b53093fdfb4b21c92b5213dba5a1b23885afa8383709427046b21c366e5f2", size = 10182537, upload-time = "2025-02-01T15:17:37.39Z" },
-]
-
-[[package]]
-name = "backoff"
-version = "2.2.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/47/d7/5bbeb12c44d7c4f2fb5b56abce497eb5ed9f34d85701de869acedd602619/backoff-2.2.1.tar.gz", hash = "sha256:03f829f5bb1923180821643f8753b0502c3b682293992485b0eef2807afa5cba", size = 17001, upload-time = "2022-10-05T19:19:32.061Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/df/73/b6e24bd22e6720ca8ee9a85a0c4a2971af8497d8f3193fa05390cbd46e09/backoff-2.2.1-py3-none-any.whl", hash = "sha256:63579f9a0628e06278f7e47b7d7d5b6ce20dc65c5e96a6f3ca99a6adca0396e8", size = 15148, upload-time = "2022-10-05T19:19:30.546Z" },
 ]
 
 [[package]]
@@ -1197,15 +1186,6 @@ wheels = [
 ]
 
 [[package]]
-name = "distro"
-version = "1.9.0"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fc/f8/98eea607f65de6527f8a2e8885fc8015d3e6f5775df186e443e0964a11c3/distro-1.9.0.tar.gz", hash = "sha256:2fa77c6fd8940f116ee1d6b94a2f90b13b5ea8d019b98bc8bafdcabcdd9bdbed", size = 60722, upload-time = "2023-12-24T09:54:32.31Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/12/b3/231ffd4ab1fc9d679809f356cebee130ac7daa00d6d6f3206dd4fd137e9e/distro-1.9.0-py3-none-any.whl", hash = "sha256:7bffd925d65168f85027d8da9af6bddab658135b840670a223589bc0c8ef02b2", size = 20277, upload-time = "2023-12-24T09:54:30.421Z" },
-]
-
-[[package]]
 name = "einops"
 version = "0.8.1"
 source = { registry = "https://pypi.org/simple" }
@@ -1226,15 +1206,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/95/af/2a2f83f981e969ae3ec5dc30f9b0cd1a258acabc2ff7b33eb9726e334e55/einx-0.3.0.tar.gz", hash = "sha256:17ff87c6a0f68ab358c1da489f00e95f1de106fd12ff17d0fb3e210aaa1e5f8c", size = 84758, upload-time = "2024-06-11T13:49:37.532Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/90/04/4a730d74fd908daad86d6b313f235cdf8e0cf1c255b392b7174ff63ea81a/einx-0.3.0-py3-none-any.whl", hash = "sha256:367d62bab8dbb8c4937308512abb6f746cc0920990589892ba0d281356d39345", size = 102958, upload-time = "2024-06-11T13:49:36.441Z" },
-]
-
-[[package]]
-name = "eval-type-backport"
-version = "0.3.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/fb/a3/cafafb4558fd638aadfe4121dc6cefb8d743368c085acb2f521df0f3d9d7/eval_type_backport-0.3.1.tar.gz", hash = "sha256:57e993f7b5b69d271e37482e62f74e76a0276c82490cf8e4f0dffeb6b332d5ed", size = 9445, upload-time = "2025-12-02T11:51:42.987Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/cf/22/fdc2e30d43ff853720042fa15baa3e6122722be1a7950a98233ebb55cd71/eval_type_backport-0.3.1-py3-none-any.whl", hash = "sha256:279ab641905e9f11129f56a8a78f493518515b83402b860f6f06dd7c011fdfa8", size = 6063, upload-time = "2025-12-02T11:51:41.665Z" },
 ]
 
 [[package]]
@@ -3223,15 +3194,6 @@ wheels = [
 ]
 
 [[package]]
-name = "nvidia-ml-py"
-version = "13.595.45"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/ce/49/c29f6e30d8662d2e94fef17739ea7309cc76aba269922ae999e4cc07f268/nvidia_ml_py-13.595.45.tar.gz", hash = "sha256:c9f34897fe0441ff35bc8f35baf80f830a20b0f4e6ce71e0a325bc0e66acf079", size = 50780, upload-time = "2026-03-19T16:59:44.956Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/8a/24/fc256107d23597fa33d319505ce77160fa1a2349c096d01901ffc7cb7fc4/nvidia_ml_py-13.595.45-py3-none-any.whl", hash = "sha256:b65a7977f503d56154b14d683710125ef93594adb63fbf7e559336e3318f1376", size = 51776, upload-time = "2026-03-19T16:59:43.603Z" },
-]
-
-[[package]]
 name = "nvidia-ml-py3"
 version = "7.352.0"
 source = { registry = "https://pypi.org/simple" }
@@ -3795,21 +3757,6 @@ wheels = [
 ]
 
 [[package]]
-name = "posthog"
-version = "7.14.2"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "backoff" },
-    { name = "distro" },
-    { name = "requests" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ca/e6/fe25f9eaeb5b4b66aa738554ba1ef9feece8b1d5b6a9ea431782b6c6c58f/posthog-7.14.2.tar.gz", hash = "sha256:b913dc23acc301a95ca9b851c193b261932d01a66a9af91eb6e9883cd05d5b6b", size = 205633, upload-time = "2026-05-13T16:36:27.153Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/c5/b8/75f9eed446c1d48405871542b36fdf1dba3333756a477bcb0d9ef70d17a4/posthog-7.14.2-py3-none-any.whl", hash = "sha256:f78b45a5ad5c72e55bf1cadebe8cf46bae2a6094e7fe01cbc7b5ec0531aab4d8", size = 240750, upload-time = "2026-05-13T16:36:25.544Z" },
-]
-
-[[package]]
 name = "pre-commit"
 version = "4.5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -4240,6 +4187,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/07/60/1d1e59c9c90d54591469ada7d268251f71c24bdb765f1a8a832cee8c6653/pydantic_settings-2.14.1.tar.gz", hash = "sha256:e874d3bec7e787b0c9958277956ed9b4dd5de6a80e162188fdaff7c5e26fd5fa", size = 235551, upload-time = "2026-05-08T13:40:06.542Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ae/8d/f1af3832f5e6eb13ba94ee809e72b8ecb5eef226d27ee0bef7d963d943c7/pydantic_settings-2.14.1-py3-none-any.whl", hash = "sha256:6e3c7edfd8277687cdc598f56e5cff0e9bfff0910a3749deaa8d4401c3a2b9de", size = 60964, upload-time = "2026-05-08T13:40:04.958Z" },
+]
+
+[[package]]
+name = "pydot"
+version = "4.0.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyparsing" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/50/35/b17cb89ff865484c6a20ef46bf9d95a5f07328292578de0b295f4a6beec2/pydot-4.0.1.tar.gz", hash = "sha256:c2148f681c4a33e08bf0e26a9e5f8e4099a82e0e2a068098f32ce86577364ad5", size = 162594, upload-time = "2025-06-17T20:09:56.454Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/32/a7125fb28c4261a627f999d5fb4afff25b523800faed2c30979949d6facd/pydot-4.0.1-py3-none-any.whl", hash = "sha256:869c0efadd2708c0be1f916eb669f3d664ca684bc57ffb7ecc08e70d5e93fee6", size = 37087, upload-time = "2025-06-17T20:09:55.25Z" },
 ]
 
 [[package]]
@@ -5082,6 +5041,27 @@ wheels = [
 ]
 
 [[package]]
+name = "skrub"
+version = "0.10.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cloudpickle" },
+    { name = "jinja2" },
+    { name = "joblib" },
+    { name = "matplotlib" },
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "pydot" },
+    { name = "requests" },
+    { name = "scikit-learn" },
+    { name = "scipy" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/a3/a6/f4d0b7240ebf546d3a77f212958b930282cccb0a53d66b9b0e1639ce8230/skrub-0.10.1.tar.gz", hash = "sha256:39f58492f6889c5563a654478cd523771aaa8dab5a42ad2ce9f430efb3881f53", size = 4205317, upload-time = "2026-09-01T09:33:37.146Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0e/2d/492a8b0d0d8b344918312a6416c537e54081ca5d0aaf19d085a188905e41/skrub-0.10.1-py3-none-any.whl", hash = "sha256:553c6f9b19a2cb97bba776a28255e7e024e77d4f50d7c6c70b4805f4e668a3cc", size = 595919, upload-time = "2026-09-01T09:33:35.208Z" },
+]
+
+[[package]]
 name = "smart-open"
 version = "7.5.0"
 source = { registry = "https://pypi.org/simple" }
@@ -5421,46 +5401,31 @@ finetune = [
 
 [[package]]
 name = "tabpfn"
-version = "8.0.3"
-source = { git = "https://github.com/PriorLabs/TabPFN.git#68e6d2b80b28938db48b07636b5598e9ea4e9341" }
+version = "9.2.0"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "einops" },
-    { name = "eval-type-backport" },
     { name = "filelock" },
     { name = "huggingface-hub" },
     { name = "joblib" },
     { name = "lightgbm" },
+    { name = "matplotlib" },
     { name = "mlx", marker = "platform_machine == 'arm64' and sys_platform == 'darwin'" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "safetensors" },
     { name = "scikit-learn" },
     { name = "scipy" },
-    { name = "tabpfn-common-utils" },
+    { name = "skrub" },
     { name = "torch" },
     { name = "tqdm" },
     { name = "typing-extensions" },
 ]
-
-[[package]]
-name = "tabpfn-common-utils"
-version = "0.2.21"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "filelock" },
-    { name = "numpy" },
-    { name = "nvidia-ml-py" },
-    { name = "pandas" },
-    { name = "platformdirs" },
-    { name = "posthog" },
-    { name = "requests" },
-    { name = "scikit-learn" },
-    { name = "typing-extensions" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/7d/6d/3035d1d809e1243c1785ef218a21d87ce6c5a5750dcbb09d32e15e2c981f/tabpfn_common_utils-0.2.21.tar.gz", hash = "sha256:dc4f00c8a5e759fa91210eb19adfebe201ec49edc354075fe6e65031b0f76053", size = 1982106, upload-time = "2026-04-28T07:31:44.536Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b0/03/1b48e093811877c651f731ac64e36a71b3ac44ec5c5c67a395422a6cbfed/tabpfn-9.2.0.tar.gz", hash = "sha256:e7fb2c6293ffef664c69838eb4cb215c79c85a0c0bd449fdf22489045d32b9eb", size = 937644, upload-time = "2026-10-12T15:12:56.56Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/3d/55/97fb9d02a5d4e28abd9e76b90b9ab2366df828588024d713ebb37750aead/tabpfn_common_utils-0.2.21-py3-none-any.whl", hash = "sha256:480b2f24a6150bc10a49485ca5e88885ffa476499ddc3d0c5f8080b379955cb9", size = 39799, upload-time = "2026-04-28T07:31:43.099Z" },
+    { url = "https://files.pythonhosted.org/packages/ac/a7/5c403c9fec9f726c91eaeaebaa8905530813ab58cb134a043c4b17afbd6a/tabpfn-9.2.0-py3-none-any.whl", hash = "sha256:bf8edb860cf490ab021d0ba6e91a9798f1b549bdb220066599661c8fc6d6089f", size = 850035, upload-time = "2026-10-12T15:12:54.671Z" },
 ]
 
 [[package]]
@@ -5608,7 +5573,7 @@ requires-dist = [
     { name = "submitit", specifier = ">=1.5.3,<2" },
     { name = "tabarena", git = "https://github.com/autogluon/tabarena.git?subdirectory=tabarena" },
     { name = "tabicl", extras = ["finetune"], git = "https://github.com/soda-inria/tabicl.git" },
-    { name = "tabpfn", git = "https://github.com/PriorLabs/TabPFN.git" },
+    { name = "tabpfn", specifier = ">=9.2,<10" },
     { name = "tomli", specifier = ">=2.2.1" },
     { name = "tomli-w", specifier = ">=1.2.0" },
     { name = "torch", specifier = ">=2.6.0" },

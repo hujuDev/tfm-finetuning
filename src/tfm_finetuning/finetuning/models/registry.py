@@ -64,7 +64,7 @@ class ModelSpec:
         if self.version_payload.get("source_available"):
             return
         raise ModelRegistryError(
-            f"{self.model_id} requires installed Git package metadata for {self.source_path}. "
+            f"{self.model_id} requires locked package metadata for {self.source_path}. "
             "Run `uv sync` before launching runs."
         )
 

@@ -30,7 +30,6 @@ _REQUIRED_WRAPPER_MEMBERS = (
     "_forward_with_loss",
     "_get_valid_finetuning_query_size",
     "_setup_batch",
-    "_setup_estimator",
     "_should_skip_batch",
 )
 _MAX_EPISODE_ATTEMPTS = 32
@@ -119,7 +118,11 @@ class TabPFNTransferRuntime:
             config["model_path"] = model_path
         inner = self.wrapper._create_estimator(config)
         self.wrapper.finetuned_estimator_ = inner
-        self.wrapper._setup_estimator()
+        # tabpfn 8.x sets the classifier softmax temperature here; 9.x dropped the hook and
+        # takes the temperature from the checkpoint's inference config in _initialize_model_variables.
+        setup_estimator = getattr(self.wrapper, "_setup_estimator", None)
+        if setup_estimator is not None:
+            setup_estimator()
         inner._initialize_model_variables()
         inner.model_.to(self.device)
         self.wrapper._ddp_module_ = None

@@ -24,7 +24,7 @@ def test_finetune_dependencies_are_packaged_for_cluster_image() -> None:
 
     assert "tabarena @ git+https://github.com/autogluon/tabarena.git#subdirectory=tabarena" in dependencies
     assert "tabicl[finetune] @ git+https://github.com/soda-inria/tabicl.git" in dependencies
-    assert "tabpfn @ git+https://github.com/PriorLabs/TabPFN.git" in dependencies
+    assert "tabpfn>=9.2,<10" in dependencies
     assert not Path(".gitmodules").exists()
 
 
@@ -32,12 +32,12 @@ def test_registry_reports_pinned_sources() -> None:
     specs = {spec.model_id: spec for spec in iter_model_specs(repo_root=Path.cwd())}
 
     assert set(specs) == {"tabpfn_v2", "tabpfn_v2_5", "tabicl_v2", "mitra"}
-    assert specs["tabpfn_v2"].version_payload["git_commit"]
-    assert specs["tabpfn_v2"].version_payload["source_resolved_path"]
+    for model_id in ("tabpfn_v2", "tabpfn_v2_5"):
+        assert specs[model_id].version_payload["source_available"]
+        assert specs[model_id].version_payload["source_resolved_path"]
+        assert specs[model_id].version_payload["package_version"].startswith("9.")
     assert specs["tabpfn_v2"].classifier_checkpoint == "models/tabpfn-v2-classifier.ckpt"
     assert specs["tabpfn_v2"].regressor_checkpoint == "models/tabpfn-v2-regressor.ckpt"
-    assert specs["tabpfn_v2_5"].version_payload["git_commit"]
-    assert specs["tabpfn_v2_5"].version_payload["source_resolved_path"]
     assert specs["tabicl_v2"].version_payload["git_commit"]
     assert specs["tabicl_v2"].version_payload["source_resolved_path"]
     assert specs["tabicl_v2"].version_payload["package_version"] == "2.1.1"

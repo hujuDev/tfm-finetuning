@@ -36,7 +36,7 @@ dependencies = [
     "typing-extensions>=4.11,<5",
     "tabarena @ git+https://github.com/autogluon/tabarena.git#subdirectory=tabarena",
     "tabicl[finetune] @ git+https://github.com/soda-inria/tabicl.git",
-    "tabpfn @ git+https://github.com/PriorLabs/TabPFN.git",
+    "tabpfn>=9.2,<10",
     "wandb>=0.18.5",
     "python-dotenv>=1.0.1",
     "pydantic>=2.10.3",

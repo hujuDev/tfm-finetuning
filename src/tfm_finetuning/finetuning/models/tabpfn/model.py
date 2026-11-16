@@ -27,6 +27,7 @@ from tfm_finetuning.finetuning.models.base import (
 from tfm_finetuning.finetuning.models.registry import ModelSpec
 from tfm_finetuning.finetuning.models.tabpfn.preprocessing import NativeCategoricalEncoder
 from tfm_finetuning.finetuning.models.tabpfn.vendor import TabPFNBindings, load_tabpfn_bindings
+from tfm_finetuning.finetuning.models.tabpfn.versions import get_tabpfn_version
 from tfm_finetuning.utils.paths import get_repo_root
 
 _TABPFN_MAX_FEATURES_PER_ESTIMATOR = 500
@@ -111,6 +112,15 @@ class TabPFNAdapter:
             return {}
         return {"categorical_features_indices": list(self._categorical_features_indices)}
 
+    def _upstream_model_version_kwargs(self) -> dict[str, Any]:
+        """Pin the fine-tuning wrapper to this model's version; tabpfn otherwise defaults to the latest TabPFN."""
+        version = get_tabpfn_version(self.model_id)
+        if version is None or version.upstream_model_version is None:
+            return {}
+        from tabpfn.constants import ModelVersion
+
+        return {"model_version": ModelVersion(version.upstream_model_version)}
+
     def _pretraining_limit_kwargs(self) -> dict[str, Any]:
         return {"ignore_pretraining_limits": bool(self._ignore_pretraining_limits)}
 
@@ -146,6 +156,7 @@ class TabPFNAdapter:
         params["device"] = _resolve_finetune_device(device)
         params["random_state"] = int(seed)
         params["eval_metric"] = validation_metric_for_task(task_type, model_id=self.model_id)
+        params.update(self._upstream_model_version_kwargs())
         model_path = initial_checkpoint or Path(self._checkpoint_for_task(task_type))
         extra_kwargs = {"model_path": str(model_path), **self._extra_tabpfn_kwargs()}
         extra_kwargs.update(self._pretraining_limit_kwargs())
@@ -342,6 +353,8 @@ class TabPFNAdapter:
             "n_estimators_finetune": int(common_config.n_estimators_finetune),
             "n_estimators_validation": int(common_config.n_estimators_validation),
             "n_estimators_final_inference": int(common_config.n_estimators_final_inference),
+            # Newer releases default to no subsampling; v2/v2.5 used 50k, so pin it for every version.
+            "n_inference_subsample_samples": 50_000,
             "early_stopping": bool(common_config.early_stopping),
             "early_stopping_patience": int(common_config.patience),
             "min_delta": float(common_config.min_delta),

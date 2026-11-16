@@ -16,25 +16,33 @@ def _split_uv_git_source(git_source: str) -> tuple[str | None, str | None]:
     return remote_url or None, commit if separator and commit else None
 
 
-def _locked_git_source_payload(repo_root: Path, *, package_name: str) -> tuple[str | None, str | None]:
+def _locked_package(repo_root: Path, *, package_name: str) -> dict[str, Any] | None:
     lock_path = repo_root / "uv.lock"
     if not lock_path.exists():
-        return None, None
+        return None
     try:
         lock_payload = tomllib.loads(lock_path.read_text())
     except tomllib.TOMLDecodeError:
-        return None, None
+        return None
     for package in lock_payload.get("package", []):
-        if package.get("name") != package_name:
-            continue
-        source = package.get("source")
-        if not isinstance(source, dict):
-            return None, None
-        git_source = source.get("git")
-        if not isinstance(git_source, str):
-            return None, None
-        return _split_uv_git_source(git_source)
-    return None, None
+        if package.get("name") == package_name:
+            return package
+    return None
+
+
+def _locked_source_payload(
+    repo_root: Path, *, package_name: str, package_version: str | None
+) -> tuple[bool, str | None, str | None]:
+    """Return whether the installed package is the locked one, and its Git remote and commit if it has them."""
+    package = _locked_package(repo_root, package_name=package_name)
+    source = package.get("source") if package else None
+    if not isinstance(source, dict):
+        return False, None, None
+    git_source = source.get("git")
+    if isinstance(git_source, str):
+        return True, *_split_uv_git_source(git_source)
+    # A release from a package registry is identified by its version.
+    return "registry" in source and package.get("version") == package_version, None, None
 
 
 def installed_package_version_payload(
@@ -44,7 +52,7 @@ def installed_package_version_payload(
     module_name: str,
     package_version: str | None,
 ) -> dict[str, Any]:
-    """Build reproducibility metadata for an installed Git package.
+    """Build reproducibility metadata for an installed package pinned in ``uv.lock``.
 
     Example:
         >>> payload = installed_package_version_payload(
@@ -56,14 +64,16 @@ def installed_package_version_payload(
         >>> payload["source_available"]
         False
     """
-    remote_url, git_commit = _locked_git_source_payload(repo_root, package_name=package_name)
+    source_available, remote_url, git_commit = _locked_source_payload(
+        repo_root, package_name=package_name, package_version=package_version
+    )
     spec = importlib.util.find_spec(module_name)
     package_path = None
     if spec is not None and spec.origin is not None:
         package_path = str(spec.origin)
     return {
         "source_path": None,
-        "source_available": remote_url is not None,
+        "source_available": source_available,
         "source_resolved_path": package_path,
         "remote_url": remote_url,
         "git_commit": git_commit,

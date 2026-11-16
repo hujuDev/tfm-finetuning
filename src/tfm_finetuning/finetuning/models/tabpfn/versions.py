@@ -1,4 +1,4 @@
-"""Data-only catalog for thesis-supported TabPFN fine-tuning versions."""
+"""Data-only catalog for supported TabPFN fine-tuning versions."""
 
 from __future__ import annotations
 
@@ -13,6 +13,9 @@ class TabPFNVersion:
     display_name: str
     classifier_checkpoint: str
     regressor_checkpoint: str
+    # Value of ``tabpfn.constants.ModelVersion`` passed to the fine-tuning wrapper, which otherwise defaults to the
+    # latest model version.
+    upstream_model_version: str | None = None
 
 
 TABPFN_VERSIONS = (
@@ -21,12 +24,14 @@ TABPFN_VERSIONS = (
         display_name="TabPFN v2",
         classifier_checkpoint="models/tabpfn-v2-classifier.ckpt",
         regressor_checkpoint="models/tabpfn-v2-regressor.ckpt",
+        upstream_model_version="v2",
     ),
     TabPFNVersion(
         model_id="tabpfn_v2_5",
         display_name="TabPFN v2.5",
         classifier_checkpoint="models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt",
         regressor_checkpoint="models/tabpfn-v2.5-regressor-v2.5_default.ckpt",
+        upstream_model_version="v2.5",
     ),
 )
 
