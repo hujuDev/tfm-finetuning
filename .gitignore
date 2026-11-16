@@ -24,13 +24,9 @@ dist/
 /results/
 /logs/
 /saves/
-/checkpoints/
 /outputs/
 /wandb/
 /var/
-/review/
-/reports/
-/latex/
 *.log
 *.sif
 configs/experiments/generated/
