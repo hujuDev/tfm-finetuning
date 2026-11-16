@@ -7,6 +7,11 @@ models:
   settings:
     finetune.model_id: tabpfn_v2_5
     finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+- name: tabpfnv35
+  config: configs/finetuning/default_tabpfnv3_5.toml
+  settings:
+    finetune.model_id: tabpfn_v3_5
+    finetune.regressor_checkpoint: models/tabpfn-v3.5-20260909.safetensors
 axes:
   targetTailMode:
   - value: none

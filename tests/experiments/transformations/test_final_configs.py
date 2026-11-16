@@ -144,7 +144,7 @@ def test_context_only_downsampling_finetunes_full_data_and_pairs_icl_contexts() 
 
 
 def test_final_rebalancing_scopes_and_folds():
-    for name, count in [("majority_downsampling", 162), ("context_only_downsampling", 81)]:
+    for name, count in [("majority_downsampling", 216), ("context_only_downsampling", 108)]:
         recipe = yaml.safe_load((CONFIG_ROOT / f"distribution_shift_class_prior_{name}.yaml").read_text())
         runs = expand_runs(recipe, repo_root=ROOT)
         assert len(runs) == count

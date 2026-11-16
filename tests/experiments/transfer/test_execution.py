@@ -237,7 +237,7 @@ def test_all_final_transfer_consumers_have_one_matching_producer_recipe():
                 producers[(route.family, route.route_id, route.target_dataset)].append(route)
             if route.dependency is not None:
                 consumers.append((run, route))
-    assert len(consumers) == 675
+    assert len(consumers) == 756
     for run, route in consumers:
         dependency = route.dependency
         expected = resolve_transfer_route(

@@ -8,6 +8,8 @@ models:
   config: configs/finetuning/default_tabicl_v2.toml
 - name: mitra
   config: configs/finetuning/default_mitra.toml
+- name: tabpfnv35
+  config: configs/finetuning/default_tabpfnv3_5.toml
 axes:
   preprocessing:
   - value: shared

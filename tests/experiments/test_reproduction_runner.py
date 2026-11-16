@@ -22,7 +22,7 @@ def recipe(name="distribution_shift_label_noise"):
 
 def test_label_noise_exact_protocol():
     runs = expand_runs(recipe(), repo_root=ROOT)
-    assert len(runs) == 180
+    assert len(runs) == 240  # 4 models * 5 datasets * 4 noise rates * 3 seeds
     assert {r["seed"] for r in runs} == {0, 1, 2}
     assert {r["fold"] for r in runs} == {0}
     assert {r["config"]["preprocess"]["label_noise"]["rate"] for r in runs} == {0, 0.05, 0.15, 0.3}
@@ -55,9 +55,9 @@ def test_hpo_removes_only_saturated_context_duplicates():
 
 def test_alignment_and_update_only_are_separate_experiments():
     for name, transform in [("feature_order", "shuffle_feature_order"), ("numeric_scale", "numeric_scale")]:
-        for suffix, field in [("", "update_state"), ("_alignment", "fit_state")]:
+        for suffix, field, count in [("", "update_state", 216), ("_alignment", "fit_state", 162)]:
             runs = expand_runs(recipe(f"distribution_shift_{name}{suffix}"), repo_root=ROOT)
-            assert len(runs) == 162
+            assert len(runs) == count
             assert all(field in r["config"]["preprocess"][transform] for r in runs)
 
 
