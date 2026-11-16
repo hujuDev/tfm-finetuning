@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
 
-from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, MODEL_ORDER
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
 from tfm_finetuning.plots.common.plot_style import (
     apply_plot_style,
     latex_fraction_width,
@@ -294,11 +294,11 @@ def plot_subsampling_pooled_composite(
 
 def _ordered_models(frame: pd.DataFrame) -> list[str]:
     present = set(frame["model"].dropna().astype(str))
-    unknown = present.difference(MODEL_ORDER)
+    unknown = present.difference(MODEL_LABELS)
     if unknown:
-        raise ValueError(f"Unknown model keys cannot use the shared thesis style: {sorted(unknown)}")
+        raise ValueError(f"Model keys without a label and color: {sorted(unknown)}")
     preferred = [model for model in GROUP2_MODEL_ORDER if model in present]
-    return preferred + [model for model in MODEL_ORDER if model in present and model not in preferred]
+    return preferred + [model for model in MODEL_LABELS if model in present and model not in preferred]
 
 
 def _model_handles(models: Sequence[str]) -> list[Line2D]:

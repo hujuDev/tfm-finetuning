@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -239,8 +240,12 @@ def _plot_combined_association_heatmap(
     *,
     filename: str = "association_heatmap_combined.pdf",
     gain_label: str = "SFT gain over ICL",
+    model_order: Sequence[str] = MODEL_ORDER,
 ) -> Path:
-    """Compare associations using a compact three-part dataset-characteristic taxonomy."""
+    """Compare associations using a compact three-part dataset-characteristic taxonomy.
+
+    Columns are the models of ``model_order`` within each task type.
+    """
     preprocessing = "shared"
     general = associations[associations["preprocessing"] == preprocessing].copy()
     structural = structural_associations.reindex(columns=associations.columns)
@@ -253,7 +258,8 @@ def _plot_combined_association_heatmap(
             "localTargetVariationIqr": "localTargetVariationByTask",
         }
     )
-    columns = [(task, model) for task in TASK_ORDER for model in MODEL_ORDER]
+    columns = [(task, model) for task in TASK_ORDER for model in model_order]
+    task_boundaries = [index * len(model_order) - 0.5 for index in range(1, len(TASK_ORDER))]
     figure, axes = plt.subplots(
         len(_ASSOCIATION_TAXONOMY),
         1,
@@ -319,7 +325,7 @@ def _plot_combined_association_heatmap(
         if panel_title == "2  Feature structure and distribution":
             categorical_start = features.index("maxCategoricalCardinality")
             axis.axhline(categorical_start - 0.5, color="#6b7280", linewidth=1.0)
-        for boundary in (3.5, 7.5):
+        for boundary in task_boundaries:
             axis.axvline(boundary, color="#4b5563", linewidth=1.2)
         for (feature_index, column_index), row in cell_rows.items():
             rho = float(row["spearman_rho"])
@@ -373,7 +379,7 @@ def _plot_combined_association_heatmap(
     header_axis.set_xlim(-0.5, len(columns) - 0.5)
     header_axis.set_ylim(0, 1)
     header_axis.axis("off")
-    task_centres = [index * len(MODEL_ORDER) + (len(MODEL_ORDER) - 1) / 2 for index in range(len(TASK_ORDER))]
+    task_centres = [index * len(model_order) + (len(model_order) - 1) / 2 for index in range(len(TASK_ORDER))]
     for centre, task in zip(task_centres, TASK_ORDER, strict=True):
         header_axis.text(
             centre,
@@ -384,7 +390,7 @@ def _plot_combined_association_heatmap(
             fontsize=9.0,
             fontweight="semibold",
         )
-    for boundary in (3.5, 7.5):
+    for boundary in task_boundaries:
         header_axis.axvline(boundary, color="#4b5563", linewidth=1.0)
     colorbar_axis = figure.add_axes([0.865, 0.19, 0.022, 0.53])
     colorbar = figure.colorbar(image, cax=colorbar_axis)
