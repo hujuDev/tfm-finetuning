@@ -85,7 +85,7 @@ def _display_label(model: str) -> str:
 def plot_score_distributions(panel: pd.DataFrame, output_dir: Path) -> Path:
     """Normalized scores over datasets per model, ICL (hollow) next to SFT (filled), task types stacked."""
     models = [m for m in PAPER_MODELS if m in set(panel["model"])]
-    fig, axes = plt.subplots(3, 1, figsize=(PREPRINT_WIDTH_INCHES, 5.0), sharex=True)
+    fig, axes = plt.subplots(3, 1, figsize=(PREPRINT_WIDTH_INCHES, 4.0), sharex=True)
     rng = np.random.default_rng(42)
     for ax, task in zip(axes, TASK_ORDER, strict=True):
         rows = panel.loc[panel["task_family"] == task]
@@ -125,7 +125,7 @@ def plot_score_distributions(panel: pd.DataFrame, output_dir: Path) -> Path:
         fontsize=FONT_SIZE,
         bbox_to_anchor=(0.5, 1.0),
     )
-    fig.subplots_adjust(left=0.09, right=0.99, top=0.9, bottom=0.08, hspace=0.42)
+    fig.subplots_adjust(left=0.09, right=0.99, top=0.885, bottom=0.1, hspace=0.36)
     return _save(fig, output_dir / "score_distributions.pdf")
 
 
@@ -134,7 +134,7 @@ def plot_dataset_wins(table: pd.DataFrame, winners: pd.DataFrame, output_dir: Pa
     models = [m for m in PAPER_MODELS if m in set(table["model"])]
     table = table.set_index("model")
     datasets = int(table["datasets"].max())
-    fig = plt.figure(figsize=(PREPRINT_WIDTH_INCHES, 2.6))
+    fig = plt.figure(figsize=(PREPRINT_WIDTH_INCHES, 2.35))
     ax = fig.add_axes([0.2, 0.15, 0.78, 0.75])
     height = 0.6
 
