@@ -1,9 +1,9 @@
 """Stable model and task display metadata for all figures."""
 
 # Labels and colors of every model. TabPFN generations run from red (TabPFNv2) to blue (TabPFN-3.5), with
-# TabPFN-3.5-Fast a lighter shade of the TabPFN-3.5 blue; TabICLv2 is green and Mitra yellow. The seven preprint
-# colors were checked in figure order with the dataviz palette validator (lightness band, colour-blind and
-# normal-vision separation of neighbours). Mitra-v2, a darker amber, is not part of that check.
+# TabPFN-3.5-Fast a lighter shade of the TabPFN-3.5 blue; TabICLv2 is green, Mitra yellow and Mitra-v2 a deeper
+# golden yellow. The eight paper colors were checked in figure order with the dataviz palette validator (lightness
+# band, colour-blind and normal-vision separation of neighbours).
 MODEL_LABELS = {
     "tabpfnv2": "TabPFNv2",
     "tabpfnv25": "TabPFN-2.5",
@@ -22,10 +22,10 @@ MODEL_COLORS = {
     "tabpfnv35fast": "#6aa6ec",
     "tabiclv2": "#3a9a3a",
     "mitra": "#e5a50a",
-    "mitra_v2": "#a8640f",
+    "mitra_v2": "#a87b00",
 }
-# The seven models of the preprint: TabPFN generations first, then the other model families.
-PAPER_MODELS = ["tabpfnv2", "tabpfnv25", "tabpfnv3", "tabpfnv35", "tabpfnv35fast", "tabiclv2", "mitra"]
+# The models of the paper: TabPFN generations first, then the other model families.
+PAPER_MODELS = ["tabpfnv2", "tabpfnv25", "tabpfnv3", "tabpfnv35", "tabpfnv35fast", "tabiclv2", "mitra", "mitra_v2"]
 # The models of overview_baseline and the transformation and transfer studies.
 MODEL_ORDER = ["tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"]
 # Weights usable commercially: TabPFNv2 (Prior Labs License 1.1, Apache-2.0 plus attribution), TabICLv2

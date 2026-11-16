@@ -111,7 +111,8 @@ def plot_score_distributions(panel: pd.DataFrame, output_dir: Path) -> Path:
         ax.yaxis.set_minor_locator(MultipleLocator(MINOR_TICK_STEP))
         ax.tick_params(axis="y", which="minor", length=1.5)
         ax.grid(axis="y", which="minor", color="#eef1f5", linewidth=0.5)
-    axes[-1].set_xticks(np.arange(len(models)) * 2.6, [_display_label(m).replace("-Fast", "-\nFast") for m in models])
+    # Two-line labels (break after the first hyphen) keep eight model names from colliding.
+    axes[-1].set_xticks(np.arange(len(models)) * 2.6, [_display_label(m).replace("-", "-\n", 1) for m in models])
     axes[-1].set_xlim(-1.0, 2.6 * (len(models) - 1) + 1.1)
     fig.supylabel("Normalized score", fontsize=FONT_SIZE, x=0.01)
     fig.legend(
@@ -398,6 +399,10 @@ def write_dataset_tables(panel: pd.DataFrame, output_dir: Path) -> list[Path]:
         higher_is_better = task == "binary"
         # ROC-AUC values cluster near 1, so four decimals keep the best result distinguishable from close runners-up.
         fmt = (lambda value: f"{value:.4f}") if task == "binary" else _format_metric
+        if task != "regression":
+            # ROC-AUC and these log-losses lie below 1; dropping the leading zero keeps eight model columns in the
+            # text width.
+            fmt = (lambda base: lambda value: base(value).removeprefix("0"))(fmt)
         for dataset in sorted(rows["dataset"].unique()):
             subset = rows.loc[rows["dataset"] == dataset]
             values = pd.concat([subset["baseline"], subset["selected"]]).astype(float)

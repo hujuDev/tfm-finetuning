@@ -1,6 +1,6 @@
 [input]
 results_root = "results"
-studies = ["overview_baseline", "preprint_tabpfn_v3"]
+studies = ["overview_baseline", "preprint_tabpfn_v3", "preprint_mitra_v2"]
 
 [analysis]
 bootstrap_seed = 20261013
