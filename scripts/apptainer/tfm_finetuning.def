@@ -1,0 +1,27 @@
+# The project environment as an Apptainer image. The repository code is not baked in: jobs bind the
+# checkout and set PYTHONPATH=src (see configs/slurm/hydra_apptainer.yaml).
+# Build from the repository root with scripts/apptainer/build.sbatch.
+Bootstrap: docker
+From: python:3.12-slim
+
+%files
+    pyproject.toml /pyproject.toml
+    uv.lock /uv.lock
+    README.md /README.md
+
+%environment
+    export UV_PROJECT_ENVIRONMENT="/.venv"
+    export PATH="/.venv/bin:$PATH"
+
+%post
+    chmod 1777 /tmp
+    apt-get update && apt-get install -y --no-install-recommends build-essential git ca-certificates
+    rm -rf /var/lib/apt/lists/*
+    pip install --root-user-action=ignore --no-cache-dir uv
+    cd /
+    UV_PROJECT_ENVIRONMENT=/.venv UV_LINK_MODE=copy UV_HTTP_TIMEOUT=120 UV_HTTP_RETRIES=10 \
+        uv sync --frozen --no-dev --no-install-project
+    # Precompile the TabArena C++ AUC extension to avoid a runtime write to site-packages.
+    if [ -x /.venv/lib/python3.12/site-packages/tabarena/metrics/_roc_auc_cpp/compile.sh ]; then
+        (cd /.venv/lib/python3.12/site-packages/tabarena/metrics/_roc_auc_cpp && ./compile.sh)
+    fi

@@ -1,0 +1,32 @@
+# HYDRA (TU Berlin) with the project's Apptainer image: workers run inside scripts/apptainer/img/tfm_finetuning.sif.
+# Paths are relative to the repository root, so submit from there. The launcher itself runs on the host and needs
+# only submitit, pyyaml, tomli, tomli-w, pydantic and python-dotenv.
+#
+# 1. Build the image once: sbatch scripts/apptainer/build.sbatch (about 48 GB of memory for mksquashfs).
+# 2. Export the datasets once, serially, before submitting; parallel jobs can corrupt each other's export on BeeGFS:
+#    python -m tfm_finetuning.experiments.prefetch overview_baseline
+# 3. Submit (add --scope smoke for a 2-epoch check with one split per dataset):
+#    APPTAINERENV_WANDB_MODE=disabled PYTHONPATH=src python -m tfm_finetuning.experiments.execution.launch \
+#        overview_baseline --cluster configs/slurm/hydra_apptainer.yaml --scope smoke --dataset credit-g --submit
+schema_version: 1
+python: [apptainer, exec, --nv, --env, PYTHONPATH=src, scripts/apptainer/img/tfm_finetuning.sif, python]
+profiles:
+  gpu_any_5h:
+    slurm_partition: gpu-5h
+  gpu_40gb_5h:
+    slurm_partition: gpu-5h
+    slurm_constraint: 40gb
+  gpu_80gb_5h:
+    slurm_partition: gpu-5h
+    slurm_constraint: 80gb
+  gpu_40gb_2d:
+    slurm_partition: gpu-2d
+    slurm_constraint: 40gb
+  gpu_80gb_2d:
+    slurm_partition: gpu-2d
+    slurm_constraint: 80gb
+  gpu_80gb_5h_mem64g:
+    slurm_partition: gpu-5h
+    slurm_constraint: 80gb
+parameters:
+  slurm_array_parallelism: 8
