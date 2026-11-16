@@ -5,7 +5,7 @@
 *.local.yaml
 .openml/
 .netrc
-.venv/
+.venv*/
 __pycache__/
 .ipynb_checkpoints/
 *.py[cod]
@@ -44,3 +44,5 @@ configs/datasets/out/
 .agents/
 .codex/
 .DS_Store
+/scripts/apptainer/img/
+/reference/
