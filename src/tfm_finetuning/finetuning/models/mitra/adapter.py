@@ -40,6 +40,7 @@ from tfm_finetuning.finetuning.models.mitra.config import (
     resolve_mitra_device,
 )
 from tfm_finetuning.finetuning.models.mitra.configured import (
+    _binned_mitra_class,
     _configured_mitra_class,
     local_mitra_snapshot_loading,
 )
@@ -68,7 +69,7 @@ from tfm_finetuning.finetuning.models.registry import ModelSpec
 
 
 class MitraAdapter:
-    """Complete thesis-side Mitra slice for official and local-chunked training.
+    """Mitra and Mitra-v2 adapter for official and local-chunked training.
 
     Example:
         >>> from tfm_finetuning.finetuning.models.registry import get_model_spec
@@ -81,6 +82,9 @@ class MitraAdapter:
 
     def __init__(self, spec: ModelSpec, *, bindings: MitraBindings | None = None) -> None:
         self.spec = spec
+        self.model_id = getattr(spec, "model_id", type(self).model_id)
+        # Mitra-v2's regressor has a binned head; Mitra-v1 regresses a single value (one "bin").
+        self.regression_bins = int(getattr(spec, "version_payload", {}).get("regression_bins", 1))
         self._bindings = bindings
         self._last_finetuned_estimator: Any | None = None
         self._last_finetune_diagnostics: dict[str, Any] = {}
@@ -110,7 +114,9 @@ class MitraAdapter:
     ) -> Any:
         """Return a Mitra estimator backed by the configured Hugging Face checkpoint."""
         cls = self._vendor().estimator_class(regression=task_type == "regression")
-        return cls(
+        if self.regression_bins > 1:
+            cls = _binned_mitra_class(cls)
+        estimator = cls(
             n_estimators=int(n_estimators_inference),
             device=resolve_mitra_device(device),
             fine_tune=False,
@@ -120,6 +126,8 @@ class MitraAdapter:
             seed=int(seed),
             verbose=False,
         )
+        estimator.tfm_regression_bins = self.regression_bins
+        return estimator
 
     def resolve_finetune_estimator(
         self,
@@ -143,6 +151,7 @@ class MitraAdapter:
                 device=device,
             )
         )
+        estimator.tfm_regression_bins = self.regression_bins
         estimator.n_estimators_finetune = int(config.n_estimators_finetune)
         estimator.n_estimators_validation = int(config.n_estimators_validation)
         estimator.n_estimators_inference = int(config.n_estimators_final_inference)

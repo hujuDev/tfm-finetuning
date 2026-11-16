@@ -34,6 +34,7 @@ from tfm_finetuning.finetuning.models.mitra.common import (
     MITRA_SCHEDULER_LINEAR_WARMUP_ONLY,
     MITRA_SCHEDULER_OFFICIAL_PLATEAU,
 )
+from tfm_finetuning.finetuning.models.mitra.regression_bins import mean_bin_decode
 
 
 @dataclass(frozen=True)
@@ -376,8 +377,7 @@ class LocalMitraTrainer(TrainerFinetune):
         self.scaler.update()
 
         if self.cfg.task == Task.REGRESSION and self.cfg.hyperparams["regression_loss"] == LossName.CROSS_ENTROPY:
-            y_hat = torch.argmax(y_hat, dim=-1)
-            y_hat = self.bins[y_hat] + self.bin_width / 2
+            y_hat = mean_bin_decode(self, y_hat)
         y_hat = y_hat.float()
         tracker.update(y_hat, y_query, train=self.cfg.task == Task.REGRESSION)
         return loss

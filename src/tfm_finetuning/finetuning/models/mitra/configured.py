@@ -1,4 +1,4 @@
-"""Choose official Mitra training or the thesis-owned local chunked strategy.
+"""Choose official Mitra training or the local chunked strategy.
 
 Official training delegates to AutoGluon's sklearn implementation. Local
 training keeps the vendor model and optimizer but interleaves ensemble members
@@ -22,9 +22,11 @@ from tfm_finetuning.finetuning.models.mitra.common import (
     MITRA_INTERFACE_LOCAL_CHUNKED,
     MITRA_INTERFACE_OFFICIAL_SKLEARN,
 )
+from tfm_finetuning.finetuning.models.mitra.regression_bins import binned_regression_config
 
 _PUBLIC_MITRA_MODULE = "tfm_finetuning.finetuning.models.mitra.model"
 _CONFIGURED_MITRA_CLASSES: dict[type[Any], type[Any]] = {}
+_BINNED_MITRA_CLASSES: dict[type[Any], type[Any]] = {}
 
 
 class _MitraEstimatorHost(Protocol):
@@ -78,6 +80,7 @@ class _ConfiguredMitraMixin:
     def _create_config(self, *args: Any, **kwargs: Any) -> Any:
         host = cast("_MitraEstimatorHost", super())
         cfg, model_cls = host._create_config(*args, **kwargs)
+        binned_regression_config(cfg, getattr(self, "tfm_regression_bins", 1))
         cfg.hyperparams["weight_decay"] = float(self.tfm_weight_decay)
         cfg.hyperparams["max_samples_support"] = int(self.tfm_max_samples_support)
         cfg.hyperparams["max_samples_query"] = int(self.tfm_max_samples_query)
@@ -375,3 +378,34 @@ def _configured_mitra_class(base_cls: type[Any]) -> type[Any]:
     setattr(public_module, class_name, ConfiguredMitra)
     _CONFIGURED_MITRA_CLASSES[base_cls] = ConfiguredMitra
     return ConfiguredMitra
+
+
+class _BinnedRegressionMixin:
+    """Zero-shot estimator whose regression config matches a binned regression head (Mitra-v2)."""
+
+    tfm_regression_bins = 1
+
+    def _create_config(self, *args: Any, **kwargs: Any) -> Any:
+        host = cast("_MitraEstimatorHost", super())
+        cfg, model_cls = host._create_config(*args, **kwargs)
+        return binned_regression_config(cfg, self.tfm_regression_bins), model_cls
+
+
+def _binned_mitra_class(base_cls: type[Any]) -> type[Any]:
+    """Return ``base_cls`` with binned regression, registered under a public name so estimators stay picklable."""
+    existing = _BINNED_MITRA_CLASSES.get(base_cls)
+    if existing is not None:
+        return existing
+
+    class BinnedMitra(_BinnedRegressionMixin, base_cls):
+        pass
+
+    class_name = f"Binned{base_cls.__name__}"
+    BinnedMitra.__name__ = class_name
+    BinnedMitra.__qualname__ = class_name
+    BinnedMitra.__module__ = _PUBLIC_MITRA_MODULE
+    globals()[class_name] = BinnedMitra
+    public_module = sys.modules.get(_PUBLIC_MITRA_MODULE) or importlib.import_module(_PUBLIC_MITRA_MODULE)
+    setattr(public_module, class_name, BinnedMitra)
+    _BINNED_MITRA_CLASSES[base_cls] = BinnedMitra
+    return BinnedMitra

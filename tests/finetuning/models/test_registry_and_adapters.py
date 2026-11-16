@@ -39,6 +39,7 @@ def test_registry_reports_pinned_sources() -> None:
         "tabpfn_v3_5_fast",
         "tabicl_v2",
         "mitra",
+        "mitra_v2",
     }
     for model_id in ("tabpfn_v2", "tabpfn_v2_5", "tabpfn_v3", "tabpfn_v3_5", "tabpfn_v3_5_fast"):
         assert specs[model_id].version_payload["source_available"]
@@ -53,6 +54,10 @@ def test_registry_reports_pinned_sources() -> None:
     assert specs["tabicl_v2"].regressor_checkpoint == "tabicl-regressor-v2-20260212.ckpt"
     assert specs["mitra"].classifier_checkpoint == "autogluon/mitra-classifier"
     assert specs["mitra"].regressor_checkpoint == "autogluon/mitra-regressor"
+    assert "regression_bins" not in specs["mitra"].version_payload
+    assert specs["mitra_v2"].classifier_checkpoint == "autogluon/mitra-classifier-2"
+    assert specs["mitra_v2"].regressor_checkpoint == "autogluon/mitra-regressor-2"
+    assert specs["mitra_v2"].version_payload["regression_bins"] == 1000
 
 
 def test_tabpfn_version_catalog_separates_supported_and_vendor_only_models() -> None:

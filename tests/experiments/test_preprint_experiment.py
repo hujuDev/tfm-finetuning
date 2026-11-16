@@ -108,3 +108,31 @@ def test_drift_check_repeats_the_baseline_tabpfn_2_5_runs_exactly() -> None:
         assert group["resource"] == original["resource"]
         assert group.get("split") == original.get("split")
         assert group["models"] == [m for m in original["models"] if m["name"] == "tabpfnv25"]
+
+
+def test_mitra_v2_runs_the_baseline_mitra_splits_and_settings() -> None:
+    runs = _runs("preprint_mitra_v2")
+    baseline_runs = [run for run in _runs("overview_baseline") if run["dataset"].lower() not in EXCLUDED_DATASETS]
+    baseline = yaml.safe_load((ROOT / "configs/experiments/overview_baseline.yaml").read_text())
+    baseline_groups = {group["name"]: group for group in baseline["groups"]}
+    recipe = yaml.safe_load((ROOT / "configs/experiments/preprint_mitra_v2.yaml").read_text())
+
+    assert {run["model"] for run in runs} == {"mitra_v2"}
+    assert _split_units(runs, "mitra_v2") == {
+        unit for unit in _split_units(baseline_runs, "mitra") if unit[1] == "shared"
+    }
+    assert len({run["run_id"] for run in runs}) == len(runs)
+    for group in recipe["groups"]:
+        # APSFailure gets a 2-day partition (Mitra-v1 needed more than 5 h there) with the 80 GB group's settings.
+        original = baseline_groups[group["name"].replace("_2d", "")]["settings"]
+        # Only the per-epoch test evaluation, a diagnostic, is dropped, as in the TabPFN-3 study.
+        changed = {key for key in {*group["settings"], *original} if group["settings"].get(key) != original.get(key)}
+        assert changed == {"finetune.test_eval_interval_epochs"}
+        (entry,) = group["models"]
+        assert entry["settings"]["finetune.model_id"] == "mitra_v2"
+        defaults = tomllib.loads((ROOT / entry["config"]).read_text())["finetune"]
+        v1_defaults = tomllib.loads((ROOT / "configs/finetuning/default_mitra.toml").read_text())["finetune"]
+        differing = {key for key in {*defaults, *v1_defaults} if defaults.get(key) != v1_defaults.get(key)}
+        assert differing == {"model_id", "classifier_checkpoint", "regressor_checkpoint"}
+        assert defaults["classifier_checkpoint"] == entry["settings"]["finetune.classifier_checkpoint"]
+        assert defaults["regressor_checkpoint"] == entry["settings"]["finetune.regressor_checkpoint"]

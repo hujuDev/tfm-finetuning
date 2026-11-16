@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from tfm_finetuning.finetuning.models.mitra.regression_bins import install_mean_bin_decode
 from tfm_finetuning.finetuning.models.registry_sources import ensure_mitra_on_path
 from tfm_finetuning.utils.paths import get_repo_root
 
@@ -25,6 +26,7 @@ def load_mitra_bindings() -> MitraBindings:
     """Load the pinned AutoGluon Mitra sklearn surface."""
     ensure_mitra_on_path(repo_root=get_repo_root(Path(__file__)))
     module = importlib.import_module("autogluon.tabular.models.mitra.sklearn_interface")
+    install_mean_bin_decode()
     return MitraBindings(
         classifier=module.MitraClassifier,
         regressor=module.MitraRegressor,

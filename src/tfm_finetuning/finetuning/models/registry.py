@@ -21,6 +21,10 @@ TABICL_V2_CLASSIFIER_CHECKPOINT = "tabicl-classifier-v2-20260212.ckpt"
 TABICL_V2_REGRESSOR_CHECKPOINT = "tabicl-regressor-v2-20260212.ckpt"
 MITRA_CLASSIFIER_CHECKPOINT = "autogluon/mitra-classifier"
 MITRA_REGRESSOR_CHECKPOINT = "autogluon/mitra-regressor"
+MITRA_V2_CLASSIFIER_CHECKPOINT = "autogluon/mitra-classifier-2"
+MITRA_V2_REGRESSOR_CHECKPOINT = "autogluon/mitra-regressor-2"
+# Mitra-v2's regression head predicts a distribution over this many value bins (see mitra/regression_bins.py).
+MITRA_V2_REGRESSION_BINS = 1000
 
 
 class ModelRegistryError(RuntimeError):
@@ -99,20 +103,51 @@ def _tabpfn_spec(
 
 
 def _mitra_spec(repo_root: Path) -> ModelSpec:
-    source_path = ensure_mitra_on_path(repo_root=repo_root)
-    return ModelSpec(
+    return _mitra_generation_spec(
+        repo_root,
         model_id="mitra",
         display_name="Mitra",
+        classifier_checkpoint=MITRA_CLASSIFIER_CHECKPOINT,
+        regressor_checkpoint=MITRA_REGRESSOR_CHECKPOINT,
+    )
+
+
+def _mitra_v2_spec(repo_root: Path) -> ModelSpec:
+    # Same Tab2D architecture and AutoGluon code as Mitra-v1; only the weights and the regression head differ.
+    return _mitra_generation_spec(
+        repo_root,
+        model_id="mitra_v2",
+        display_name="Mitra-v2",
+        classifier_checkpoint=MITRA_V2_CLASSIFIER_CHECKPOINT,
+        regressor_checkpoint=MITRA_V2_REGRESSOR_CHECKPOINT,
+        regression_bins=MITRA_V2_REGRESSION_BINS,
+    )
+
+
+def _mitra_generation_spec(
+    repo_root: Path,
+    *,
+    model_id: str,
+    display_name: str,
+    classifier_checkpoint: str,
+    regressor_checkpoint: str,
+    regression_bins: int = 1,
+) -> ModelSpec:
+    source_path = ensure_mitra_on_path(repo_root=repo_root)
+    return ModelSpec(
+        model_id=model_id,
+        display_name=display_name,
         adapter_cls_path="tfm_finetuning.finetuning.models.mitra.model.MitraAdapter",
         supports_classification=True,
         supports_regression=True,
-        classifier_checkpoint=MITRA_CLASSIFIER_CHECKPOINT,
-        regressor_checkpoint=MITRA_REGRESSOR_CHECKPOINT,
+        classifier_checkpoint=classifier_checkpoint,
+        regressor_checkpoint=regressor_checkpoint,
         source_path=source_path,
         version_payload={
             **mitra_version_payload(source_path),
-            "checkpoint_identifier_classifier": MITRA_CLASSIFIER_CHECKPOINT,
-            "checkpoint_identifier_regressor": MITRA_REGRESSOR_CHECKPOINT,
+            "checkpoint_identifier_classifier": classifier_checkpoint,
+            "checkpoint_identifier_regressor": regressor_checkpoint,
+            **({"regression_bins": regression_bins} if regression_bins > 1 else {}),
         },
     )
 
@@ -162,6 +197,7 @@ def get_model_spec(
     factories = {
         "tabicl_v2": _tabicl_spec,
         "mitra": _mitra_spec,
+        "mitra_v2": _mitra_v2_spec,
     }
     try:
         spec = factories[normalized](root)
@@ -177,4 +213,5 @@ def iter_model_specs(*, repo_root: Path | None = None) -> list[ModelSpec]:
         *(get_model_spec(version.model_id, repo_root=repo_root) for version in TABPFN_VERSIONS),
         get_model_spec("tabicl_v2", repo_root=repo_root),
         get_model_spec("mitra", repo_root=repo_root),
+        get_model_spec("mitra_v2", repo_root=repo_root),
     ]
