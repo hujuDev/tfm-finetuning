@@ -1,4 +1,4 @@
-"""Load the official OpenML partition and create the thesis validation split."""
+"""Load the official OpenML partition and create the validation split."""
 
 from __future__ import annotations
 

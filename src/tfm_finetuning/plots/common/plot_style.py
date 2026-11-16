@@ -1,4 +1,4 @@
-"""Shared publication typography for overview thesis figures.
+"""Shared publication typography for the figures.
 
 Example:
     ``apply_plot_style()`` before constructing any Matplotlib figures.

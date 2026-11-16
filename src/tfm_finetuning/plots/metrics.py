@@ -62,7 +62,7 @@ def split_raw_metric_value(
 
 
 def fine_tuning_gain(baseline: object, adapted: object, metric: object) -> float | None:
-    """Return the thesis-defined matched SFT gain over ICL."""
+    """Return the matched SFT gain over ICL."""
     baseline_value = finite_number(baseline)
     adapted_value = finite_number(adapted)
     if baseline_value is None or adapted_value is None:
@@ -75,7 +75,7 @@ def fine_tuning_gain(baseline: object, adapted: object, metric: object) -> float
 
 
 def best_relative_normalized_score(value: object, best: object, metric: object) -> float | None:
-    """Return the thesis-defined best-relative normalized score."""
+    """Return the best-relative normalized score."""
     raw_value = finite_number(value)
     best_value = finite_number(best)
     if raw_value is None or best_value is None:

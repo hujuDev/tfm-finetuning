@@ -1,4 +1,4 @@
-"""Preview, materialize, run locally, or submit a pinned thesis experiment.
+"""Preview, materialize, run locally, or submit a pinned experiment.
 
 Example: ``python -m tfm_finetuning.experiments.execution.launch distribution_shift_feature_order --dataset splice --local``.
 """

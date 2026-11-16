@@ -59,7 +59,7 @@ def build_plan(
                 "result_datasets": group.get("targets", list(dict.fromkeys(r["dataset"] for r in selected))),
                 "models": list(dict.fromkeys(r["model"] for r in selected)),
                 "resource_rule": f"{source}:{group['name']}",
-                "reason": group.get("reason", "Thesis dataset resource allocation"),
+                "reason": group.get("reason", "Dataset resource allocation"),
                 "resources": resolve_resources(group["resource"], resources, cluster),
                 "runs": selected,
             }
