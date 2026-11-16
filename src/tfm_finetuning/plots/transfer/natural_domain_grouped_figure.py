@@ -87,7 +87,7 @@ def render_grouped_natural_domains(matched_rows, fixed_rows, output: Path) -> Pa
         handles=handles,
         loc="upper center",
         bbox_to_anchor=(0.5, 0.995),
-        ncol=5,
+        ncol=len(MODEL_ORDER) + 2,
         frameon=False,
         fontsize=8,
         columnspacing=1.1,
@@ -107,7 +107,7 @@ def render_grouped_natural_domains(matched_rows, fixed_rows, output: Path) -> Pa
         ]
         for j, (protocol, route) in enumerate(settings):
             for mi, model in enumerate(MODEL_ORDER):
-                x = j + (mi - 1) * 0.22
+                x = j + (mi - (len(MODEL_ORDER) - 1) / 2) * (0.66 / len(MODEL_ORDER))
                 a = point(ax, protocol, panel, model, route, "icl", x - 0.045)
                 b = point(ax, protocol, panel, model, route, "sft", x + 0.045)
                 ax.plot([x - 0.045, x + 0.045], [a, b], color=MODEL_COLORS[model], alpha=0.4, lw=0.8)

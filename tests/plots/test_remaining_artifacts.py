@@ -23,7 +23,13 @@ from tfm_finetuning.utils.config import read_yaml_mapping
 
 ROOT = Path(__file__).resolve().parents[2]
 MANIFEST = tomllib.loads((ROOT / "configs/plots/final_figures.toml").read_text())
-MODEL_IDS = {"mitra": "mitra", "tabiclv2": "tabicl_v2", "tabpfnv25": "tabpfn_v2_5", "tabpfnv2": "tabpfn_v2"}
+MODEL_IDS = {
+    "mitra": "mitra",
+    "tabiclv2": "tabicl_v2",
+    "tabpfnv25": "tabpfn_v2_5",
+    "tabpfnv2": "tabpfn_v2",
+    "tabpfnv35": "tabpfn_v3_5",
+}
 REGRESSION = {
     "houses",
     "diamonds",

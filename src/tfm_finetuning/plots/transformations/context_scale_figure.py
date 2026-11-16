@@ -27,7 +27,9 @@ def plot_context_interactions(summary: pd.DataFrame, output: Path) -> Path:
     pooled = pooled_subsampling_summary(
         summary, value_column="normalized_score_mean", group_columns=("model", "method", "condition")
     ).set_index(["model", "method", "condition"])
-    fig, axes = plt.subplots(3, 2, figsize=(latex_fraction_width(0.94), 5.7), sharex=True, sharey=True)
+    fig, axes = plt.subplots(
+        len(MODELS), 2, figsize=(latex_fraction_width(0.94), 1.9 * len(MODELS)), sharex=True, sharey=True
+    )
     for y, model in enumerate(MODELS):
         for x, method in enumerate(METHODS):
             axis = axes[y, x]

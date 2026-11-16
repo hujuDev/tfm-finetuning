@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
 
-from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, ROBUSTNESS_MODELS
 from tfm_finetuning.plots.common.plot_style import (
     apply_plot_style,
     latex_fraction_width,
@@ -20,7 +20,7 @@ from tfm_finetuning.plots.common.plot_style import (
 )
 from tfm_finetuning.plots.transformations.transformation_data import _normalized_scores, _run_gain_table
 
-MODELS = ("tabpfnv25", "tabiclv2", "mitra")
+MODELS = ROBUSTNESS_MODELS
 DATASETS = ("amazon_employee_access", "jm1", "houses")
 LABELS = ("Amazon Employee Access", "JM1", "Houses")
 CONDITIONS = ("0", "0.5", "0.8", "0.95")
@@ -123,7 +123,7 @@ def plot_spurious_figures(run_metrics: pd.DataFrame, output_dir: Path) -> list[P
             for s, l in (("-", "Selected"), ("--", "Final at stopping"))
         ],
         loc="outside upper center",
-        ncol=5,
+        ncol=(len(MODELS) + 3) // 2,
         fontsize=8,
         frameon=False,
     )

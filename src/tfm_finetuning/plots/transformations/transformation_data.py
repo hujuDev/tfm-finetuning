@@ -39,6 +39,8 @@ MODEL_KEYS = {
     "tabpfnv25": "tabpfnv25",
     "tabicl_v2": "tabiclv2",
     "tabiclv2": "tabiclv2",
+    "tabpfn_v3_5": "tabpfnv35",
+    "tabpfnv35": "tabpfnv35",
     "mitra": "mitra",
 }
 

@@ -19,14 +19,14 @@ import pandas as pd
 from matplotlib.lines import Line2D
 from matplotlib.ticker import LogFormatter
 
-from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, ROBUSTNESS_MODELS
 from tfm_finetuning.plots.common.plot_style import (
     apply_plot_style,
     latex_fraction_width,
     save_figure,
 )
 
-GROUP2_MODEL_ORDER = ("tabpfnv25", "tabiclv2", "mitra")
+GROUP2_MODEL_ORDER = ROBUSTNESS_MODELS
 DEFAULT_TARGET_MODE_COLORS = ("#6b7280", "#4f78cf", "#2f8f83")
 HORIZONTAL_AB_LATEX_WIDTH_FRACTION = 0.94
 METHOD_STYLES = {

@@ -13,6 +13,7 @@ from pathlib import Path
 from statistics import fmean, stdev
 from typing import Any
 
+from tfm_finetuning.plots.common.model_display import ROBUSTNESS_MODELS
 from tfm_finetuning.plots.metrics import (
     best_relative_normalized_score,
     fine_tuning_gain,
@@ -40,7 +41,7 @@ PANEL_DATASETS = {
     ),
     "covertype": ("covertype_comanche_peak", "covertype_neota", "covertype_rawah"),
 }
-MODEL_ORDER = ("tabpfnv25", "tabiclv2", "mitra")
+MODEL_ORDER = ROBUSTNESS_MODELS
 TARGET_100_ROUTE = "target_only_100_steps"
 TARGET_PRODUCER_ROUTE = "target_control_300_steps"
 FIXED_TARGET_CONTEXT_POLICY = "target_train_plus_validation"

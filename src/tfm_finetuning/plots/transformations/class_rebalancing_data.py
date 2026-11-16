@@ -12,9 +12,10 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from tfm_finetuning.plots.common.model_display import ROBUSTNESS_MODELS
 from tfm_finetuning.plots.results import read_runs
 
-MODEL_KEYS = {"tabpfn_v2_5": "tabpfnv25", "tabicl_v2": "tabiclv2", "mitra": "mitra"}
+MODEL_KEYS = {"tabpfn_v2_5": "tabpfnv25", "tabpfn_v3_5": "tabpfnv35", "tabicl_v2": "tabiclv2", "mitra": "mitra"}
 
 
 def _load_reports(root: Path, study: str) -> list[dict[str, Any]]:
@@ -121,9 +122,11 @@ def summarize(results_root: Path, *, shared_study: str, context_study: str) -> t
     """Return class-accuracy differences from the common full-data ICL baseline."""
     shared_reports = _load_reports(results_root, shared_study)
     context_reports = _load_reports(results_root, context_study)
-    if len(shared_reports) != 162 or len(context_reports) != 81:
+    # 27 runs (datasets x folds x seeds) per model; the shared study runs each at two class ratios.
+    expected_context = 27 * len(ROBUSTNESS_MODELS)
+    if len(shared_reports) != 2 * expected_context or len(context_reports) != expected_context:
         raise RuntimeError(
-            "Expected 162 shared-downsampling and 81 context-only reports, "
+            f"Expected {2 * expected_context} shared-downsampling and {expected_context} context-only reports, "
             f"found {len(shared_reports)} and {len(context_reports)}"
         )
     shared = _shared_differences_from_icl(shared_reports)

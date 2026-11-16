@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.lines import Line2D
 
-from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, ROBUSTNESS_MODELS
 from tfm_finetuning.plots.common.plot_style import (
     apply_plot_style,
     latex_fraction_width,
@@ -19,7 +19,7 @@ from tfm_finetuning.plots.common.plot_style import (
 )
 from tfm_finetuning.plots.transformations.transformation_data import _normalized_scores, _run_gain_table
 
-MODELS = ("tabpfnv25", "tabiclv2", "mitra")
+MODELS = ROBUSTNESS_MODELS
 DATASETS = ("jm1", "bank_marketing", "amazon_employee_access", "splice", "sdss17")
 CONDITIONS = ("0", "0.05", "0.15", "0.3")
 TICK_LABELS = ("0", "0.05", "0.15", "0.30")
@@ -108,6 +108,6 @@ def plot_label_noise_figures(run_metrics: pd.DataFrame, output_dir: Path) -> lis
         axis.axhline(0, color="0.4", linewidth=0.7)
         axis.set_ylabel("SFT − ICL ROC-AUC" if dataset == "bank_marketing" else "log(ICL / SFT) log loss", fontsize=8)
     figure.supxlabel("Fraction of training labels flipped", fontsize=9)
-    figure.legend(handles=handles, loc="outside upper center", ncol=3, fontsize=8, frameon=False)
+    figure.legend(handles=handles, loc="outside upper center", ncol=len(MODELS), fontsize=8, frameon=False)
     paths.append(_save(figure, axes, output_dir / "label_noise_selected_dataset_gains.pdf", fraction=1.0))
     return paths

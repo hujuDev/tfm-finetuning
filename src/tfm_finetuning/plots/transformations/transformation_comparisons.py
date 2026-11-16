@@ -13,7 +13,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
 
-from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS
+from tfm_finetuning.plots.common.model_display import MODEL_COLORS, MODEL_LABELS, ROBUSTNESS_MODELS
 from tfm_finetuning.plots.common.plot_style import (
     FULL_WIDTH_INCHES,
     apply_plot_style,
@@ -25,7 +25,7 @@ from tfm_finetuning.plots.transformations.transformation_overviews import (
     pooled_subsampling_summary,
 )
 
-MODELS = ("tabpfnv25", "tabiclv2", "mitra")
+MODELS = ROBUSTNESS_MODELS
 METHODS = ("icl", "sft")
 MITIGATIONS = ("none", "winsor_p01_p99", "robust_log1p")
 MODEL_HANDLES = [Line2D([], [], color=MODEL_COLORS[m], marker="o", label=MODEL_LABELS[m]) for m in MODELS]
@@ -52,7 +52,16 @@ def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Pat
     fig, axes = plt.subplots(2, 1, figsize=(latex_fraction_width(0.94), 5.0), layout="constrained")
     cmap = LinearSegmentedColormap.from_list("white_gray_green", [(0, "#ffffff"), (0.4, "#dedede"), (1, "#006837")])
     cmap.set_bad("#eeeeee")
-    columns = [(model, method) for model in MODELS for method in METHODS]
+    # The alignment studies cover fewer models than the main studies; show only models with every condition.
+    models = [
+        model
+        for model in MODELS
+        if all(
+            set(REPRESENTATION_SCORE_CONDITION_ORDER) <= set(frame.loc[frame.model == model, "condition"])
+            for frame in summaries.values()
+        )
+    ]
+    columns = [(model, method) for model in models for method in METHODS]
     labels = [
         "Original control",
         "Consistent transformation",
@@ -65,7 +74,7 @@ def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Pat
         pooled = pooled_subsampling_summary(
             rows, value_column="normalized_score_mean", group_columns=("model", "method", "condition")
         ).set_index(["condition", "model", "method"])
-        values = np.full((5, 6), np.nan)
+        values = np.full((5, len(columns)), np.nan)
         for y, condition in enumerate(REPRESENTATION_SCORE_CONDITION_ORDER):
             for x, (model, method) in enumerate(columns):
                 if condition == "fine_tuning_train" and method == "icl":
@@ -114,11 +123,11 @@ def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Pat
             )
         axis.set_yticks(np.arange(-0.5, 5, 1), minor=True)
         axis.grid(which="minor", color="white", linewidth=1.5)
-        axis.set_xticks(range(6), [method.upper() for _, method in columns], fontsize=8)
+        axis.set_xticks(range(len(columns)), [method.upper() for _, method in columns], fontsize=8)
         axis.xaxis.tick_top()
-        for index, model in enumerate(MODELS):
+        for index, model in enumerate(models):
             axis.text(
-                (2 * index + 1) / 6,
+                (2 * index + 1) / len(columns),
                 1.16,
                 MODEL_LABELS[model],
                 transform=axis.transAxes,
@@ -127,10 +136,10 @@ def plot_representation_heatmaps(summaries: dict[str, pd.DataFrame], output: Pat
                 fontweight="bold",
                 color=MODEL_COLORS[model],
             )
-        for boundary in (1.5, 3.5):
+        for boundary in np.arange(1.5, len(columns) - 1, 2):
             axis.axvline(boundary, color="#334155", linewidth=1.6, zorder=2)
         axis.set_title(f"{letter}  {title}", loc="left", pad=33)
-        axis.set_xticks(np.arange(-0.5, 6, 1), minor=True)
+        axis.set_xticks(np.arange(-0.5, len(columns), 1), minor=True)
 
         axis.tick_params(which="both", length=0)
         axis.spines[:].set_visible(False)
@@ -147,7 +156,7 @@ def plot_class_tradeoff(summary: pd.DataFrame, output: Path) -> Path:
         "sft_shared": ("s", "Balanced SFT +\nbalanced ICL"),
         "sft_context": ("^", "Full-data SFT +\nbalanced ICL"),
     }
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH_INCHES, 2.8), sharex=True, sharey=True)
+    fig, axes = plt.subplots(1, len(MODELS), figsize=(FULL_WIDTH_INCHES, 2.8), sharex=True, sharey=True)
     for axis, model in zip(axes, MODELS, strict=True):
         data = summary[summary.model == model].set_index(["route", "role"])
         for route, (marker, _) in routes.items():
@@ -248,7 +257,12 @@ def plot_heavy_tail_pairs(summary: pd.DataFrame, output: Path) -> Path:
         "houses": "Houses",
         "miami_housing": "Miami housing",
     }
-    fig, axes = plt.subplots(1, 3, figsize=(FULL_WIDTH_INCHES, 3.6), sharex=True, sharey=True)
+    # One block of model rows per mitigation; each model holds an ICL and an SFT row.
+    span = (len(MODELS) - 1) * 2.4 + 1
+    block = span + 1.5
+    fig, axes = plt.subplots(
+        1, 3, figsize=(FULL_WIDTH_INCHES, 3.6 + 0.7 * (len(MODELS) - 3)), sharex=True, sharey=True
+    )
     for axis, (dataset, label) in zip(axes, datasets.items(), strict=True):
         rows = summary[summary.dataset == dataset].set_index(["model", "method", "condition"])
         for index, mitigation in enumerate(MITIGATIONS):
@@ -258,23 +272,27 @@ def plot_heavy_tail_pairs(summary: pd.DataFrame, output: Path) -> Path:
                         rows.loc[(model, method, f"{state}/{mitigation}")]
                         for state in ("original", "fit_side_contaminated")
                     ]
-                    position = index * 7.3 + model_index * 2.4 + method_index
+                    position = index * block + model_index * 2.4 + method_index
                     paired_score(axis, pair, position, model, method, marker_size=4.0)
         title = label.replace("Healthcare expenses", "Healthcare\nexpenses")
         axis.set_title(title, fontsize=9, loc="left", fontweight="bold", pad=5)
-        axis.set_yticks([2.9, 10.2, 17.5], ["Raw\ntarget", "Winsorized", "Log\ntransformation"], fontsize=8)
+        axis.set_yticks(
+            [index * block + span / 2 for index in range(3)],
+            ["Raw\ntarget", "Winsorized", "Log\ntransformation"],
+            fontsize=8,
+        )
         axis.set_xlim(0, 1.04)
-        axis.set_ylim(21.1, -0.7)
+        axis.set_ylim(2 * block + span + 1.4, -0.7)
         axis.set_xticks([0, 0.5, 1])
         axis.tick_params(labelsize=8, axis="y", length=0)
         _clean(axis)
         axis.grid(axis="y", visible=False)
-        for boundary in [6.55, 13.85]:
+        for boundary in [span + 0.75, block + span + 0.75]:
             axis.axhline(boundary, color="#e2e8f0", linewidth=0.6)
     fig.legend(
         handles=MODEL_HANDLES,
         loc="upper center",
-        ncol=3,
+        ncol=len(MODEL_HANDLES),
         frameon=False,
         fontsize=8,
         handlelength=1,

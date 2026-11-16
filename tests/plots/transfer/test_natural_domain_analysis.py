@@ -36,9 +36,9 @@ def _complete_rows() -> tuple[NaturalDomainRow, ...]:
     )
 
 
-def test_natural_domain_grid_has_243_seed_results() -> None:
+def test_natural_domain_grid_has_324_seed_results() -> None:
     target_count = sum(len(PANEL_DATASETS[panel]) for panel in PANEL_ORDER)
-    assert target_count * len(MODEL_ORDER) * len(ROUTE_ORDER) * 3 == 243
+    assert target_count * len(MODEL_ORDER) * len(ROUTE_ORDER) * 3 == 324
 
 
 def test_natural_domain_panels_use_task_primary_metrics() -> None:
