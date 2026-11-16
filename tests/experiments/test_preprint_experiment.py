@@ -88,3 +88,23 @@ def test_model_entries_match_the_version_catalog_and_toml_defaults(model_key: st
         assert defaults["model_id"] == model_id
         assert defaults["classifier_checkpoint"] == version.classifier_checkpoint
         assert defaults["regressor_checkpoint"] == version.regressor_checkpoint
+
+
+def test_drift_check_repeats_the_baseline_tabpfn_2_5_runs_exactly() -> None:
+    recipe = yaml.safe_load((ROOT / "configs/experiments/preprint_tabpfn_drift_check.yaml").read_text())
+    baseline = yaml.safe_load((ROOT / "configs/experiments/overview_baseline.yaml").read_text())
+    baseline_groups = {group["name"]: group for group in baseline["groups"]}
+    runs = _runs("preprint_tabpfn_drift_check")
+    expected = _split_units(
+        [run for run in _runs("overview_baseline") if run["dataset"] in {r["dataset"] for r in runs}], "tabpfnv25"
+    )
+
+    assert {run["model"] for run in runs} == {"tabpfnv25"}
+    assert {run["preprocessing"] for run in runs} == {"shared"}
+    assert _split_units(runs, "tabpfnv25") == {unit for unit in expected if unit[1] == "shared"}
+    for group in recipe["groups"]:
+        original = baseline_groups[group["name"]]
+        assert group["settings"] == original["settings"]
+        assert group["resource"] == original["resource"]
+        assert group.get("split") == original.get("split")
+        assert group["models"] == [m for m in original["models"] if m["name"] == "tabpfnv25"]

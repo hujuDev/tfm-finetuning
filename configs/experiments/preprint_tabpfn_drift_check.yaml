@@ -1,0 +1,158 @@
+study: preprint_tabpfn_drift_check
+title: TabPFN-2.5 with tabpfn 9.2 (library drift check)
+category: overview
+note: The TabPFN-2.5 settings and splits of overview_baseline (tabpfn 8.0.3), run with tabpfn 9.2.
+axes:
+  preprocessing:
+  - value: shared
+    settings:
+      finetune.preprocessing_protocol: shared
+split:
+  protocol: cv_auto
+  seeds:
+  - 0
+  - 1
+  - 2
+  validation_seed: 0
+  samples:
+  - 0
+groups:
+- name: any_gpu_main
+  resource: gpu_any_5h
+  datasets:
+  - QSAR_fish_toxicity
+  - anneal
+  - concrete_compressive_strength
+  - credit-g
+  - maternal_health_risk
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5.toml
+    settings:
+      finetune.model_id: tabpfn_v2_5
+      finetune.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    finetune.n_estimators_finetune: 2
+    finetune.n_estimators_validation: 2
+    finetune.n_estimators_final_inference: 2
+    finetune.baseline_only: false
+    finetune.epochs: 100
+    finetune.early_stopping: false
+    finetune.keep_intermediate_checkpoints: false
+    finetune.test_eval_interval_epochs: 1
+    finetune.final_eval_checkpoint: best
+    finetune.test_context_includes_validation_data: true
+    finetune.validation_split_ratio: 0.1
+    finetune.validation_split_seed: 0
+    finetune.train_max_rows: 200000
+    finetune.inference_context_max_rows: 50000
+    finetune.resource_fallback_policy: oom_context_retry
+    finetune.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    finetune.grad_clip: 1
+    finetune.ignore_pretraining_limits: true
+    finetune.mitra_finetune_interface: local_chunked
+    finetune.mitra_scheduler_policy: cosine_warmup
+    finetune.save_best_val_checkpoint: false
+    finetune.test_context_comparison.enabled: false
+    finetune.use_lr_scheduler: true
+    finetune.warmup_proportion: 0.1
+- name: medium_40gb_main
+  resource: gpu_40gb_5h
+  datasets:
+  - jm1
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5.toml
+    settings:
+      finetune.model_id: tabpfn_v2_5
+      finetune.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    finetune.n_estimators_finetune: 2
+    finetune.n_estimators_validation: 2
+    finetune.n_estimators_final_inference: 2
+    finetune.baseline_only: false
+    finetune.epochs: 100
+    finetune.early_stopping: false
+    finetune.keep_intermediate_checkpoints: false
+    finetune.test_eval_interval_epochs: 1
+    finetune.final_eval_checkpoint: best
+    finetune.test_context_includes_validation_data: true
+    finetune.validation_split_ratio: 0.1
+    finetune.validation_split_seed: 0
+    finetune.train_max_rows: 200000
+    finetune.inference_context_max_rows: 50000
+    finetune.resource_fallback_policy: oom_context_retry
+    finetune.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    finetune.grad_clip: 1
+    finetune.ignore_pretraining_limits: true
+    finetune.mitra_finetune_interface: local_chunked
+    finetune.mitra_scheduler_policy: cosine_warmup
+    finetune.save_best_val_checkpoint: false
+    finetune.test_context_comparison.enabled: false
+    finetune.use_lr_scheduler: true
+    finetune.warmup_proportion: 0.1
+- name: large_80gb_main
+  resource: gpu_80gb_5h
+  datasets:
+  - APSFailure
+  models:
+  - name: tabpfnv25
+    config: configs/finetuning/default_tabpfnv2_5.toml
+    settings:
+      finetune.model_id: tabpfn_v2_5
+      finetune.classifier_checkpoint: models/tabpfn-v2.5-classifier-v2.5_default-2.ckpt
+      finetune.regressor_checkpoint: models/tabpfn-v2.5-regressor-v2.5_default.ckpt
+  settings:
+    preprocess.steps:
+    - clamp_train_pool
+    preprocess.clamp_train_pool.max_size: 200000
+    data.backend: tabarena_openml_task_wrapper
+    evaluation.backend: tabarena_aligned
+    finetune.n_estimators_finetune: 2
+    finetune.n_estimators_validation: 2
+    finetune.n_estimators_final_inference: 2
+    finetune.baseline_only: false
+    finetune.epochs: 100
+    finetune.early_stopping: false
+    finetune.keep_intermediate_checkpoints: false
+    finetune.test_eval_interval_epochs: 1
+    finetune.final_eval_checkpoint: best
+    finetune.test_context_includes_validation_data: true
+    finetune.validation_split_ratio: 0.1
+    finetune.validation_split_seed: 0
+    finetune.train_max_rows: 200000
+    finetune.inference_context_max_rows: 50000
+    finetune.resource_fallback_policy: oom_context_retry
+    finetune.oom_retry_context_sizes:
+    - 5000
+    - 2500
+    - 1000
+    - 500
+    finetune.grad_clip: 1
+    finetune.ignore_pretraining_limits: true
+    finetune.mitra_finetune_interface: local_chunked
+    finetune.mitra_scheduler_policy: cosine_warmup
+    finetune.save_best_val_checkpoint: false
+    finetune.test_context_comparison.enabled: false
+    finetune.use_lr_scheduler: true
+    finetune.warmup_proportion: 0.1
