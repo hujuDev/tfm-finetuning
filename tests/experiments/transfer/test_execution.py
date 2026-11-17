@@ -132,7 +132,7 @@ def consumer_config():
     )
 
 
-def write_producer(root, consumer, *, name="producer", status="complete", changed_seed=None):
+def write_producer(root, consumer, *, name="producer", status="complete", changed_seed=None, dataset="credit-g"):
     route = resolve_transfer_route(consumer)
     producer = producer_config(consumer, route)
     if changed_seed is not None:
@@ -141,7 +141,7 @@ def write_producer(root, consumer, *, name="producer", status="complete", change
     directory.mkdir(parents=True)
     checkpoint = directory / "source.ckpt"
     checkpoint.write_text("weights")
-    (directory / "run.json").write_text(json.dumps({"status": status, "config": producer}))
+    (directory / "run.json").write_text(json.dumps({"status": status, "dataset": dataset, "config": producer}))
     (directory / "finetune_report.json").write_text(
         json.dumps(
             {
@@ -161,6 +161,8 @@ def test_dependency_requires_matching_completed_producer_and_actual_weights(tmp_
     write_producer(tmp_path, consumer, name="unfinished", status="running")
     with pytest.raises(FileNotFoundError, match="Run producer"):
         resolve_checkpoint_dependency(consumer, route, results_root=tmp_path, repo_root=tmp_path)
+    # A producer for another target shares the route and recipe but is not this consumer's checkpoint.
+    write_producer(tmp_path, consumer, name="other-target", dataset="satimage")
     checkpoint = write_producer(tmp_path, consumer)
     assert resolve_checkpoint_dependency(consumer, route, results_root=tmp_path, repo_root=tmp_path) == checkpoint
     checkpoint.unlink()

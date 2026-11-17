@@ -115,6 +115,10 @@ def resolve_checkpoint_dependency(
         metadata = json.loads(run_path.read_text())
         if metadata.get("status") != "complete":
             continue
+        # Producers of other targets share the route and recipe; the stage recipe below is resolved for the
+        # dependency's origin, so it cannot tell them apart.
+        if metadata.get("dataset", dependency.checkpoint_origin) != dependency.checkpoint_origin:
+            continue
         report_path = run_path.with_name("finetune_report.json")
         if not report_path.is_file():
             continue
