@@ -58,8 +58,8 @@ contextual_scale = "scale_1x_no_unit_column"
 heavy_tail = "original/none"
 
 [models]
-default = ["tabpfnv25", "tabiclv2", "mitra"]
-diamonds_mitigation = ["tabpfnv25"]
+default = ["tabpfnv35", "tabiclv2", "mitra"]
+diamonds_mitigation = ["tabpfnv35"]
 
 [splits]
 seeds = [0, 1, 2]

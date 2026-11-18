@@ -36,9 +36,9 @@ def _complete_rows() -> tuple[NaturalDomainRow, ...]:
     )
 
 
-def test_natural_domain_grid_has_324_seed_results() -> None:
+def test_natural_domain_grid_has_243_seed_results() -> None:
     target_count = sum(len(PANEL_DATASETS[panel]) for panel in PANEL_ORDER)
-    assert target_count * len(MODEL_ORDER) * len(ROUTE_ORDER) * 3 == 324
+    assert target_count * len(MODEL_ORDER) * len(ROUTE_ORDER) * 3 == 243
 
 
 def test_natural_domain_panels_use_task_primary_metrics() -> None:
@@ -65,7 +65,7 @@ def test_target_wise_normalized_scores_preserve_route_specific_baselines() -> No
         for score in scores
         if score.panel == "heart"
         and score.dataset == PANEL_DATASETS["heart"][0]
-        and score.model == "tabpfnv25"
+        and score.model == "tabpfnv35"
         and score.route == "target_only_100_steps"
         and score.phase == "icl"
     )
@@ -74,7 +74,7 @@ def test_target_wise_normalized_scores_preserve_route_specific_baselines() -> No
         for score in scores
         if score.panel == "heart"
         and score.dataset == PANEL_DATASETS["heart"][0]
-        and score.model == "tabpfnv25"
+        and score.model == "tabpfnv35"
         and score.route == "target_only_100_steps"
         and score.phase == "sft"
     )
@@ -86,14 +86,14 @@ def test_normalized_score_summary_respects_metric_orientation() -> None:
     summary = summarize_normalized_scores(_complete_rows())
     lookup = {(str(row["panel"]), str(row["model"]), str(row["method"])): row for row in summary}
 
-    assert lookup[("heart", "tabpfnv25", "target_only_100_steps_icl")]["mean_normalized_score"] == pytest.approx(
+    assert lookup[("heart", "tabpfnv35", "target_only_100_steps_icl")]["mean_normalized_score"] == pytest.approx(
         0.5 / 0.51
     )
-    assert lookup[("heart", "tabpfnv25", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(1.0)
-    assert lookup[("covertype", "tabpfnv25", "target_only_100_steps_icl")]["mean_normalized_score"] == pytest.approx(
+    assert lookup[("heart", "tabpfnv35", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(1.0)
+    assert lookup[("covertype", "tabpfnv35", "target_only_100_steps_icl")]["mean_normalized_score"] == pytest.approx(
         1.0
     )
-    assert lookup[("covertype", "tabpfnv25", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(
+    assert lookup[("covertype", "tabpfnv35", "source_only_pooled_sft")]["mean_normalized_score"] == pytest.approx(
         0.5 / 0.51
     )
     assert all(row["target_count"] == 3 for row in summary)

@@ -135,8 +135,13 @@ def build_transformation_tables(
     expected = _expected_fit_units(resolved)
     metrics, epochs, observed = [], [], []
     studies = resolved["studies"]
+    model_config = resolved.get("models", {})
     for family, study in studies.items():
+        # Runs of models outside the configured selection stay out of every table, including normalization.
+        family_models = set(model_config.get(family, model_config.get("default", [])))
         for run in read_runs(repo_root / resolved["input"]["results_root"], [study]):
+            if family_models and MODEL_KEYS.get(run.model, run.model) not in family_models:
+                continue
             report = run.report
             score_metric = normalize_metric_key(report["score_metric"])
             base = {

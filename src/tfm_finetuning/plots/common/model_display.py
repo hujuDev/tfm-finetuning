@@ -28,8 +28,9 @@ MODEL_COLORS = {
 PAPER_MODELS = ["tabpfnv2", "tabpfnv25", "tabpfnv3", "tabpfnv35", "tabpfnv35fast", "tabiclv2", "mitra", "mitra_v2"]
 # The models of overview_baseline and the transformation and transfer studies.
 MODEL_ORDER = ["tabpfnv2", "tabpfnv25", "tabiclv2", "mitra"]
-# The models of the robustness (distribution_shift_*) and natural-domain transfer studies.
-ROBUSTNESS_MODELS = ("tabpfnv25", "tabpfnv35", "tabiclv2", "mitra")
+# The models shown for the robustness (distribution_shift_*) and natural-domain transfer studies. Their results
+# also hold TabPFN-2.5 runs, which the figures leave out.
+ROBUSTNESS_MODELS = ("tabpfnv35", "tabiclv2", "mitra")
 # Weights usable commercially: TabPFNv2 (Prior Labs License 1.1, Apache-2.0 plus attribution), TabICLv2
 # (BSD-3-Clause), Mitra and Mitra-v2 (Apache-2.0). The weights of TabPFN-2.5, -3 and -3.5 are released under
 # non-commercial licenses. See THIRD_PARTY_NOTICES.md.

@@ -336,7 +336,7 @@ def test_natural_domains_read_fresh_training_boundaries_and_frozen_context_views
                             path.write_text(json.dumps(report))
     for fixed in (False, True):
         rows = load_natural_domain_rows(tmp_path, fixed_target_context=fixed)
-        assert len(rows) == 108
+        assert len(rows) == 81
         assert all(row.seed_count == 3 for row in rows)
         assert all(row.gain > 0 for row in rows)
 

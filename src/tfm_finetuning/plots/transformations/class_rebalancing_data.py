@@ -19,7 +19,11 @@ MODEL_KEYS = {"tabpfn_v2_5": "tabpfnv25", "tabpfn_v3_5": "tabpfnv35", "tabicl_v2
 
 
 def _load_reports(root: Path, study: str) -> list[dict[str, Any]]:
-    return [{"report": run.report, "metadata": run.metadata} for run in read_runs(root, [study])]
+    return [
+        {"report": run.report, "metadata": run.metadata}
+        for run in read_runs(root, [study])
+        if MODEL_KEYS.get(run.model, run.model) in ROBUSTNESS_MODELS
+    ]
 
 
 def _identity(payload: dict[str, Any]) -> dict[str, object]:
