@@ -524,3 +524,29 @@ def test_training_history_rows_accept_tabpfn_display_metric_keys() -> None:
 
     assert rows[0]["train/val/score"] == -2.0
     assert rows[0]["core/train/val/mse"] == 4.0
+
+
+def test_estimators_fetch_a_missing_base_checkpoint(tmp_path: Path, monkeypatch) -> None:
+    from tfm_finetuning.finetuning.models.tabpfn import model as tabpfn_model
+
+    class FakeTabPFNEstimator:
+        def __init__(self, **kwargs) -> None:
+            self.kwargs = dict(kwargs)
+
+    fetched: list[Path] = []
+    monkeypatch.setattr(tabpfn_model, "ensure_checkpoint", fetched.append)
+    bindings = TabPFNBindings(
+        classifier=FakeTabPFNEstimator,
+        regressor=FakeTabPFNEstimator,
+        finetuned_classifier=FakeTabPFNEstimator,
+        finetuned_regressor=FakeTabPFNEstimator,
+        clone_model_for_evaluation=lambda *_args, **_kwargs: None,
+        save_model=lambda *_args, **_kwargs: None,
+    )
+    adapter = TabPFNAdapter(_tabpfn_test_spec(tmp_path), bindings=bindings)
+    adapter.resolve_zero_shot_estimator("regression", seed=0, device="cpu", n_estimators_inference=1)
+    adapter.resolve_finetune_estimator("binary", CommonFineTuneConfig(), seed=0, device="cpu")
+    adapter.resolve_finetune_estimator(
+        "binary", CommonFineTuneConfig(), seed=0, device="cpu", initial_checkpoint=tmp_path / "learned.ckpt"
+    )
+    assert [path.name for path in fetched] == ["tabpfn-v2.5-regressor.ckpt", "tabpfn-v2.5-classifier.ckpt"]

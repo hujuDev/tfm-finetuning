@@ -120,3 +120,15 @@ def test_cli_group_selects_only_that_version(tmp_path, monkeypatch, group, expec
     downloader.main(["--models-root", str(tmp_path), "--group", group])
     assert fetch.call_count == expected
     assert all(call.args[0].version == group for call in fetch.call_args_list)
+
+
+def test_ensure_checkpoint_fetches_only_missing_pinned_files(tmp_path, monkeypatch):
+    fetch = Mock(return_value="downloaded")
+    monkeypatch.setattr(downloader, "download_checkpoint", fetch)
+    spec = downloader.CHECKPOINTS[2]
+    downloader.ensure_checkpoint(tmp_path / spec.filename)
+    fetch.assert_called_once_with(spec, tmp_path)
+    (tmp_path / spec.filename).write_bytes(b"present")
+    downloader.ensure_checkpoint(tmp_path / spec.filename)
+    downloader.ensure_checkpoint(tmp_path / "my-own-weights.ckpt")
+    assert fetch.call_count == 1

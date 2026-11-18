@@ -12,6 +12,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from tfm_finetuning.data.download.tabpfn_checkpoints import ensure_checkpoint
 from tfm_finetuning.finetuning.datasets.preprocessing_protocol import (
     PREPROCESSING_NATIVE,
     normalize_preprocessing_protocol,
@@ -98,6 +99,12 @@ class TabPFNAdapter:
             path = get_repo_root(Path(__file__)) / path
         return str(path)
 
+    def _fetched_checkpoint_for_task(self, task_type: TaskKind) -> str:
+        """Return the base checkpoint, downloading the pinned file first if it is missing."""
+        checkpoint = self._checkpoint_for_task(task_type)
+        ensure_checkpoint(Path(checkpoint))
+        return checkpoint
+
     def baseline_checkpoint_path(self, task_type: TaskKind) -> Path:
         """Return the local base checkpoint used for zero-shot TabPFN inference."""
         return Path(self._checkpoint_for_task(task_type))
@@ -134,7 +141,7 @@ class TabPFNAdapter:
         """Return a TabPFN estimator backed by the configured base checkpoint."""
         cls = self._vendor().estimator_class(regression=task_type == "regression")
         return cls(
-            model_path=self._checkpoint_for_task(task_type),
+            model_path=self._fetched_checkpoint_for_task(task_type),
             n_estimators=int(n_estimators_inference),
             device=device or "auto",
             random_state=int(seed),
@@ -157,7 +164,7 @@ class TabPFNAdapter:
         params["random_state"] = int(seed)
         params["eval_metric"] = validation_metric_for_task(task_type, model_id=self.model_id)
         params.update(self._upstream_model_version_kwargs())
-        model_path = initial_checkpoint or Path(self._checkpoint_for_task(task_type))
+        model_path = initial_checkpoint or Path(self._fetched_checkpoint_for_task(task_type))
         extra_kwargs = {"model_path": str(model_path), **self._extra_tabpfn_kwargs()}
         extra_kwargs.update(self._pretraining_limit_kwargs())
         if task_type == "regression":

@@ -127,6 +127,17 @@ def download_checkpoint(spec: CheckpointSpec, models_root: Path, *, overwrite: b
     return "downloaded"
 
 
+def ensure_checkpoint(path: Path) -> None:
+    """Fetch a missing pinned checkpoint on first use; existing files and unpinned paths are left as they are."""
+    if path.exists():
+        return
+    spec = next((spec for spec in CHECKPOINTS if spec.filename == path.name), None)
+    if spec is None:
+        return
+    logger.info("Fetching the missing TabPFN checkpoint %s", spec.filename)
+    download_checkpoint(spec, path.parent)
+
+
 def main(argv: list[str] | None = None) -> None:
     """Download all weights, or select ``--group v2`` / ``v2.5`` / ``v3`` / ``v3.5`` (v3.5 includes v3.5-Fast)."""
     parser = argparse.ArgumentParser(description="Download and verify the pinned TabPFN checkpoints.")
